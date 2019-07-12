@@ -4,6 +4,21 @@ spring:
     username: root
     password: "000411"
     driver-class-name: com.mysql.cj.jdbc.Driver
+  # RabbitMQ
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    listener:
+      simple:
+        concurrency: 10
+        max-concurrency
+        auto-startup: true
+      direct:
+        retry:
+          enabled: true
 
 
 
@@ -20,3 +35,5 @@ jwt:
 
 upload:
   path: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/file/
+
+
