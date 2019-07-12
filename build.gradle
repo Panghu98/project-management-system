@@ -35,9 +35,9 @@ dependencies {
     //wire mock
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.18.0', ext: 'pom'
 
-    //swagger
-    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
-    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    //swagger  2.9的会有一些小问题（没解决）
+    compile 'io.springfox:springfox-swagger2:2.8.0'
+    compile 'io.springfox:springfox-swagger-ui:2.8.0'
     //    用于加密的包
     implementation 'commons-codec:commons-codec'
     //jwt

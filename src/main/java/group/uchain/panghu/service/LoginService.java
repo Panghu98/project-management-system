@@ -17,4 +17,11 @@ public interface LoginService {
      * @return 返回给前端的结果
      */
     Result login(long userId, String password);
+
+    /**
+     * 用户更改密码
+     * @param newPassword
+     * @return
+     */
+    Result updatePassword(String newPassword);
 }

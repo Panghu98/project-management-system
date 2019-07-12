@@ -14,4 +14,6 @@ public interface UserFormMapper {
 
     User selectUserByUserId(long id);
 
+    void updatePassword(String userId,String password);
+
 }

@@ -7,8 +7,10 @@ import group.uchain.panghu.mapper.UserFormMapper;
 import group.uchain.panghu.result.Result;
 import group.uchain.panghu.security.JwtTokenUtil;
 import group.uchain.panghu.service.LoginService;
+import group.uchain.panghu.service.UserService;
 import group.uchain.panghu.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,12 +37,17 @@ public class LoginServiceImpl implements LoginService {
 
     private UserFormMapper userFormMapper;
 
+    private UserService userService;
+
+    @Autowired
     public LoginServiceImpl(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil,
-                            UserDetailsService userDetailsService, UserFormMapper userFormMapper) {
+                            UserDetailsService userDetailsService, UserFormMapper userFormMapper,
+                            UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userFormMapper = userFormMapper;
+        this.userService = userService;
     }
 
     @Override
@@ -78,6 +85,22 @@ public class LoginServiceImpl implements LoginService {
         return Result.successData(r);
     }
 
+    @Override
+    public Result updatePassword(String newPassword) {
+
+        //从Token中获取用户信息
+        User user = userService.getCurrentUser();
+        String salt = user.getSalt();
+        //判断更改的密码和用户原密码是否相同
+        String oldPassword = user.getPassword();
+        if (!oldPassword.equals(MD5Util.formPassToDBPass(newPassword,salt))) {
+            log.info("新密码和原密码相同");
+            return Result.error(CodeMsg.PASSWORD_UPDATE_ERROR);
+        }
+
+        //默认返回成功
+        return new Result();
+    }
 
 
 }

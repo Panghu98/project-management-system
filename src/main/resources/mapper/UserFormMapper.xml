@@ -11,6 +11,9 @@
     <insert id="register">
         insert into user values (#{userId},#{username},#{password},#{role},#{salt})
     </insert>
+    <update id="updatePassword">
+        update user set password=#{password} where user_id=#{userId}
+    </update>
     <select id="selectUserByUserId" resultType="group.uchain.panghu.entity.User">
         select user_id,username,salt,`role`,`password` from user where user_id = #{id}
     </select>
