@@ -1,24 +1,30 @@
 package group.uchain.panghu.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
+import group.uchain.panghu.result.Result;
+import group.uchain.panghu.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author panghu
  * @title: TestController
  * @projectName panghu
- * @date 19-7-11 下午9:51
+ * @date 19-7-12 下午6:18
  */
-@Api(tags = "测试")
 @RestController
+@RequestMapping("/user")
 public class TestController {
 
-    @GetMapping("/anon/test")
-    @ApiOperation(value = "测试")
-    public void test(){
-        System.out.println("测试");
+    @Autowired
+    private LoginService loginService;
+
+    @PostMapping("/updatePassword")
+    public Result updatePassword(String password){
+        return loginService.updatePassword(password);
     }
+
+
 
 }

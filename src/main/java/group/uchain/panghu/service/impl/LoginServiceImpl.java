@@ -78,9 +78,9 @@ public class LoginServiceImpl implements LoginService {
         final String token = jwtTokenUtil.generateToken(userDetails);
         HashMap<String, String> r = new HashMap<>(10);
         r.put("token", token);
-
-        String role = userFormMapper.selectUserByUserId(userId).getRole();
-        r.put("role", String.valueOf(role));
+        System.out.println("-------------------------------------------------------");
+        System.out.println(token);
+        System.out.println("--------------------------------------------------------");
 
         return Result.successData(r);
     }
@@ -90,14 +90,21 @@ public class LoginServiceImpl implements LoginService {
 
         //从Token中获取用户信息
         User user = userService.getCurrentUser();
+        if (user == null){
+            return Result.error(CodeMsg.AUTHENTICATION_ERROR);
+        }
         String salt = user.getSalt();
         //判断更改的密码和用户原密码是否相同
         String oldPassword = user.getPassword();
-        if (!oldPassword.equals(MD5Util.formPassToDBPass(newPassword,salt))) {
+
+        String encryptNewPassword = MD5Util.formPassToDBPass(newPassword,salt);
+        if (oldPassword.equals(encryptNewPassword)) {
             log.info("新密码和原密码相同");
             return Result.error(CodeMsg.PASSWORD_UPDATE_ERROR);
         }
 
+        long userId = user.getUserId();
+        userFormMapper.updatePassword(userId,encryptNewPassword);
         //默认返回成功
         return new Result();
     }

@@ -83,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         HttpMethod.POST,
                         "/test/**",
                         "/swagger**",
-                        "/anon/**",
+                        "/anon/login",
                         "/webjars/**").permitAll()
                 .anyRequest().authenticated();
 

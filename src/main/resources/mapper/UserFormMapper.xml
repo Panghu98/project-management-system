@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="group.uchain.panghu.mapper.UserFormMapper">
     <resultMap id="UserResultMap" type="group.uchain.panghu.entity.User">
-        <id column="user_id" property="userId"/>
+        <id column="user_id" property="userId" javaType="Long"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="CHAR"/>
         <result column="role" property="role" jdbcType="INTEGER"/>
@@ -12,9 +12,9 @@
         insert into user values (#{userId},#{username},#{password},#{role},#{salt})
     </insert>
     <update id="updatePassword">
-        update user set password=#{password} where user_id=#{userId}
+        update user set password=#{param2} where user_id=#{param1}
     </update>
     <select id="selectUserByUserId" resultType="group.uchain.panghu.entity.User">
-        select user_id,username,salt,`role`,`password` from user where user_id = #{id}
+        select user_id as userId,username,salt,`role`,`password` from `user` where user_id = #{id}
     </select>
 </mapper>
