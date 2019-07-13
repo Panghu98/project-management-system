@@ -51,6 +51,12 @@ dependencies {
     compile 'redis.clients:jedis:2.9.0'
     compile 'org.springframework.boot:spring-boot-starter-data-redis:2.1.2.RELEASE'
 
+    //POI 用于office文件处理
+    compile group: 'org.apache.poi', name: 'poi', version: '3.17'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+
+
+
 
 
 

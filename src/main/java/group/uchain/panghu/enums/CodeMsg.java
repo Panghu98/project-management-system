@@ -20,7 +20,9 @@ public enum CodeMsg {
     DATABASE_ERROR(6,"数据库异常"),
     PASSWORD_UPDATE_ERROR(7,"新密码和原密码不能一样"),
     FILE_UPLOAD_FAILED(8,"文件上传服务器失败"),
-    FILE_EMPTY_ERROR(9,"文件为空");
+    FILE_EMPTY_ERROR(9,"文件为空"),
+    XLS_FILE_READ_ERROR(10,"XLS文件读取异常");
+
 
     private Integer code;
     private String msg;
