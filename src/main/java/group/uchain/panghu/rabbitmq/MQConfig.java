@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MQConfig {
 
-    private static final String TOPIC_QUEUE = "topic.queue1";
+    static final String TOPIC_QUEUE = "topic.queue1";
 
-    private static final String TOPIC_EXCHANGE = "topicExchange";
+    static final String TOPIC_EXCHANGE = "topicExchange";
 
     /**
      * Topic模式 交换机Exchange

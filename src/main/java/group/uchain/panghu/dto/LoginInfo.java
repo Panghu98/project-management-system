@@ -1,4 +1,4 @@
-package group.uchain.panghu.entity;
+package group.uchain.panghu.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

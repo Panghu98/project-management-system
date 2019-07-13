@@ -1,9 +1,12 @@
 package group.uchain.panghu.service.impl;
 
 
+import group.uchain.panghu.dto.LoginInfo;
 import group.uchain.panghu.entity.User;
 import group.uchain.panghu.enums.CodeMsg;
 import group.uchain.panghu.mapper.UserFormMapper;
+import group.uchain.panghu.rabbitmq.MQReceiver;
+import group.uchain.panghu.rabbitmq.MQSender;
 import group.uchain.panghu.result.Result;
 import group.uchain.panghu.security.JwtTokenUtil;
 import group.uchain.panghu.service.LoginService;
@@ -19,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -39,15 +43,18 @@ public class LoginServiceImpl implements LoginService {
 
     private UserService userService;
 
+    private MQSender mqSender;
+
     @Autowired
     public LoginServiceImpl(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil,
                             UserDetailsService userDetailsService, UserFormMapper userFormMapper,
-                            UserService userService) {
+                            UserService userService,MQSender mqSender) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userFormMapper = userFormMapper;
         this.userService = userService;
+        this.mqSender = mqSender;
     }
 
     @Override
@@ -74,6 +81,10 @@ public class LoginServiceImpl implements LoginService {
         //返回的对象中是带有权限信息的
         final UserDetails userDetails = userDetailsService.loadUserByUsername(String.valueOf(userId));
         log.info("加载userDetails:" + userDetails.getUsername());
+        LoginInfo info = new LoginInfo();
+        info.setDate(new Date());
+        info.setUserId(userId);
+        mqSender.sendLoginInfo(info);
         //将UserDetails放入Token的 payload中
         final String token = jwtTokenUtil.generateToken(userDetails);
         HashMap<String, String> r = new HashMap<>(10);

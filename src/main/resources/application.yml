@@ -14,7 +14,7 @@ spring:
     listener:
       simple:
         concurrency: 10
-        max-concurrency
+        max-concurrency: 10
         auto-startup: true
       direct:
         retry:
