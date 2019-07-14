@@ -69,13 +69,9 @@ public class FileServiceImpl implements FileService {
         //读取Excel表格 存入数据库
         List<ProjectInfo> list = ExcelUtil.importXLS(pathFile);
         projectInfoMapper.readExcel(list);
-
         log.info("文件上传成功");
         return new Result();
 
-
     }
-
-
 
 }

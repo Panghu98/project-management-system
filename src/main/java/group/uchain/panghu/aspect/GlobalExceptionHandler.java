@@ -18,7 +18,7 @@ import java.sql.SQLException;
  * @date 19-4-7 下午5:28
  */
 @Slf4j
-//@ControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     private final static String EXCEPTION_MSG_KEY = "Exception message : ";
@@ -29,13 +29,5 @@ public class GlobalExceptionHandler {
         log.error(EXCEPTION_MSG_KEY+exception.getMessage());
         return Result.error(exception);
     }
-
-    @ResponseBody
-    @ExceptionHandler(SQLException.class)
-    public Result<Object> handleSQLException(SQLException exception){
-        log.error(EXCEPTION_MSG_KEY+exception.getMessage());
-        return Result.error(CodeMsg.DATABASE_ERROR);
-    }
-
 
 }

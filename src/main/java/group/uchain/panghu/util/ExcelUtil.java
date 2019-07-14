@@ -75,6 +75,9 @@ public class ExcelUtil {
         } catch (IOException e) {
             e.printStackTrace();
             throw new MyException(CodeMsg.XLS_FILE_READ_ERROR);
+        } catch (IllegalStateException e){
+            e.printStackTrace();
+            throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
         }
 
         return list;

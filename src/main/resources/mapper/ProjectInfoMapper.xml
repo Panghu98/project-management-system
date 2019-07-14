@@ -3,9 +3,9 @@
 <mapper namespace="group.uchain.panghu.mapper.ProjectInfoMapper">
 
     <insert id="readExcel" parameterType="list">
-        insert into project.project_info (category, instruction, level, grade, number, variety, score, leader, division)
+        insert into project.project_info (`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`)
         values
-        <foreach collection="list" separator="," open="(" close=")" index="" item="projectInfo">
+        <foreach collection="list" separator="," index="" item="projectInfo">
             (
                 #{projectInfo.category,jdbcType=VARCHAR},
                 #{projectInfo.instruction,jdbcType=VARCHAR},

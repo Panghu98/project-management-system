@@ -1,6 +1,7 @@
 package group.uchain.panghu.mapper;
 
 import group.uchain.panghu.entity.ProjectInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,6 +13,6 @@ import java.util.List;
  */
 public interface ProjectInfoMapper {
 
-    void readExcel(List<ProjectInfo> list);
+    void readExcel(@Param("list")List<ProjectInfo> list);
 
 }
