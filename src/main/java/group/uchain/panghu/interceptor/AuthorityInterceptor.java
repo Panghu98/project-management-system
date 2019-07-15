@@ -11,6 +11,7 @@ import group.uchain.panghu.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author dgh
  * @date 19-1-19 下午7:54
  */
-@Service
+@Component
 @Slf4j
 public class AuthorityInterceptor implements HandlerInterceptor {
 
@@ -40,7 +41,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         String json;
         User user = userService.getCurrentUser();
-        log.info(String.valueOf(user));
+        //Token中获取到用户为空  抛出交给 Filter处理
         if (user == null) {
             return true;
         }
@@ -52,18 +53,11 @@ public class AuthorityInterceptor implements HandlerInterceptor {
                 return true;
             }
             /*将需要的权限对应的数字转化成字符数组,通过字符进行对比*/
-            String[] requireValue = roleRequired.value().getRole().split("");
-            String[] requireValueArr =  new String[requireValue.length];
-            for(int i=0;i<requireValueArr.length;i++)
-            {
-                requireValueArr[i] = requireValue[i];
-            }
-            String userValue = user.getRole();
-            log.info("requireValue:{},userValue:{}", requireValueArr, userValue);
-            for (String c : requireValueArr) {
-                if (userValue.equals(c)) {
+            Integer requireValue = Integer.valueOf(roleRequired.value().getRole());
+            Integer userValue = Integer.valueOf(user.getRole());
+            log.info("requireValue:{},userValue:{}", requireValue, userValue);
+                if (userValue >= requireValue) {
                     return true;
-                }
             }
         }
         json = JSON.toJSONString(Result.error(CodeMsg.PERMISSION_DENNY));

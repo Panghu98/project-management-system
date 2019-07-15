@@ -13,4 +13,6 @@ public interface FileService {
 
     Result uploadFile(MultipartFile file);
 
+    Result registerByExcel(MultipartFile file);
+
 }

@@ -33,7 +33,10 @@ jwt:
   secret: swpu-uchain
   expiration: 1296000
 
-upload:
-  path: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/file/
+filepath:
+  project-excel: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/file/
+  register-excel: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/file2/
 
 
+default:
+  password: 123456

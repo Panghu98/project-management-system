@@ -1,7 +1,9 @@
 package group.uchain.panghu.service;
 
 
+import group.uchain.panghu.dto.RegisterUser;
 import group.uchain.panghu.entity.User;
+import group.uchain.panghu.result.Result;
 
 /**
  * @author dgh
@@ -10,10 +12,15 @@ import group.uchain.panghu.entity.User;
 public interface UserService {
 
     /**
-     * demo
-     *
-     * @return
+     * @return  当前登录用户的信息
      */
     User getCurrentUser();
+
+    /**
+     * 超级管理员通过表单注册用户
+     * @param user
+     * @return
+     */
+    Result register(RegisterUser user);
 
 }

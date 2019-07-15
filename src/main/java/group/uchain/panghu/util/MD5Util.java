@@ -43,7 +43,7 @@ public class MD5Util {
      * @param DBsalt
      * @return
      */
-    private static String inputPassToDBPass(String inputPass,String DBsalt){
+    public static String inputPassToDBPass(String inputPass,String DBsalt){
         String formPass = inputPassToFormPass(inputPass);
         return formPassToDBPass(formPass, DBsalt);
     }

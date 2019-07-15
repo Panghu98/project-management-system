@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @projectName panghu
  * @date 19-7-11 下午7:47
  */
-@Api(tags = {"用户操作接口"})
+@Api(tags = {"登录操作接口"})
 @RequestMapping("/anon")
 @RestController
 @CrossOrigin

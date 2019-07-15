@@ -39,7 +39,7 @@ public class ProjectInfo {
     /**
      * 项目数量
      */
-    private String number;
+    private Double number;
 
     /**
      * 类型

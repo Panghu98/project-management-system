@@ -9,12 +9,31 @@
         <result column="salt" property="salt" jdbcType="CHAR"/>
     </resultMap>
     <insert id="register">
-        insert into user values (#{userId},#{username},#{password},#{role},#{salt})
+        insert into user values (#{userId},#{username},#{password},#{role},#{salt},#{position},#{office})
+    </insert>
+    <insert id="registerMultiUser">
+        insert into
+            user
+        values
+            <foreach collection="list" item="user" separator=",">
+                (
+                 #{user.userId},
+                 #{user.username},
+                 #{user.password},
+                 #{user.role},
+                 #{user.salt},
+                 #{user.position},
+                 #{user.office}
+                )
+            </foreach>
     </insert>
     <update id="updatePassword">
         update user set password=#{param2} where user_id=#{param1}
     </update>
     <select id="selectUserByUserId" resultType="group.uchain.panghu.entity.User">
         select user_id as userId,username,salt,`role`,`password` from `user` where user_id = #{id}
+    </select>
+    <select id="getAllUser" resultType="group.uchain.panghu.vo.User">
+        select user_id as userId,username as name from user;
     </select>
 </mapper>

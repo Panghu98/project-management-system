@@ -24,4 +24,6 @@ public interface LoginService {
      * @return
      */
     Result updatePassword(String newPassword);
+
+
 }

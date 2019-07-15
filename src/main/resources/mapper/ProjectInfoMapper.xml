@@ -7,15 +7,15 @@
         values
         <foreach collection="list" separator="," index="" item="projectInfo">
             (
-                #{projectInfo.category,jdbcType=VARCHAR},
-                #{projectInfo.instruction,jdbcType=VARCHAR},
-                #{projectInfo.level,jdbcType=VARCHAR},
-                #{projectInfo.grade,jdbcType=VARCHAR},
-                #{projectInfo.number,jdbcType=VARCHAR},
-                #{projectInfo.variety,jdbcType=VARCHAR},
-                #{projectInfo.score,jdbcType=DOUBLE},
-                #{projectInfo.leader,jdbcType=VARCHAR},
-                #{projectInfo.division,jdbcType=VARCHAR}
+            #{projectInfo.category,jdbcType=VARCHAR},
+            #{projectInfo.instruction,jdbcType=VARCHAR},
+            #{projectInfo.level,jdbcType=VARCHAR},
+            #{projectInfo.grade,jdbcType=VARCHAR},
+            #{projectInfo.number,jdbcType=VARCHAR},
+            #{projectInfo.variety,jdbcType=VARCHAR},
+            #{projectInfo.score,jdbcType=DOUBLE},
+            #{projectInfo.leader,jdbcType=VARCHAR},
+            #{projectInfo.division,jdbcType=VARCHAR}
             )
         </foreach>
     </insert>
