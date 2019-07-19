@@ -13,6 +13,24 @@ import java.util.List;
  */
 public interface ProjectInfoMapper {
 
+    /**
+     * 通过读取Excel注册
+     * @param list
+     */
     void readExcel(@Param("list")List<ProjectInfo> list);
+
+    /**
+     * 获取ID重复的数量
+     * @param list  传入Excel的IDList
+     * @return
+     */
+    List<String> getRepeatNums(@Param("list")List<String> list);
+
+    /**
+     * 负责人获取个人所拥有的项目信息
+     * @param userId
+     * @return
+     */
+    List<ProjectInfo> getAllProjectInfo(String userId);
 
 }

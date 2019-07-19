@@ -21,4 +21,13 @@ public class User {
      */
     private String name;
 
+    /**
+     * 教师职称
+     */
+    private String position;
+
+    /**
+     * 教师所属教研室
+     */
+    private String office;
 }

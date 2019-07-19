@@ -1,9 +1,10 @@
 package group.uchain.panghu.controller;
 
+import group.uchain.panghu.annotation.RoleRequired;
+import group.uchain.panghu.entity.ProjectInfo;
+import group.uchain.panghu.enums.RoleEnum;
 import group.uchain.panghu.result.Result;
 import group.uchain.panghu.service.InfoService;
-import group.uchain.panghu.service.UserService;
-import group.uchain.panghu.vo.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +34,24 @@ public class InfoController {
         this.infoService = infoService;
     }
 
+    @RoleRequired(value = RoleEnum.PROJECT_LEADER)
     @ApiOperation(value = "获取所有的用户")
     @GetMapping("/getAllUser")
     public Result getAllUser(){
         return infoService.getAllUser();
     }
 
-    @ApiOperation(value = "上传信息")
+    @ApiOperation(value = "上传分数分配信息")
     @PostMapping("/uploadAllocationInfo")
     public Result uploadAllocationInfo(Map<Long,Integer> list,String projectId){
         return new Result();
     }
+
+    @ApiOperation(value = "获取个人所有项目信息")
+    @GetMapping("/getAllProjectInfo")
+    public Result<List<ProjectInfo>> getAllProjectInfo(){
+        return infoService.getAllProjectInfo();
+    }
+
 
 }

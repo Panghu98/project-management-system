@@ -23,8 +23,9 @@ public enum CodeMsg {
     FILE_EMPTY_ERROR(9,"文件为空"),
     XLS_FILE_READ_ERROR(10,"XLS文件读取异常"),
     XLS_FILE_FORMAT_ERROR(11,"表格格式有误"),
-    USER_HAS_EXISTED(12,"用户已经存在"),
-    ALL_USERS_HAS_EXISTED(13,"所有的用户都已经注册");
+    PROJECT_ID_HAS_EXISTED(14,"项目编号已经存在"),
+    USER_HAS_EXISTED(20,"用户已经存在"),
+    ALL_USERS_HAS_EXISTED(21,"所有的用户都已经注册");
 
 
     private Integer code;

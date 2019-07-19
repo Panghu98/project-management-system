@@ -3,10 +3,11 @@
 <mapper namespace="group.uchain.panghu.mapper.ProjectInfoMapper">
 
     <insert id="readExcel" parameterType="list">
-        insert into project.project_info (`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`)
+        insert into project.project_info (`id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`)
         values
         <foreach collection="list" separator="," index="" item="projectInfo">
             (
+            #{projectInfo.id,jdbcType=VARCHAR},
             #{projectInfo.category,jdbcType=VARCHAR},
             #{projectInfo.instruction,jdbcType=VARCHAR},
             #{projectInfo.level,jdbcType=VARCHAR},
@@ -15,8 +16,21 @@
             #{projectInfo.variety,jdbcType=VARCHAR},
             #{projectInfo.score,jdbcType=DOUBLE},
             #{projectInfo.leader,jdbcType=VARCHAR},
-            #{projectInfo.division,jdbcType=VARCHAR}
+            #{projectInfo.division,jdbcType=SMALLINT}
             )
         </foreach>
     </insert>
+    <select id="getRepeatNums" resultType="java.lang.String">
+        select id as number
+            from project_info
+        where id in
+        <foreach collection="list" separator="," index="" item="id" open="(" close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+    <!--使用内连接代替子查询进行SQL优化-->
+    <select id="getAllProjectInfo" resultType="group.uchain.panghu.entity.ProjectInfo">
+        select `id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`
+        from project_info p inner join user u on (p.`leader` = u.username)  where u.user_id =#{userId}
+</select>
 </mapper>

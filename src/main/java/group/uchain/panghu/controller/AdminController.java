@@ -9,11 +9,10 @@ import group.uchain.panghu.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.management.relation.Role;
 
 /**
  * @author panghu
@@ -56,8 +55,11 @@ public class AdminController {
         return userService.register(registerUser);
     }
 
-//    @RoleRequired(RoleEnum.SUPER_ADMIN)
-//    @ApiOperation(value = "更新用户信息")
-//    public Result updateInfo()
+    @RoleRequired(RoleEnum.SUPER_ADMIN)
+    @ApiOperation(value = "更新用户信息")
+    @GetMapping("/test")
+    public Result updateInfo(){
+        return new Result();
+    }
 
 }

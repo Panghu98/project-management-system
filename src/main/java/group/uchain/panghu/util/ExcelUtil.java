@@ -4,7 +4,11 @@ import group.uchain.panghu.dto.RegisterUser;
 import group.uchain.panghu.entity.ProjectInfo;
 import group.uchain.panghu.enums.CodeMsg;
 import group.uchain.panghu.exception.MyException;
+import org.apache.poi.hssf.util.CellReference;
+import org.apache.poi.ss.usermodel.Name;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFName;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -36,14 +40,17 @@ public class ExcelUtil {
 
             XSSFSheet sheetAt = workbook.getSheetAt(0);
             //4、循环读取表格数据
-
             for (Row row : sheetAt) {
+
                 //首行（即表头）不读取
                 if (row.getRowNum() == 0) {
                     continue;
                 }
 
-                //读取当前行中单元格数据，索引从0开始 不用获取序号 所以从1开始
+                String id = row.getCell(0).getStringCellValue();
+                if (id == null){
+                    throw new MyException("项目编号不能为空",11);
+                }
                 String category = row.getCell(1).getStringCellValue();
                 String instruction = row.getCell(2).getStringCellValue();
                 String level = row.getCell(3).getStringCellValue();
@@ -55,8 +62,9 @@ public class ExcelUtil {
                 String division = row.getCell(9).getStringCellValue();
 
                 ProjectInfo projectInfo = new ProjectInfo();
+                projectInfo.setId(id);
                 projectInfo.setCategory(category);
-                projectInfo.setDivision(division);
+                projectInfo.setDivision(AllocationInfoUtil.getInfo(division));
                 projectInfo.setGrade(grade);
                 projectInfo.setInstruction(instruction);
                 projectInfo.setLeader(leader);
@@ -73,8 +81,10 @@ public class ExcelUtil {
         } catch (IOException e) {
             e.printStackTrace();
             throw new MyException(CodeMsg.XLS_FILE_READ_ERROR);
-        } catch (IllegalStateException e){
+        } catch (IllegalStateException | NumberFormatException e){
             e.printStackTrace();
+            throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
+        }catch (Exception e){
             throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
         }
 
@@ -122,8 +132,10 @@ public class ExcelUtil {
         } catch (IOException e) {
             e.printStackTrace();
             throw new MyException(CodeMsg.XLS_FILE_READ_ERROR);
-        } catch (IllegalStateException e){
+        } catch (IllegalStateException | NumberFormatException e){
             e.printStackTrace();
+            throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
+        }catch (Exception e) {
             throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
         }
 

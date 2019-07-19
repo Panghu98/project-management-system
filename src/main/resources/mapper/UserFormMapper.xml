@@ -34,6 +34,6 @@
         select user_id as userId,username,salt,`role`,`password` from `user` where user_id = #{id}
     </select>
     <select id="getAllUser" resultType="group.uchain.panghu.vo.User">
-        select user_id as userId,username as name from user;
+        select user_id as userId,username as name,position,office  from user;
     </select>
 </mapper>

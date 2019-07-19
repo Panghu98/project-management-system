@@ -10,8 +10,6 @@ import group.uchain.panghu.mapper.UserFormMapper;
 import group.uchain.panghu.result.Result;
 import group.uchain.panghu.service.FileService;
 import group.uchain.panghu.util.ExcelUtil;
-import group.uchain.panghu.util.MD5Util;
-import group.uchain.panghu.util.SaltUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,6 +51,11 @@ public class FileServiceImpl implements FileService {
     private String filePath2;
 
 
+    /**
+     *
+     * @param file  项目文件
+     * @return
+     */
     @Override
     public Result uploadFile(MultipartFile file) {
         if (file==null){
@@ -78,7 +81,19 @@ public class FileServiceImpl implements FileService {
 
         //读取Excel表格 存入数据库
         List<ProjectInfo> list = ExcelUtil.importProjectXLS(pathFile);
+        List<String> listOfId = new ArrayList<>();
+        for (ProjectInfo projectInfo : list) {
+            String id = projectInfo.getId();
+            listOfId.add(id);
+        }
+        List<String> idList = projectInfoMapper.getRepeatNums(listOfId);
+        if(idList.size()!=0){
+            throw new MyException("项目编号"+idList.toString()+"已经存在",14);
+        }
+
+        //插入数据库
         projectInfoMapper.readExcel(list);
+
         log.info("文件上传成功");
         return new Result();
 

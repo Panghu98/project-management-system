@@ -32,8 +32,4 @@ public class AllocationInfoUtil {
         return Integer.valueOf(m.replaceAll("").trim());
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(getInfo("填写比例，负责人分数不低于50"));
-    }
 }
