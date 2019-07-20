@@ -1,5 +1,6 @@
 package group.uchain.panghu.vo;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
@@ -14,6 +15,7 @@ public class User {
     /**
      * 用户ID
      */
+
     private Long userId;
 
     /**

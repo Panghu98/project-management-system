@@ -9,6 +9,8 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * @author panghu
  * @Title: ControllerLogger
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class ControllerLogger {
+
     @Pointcut("execution(public * group.uchain.panghu.controller.*.*(..))")
     public void service() {
 
@@ -38,10 +41,13 @@ public class ControllerLogger {
         log.info("-------------------------------");
     }
 
+
     @AfterReturning(pointcut = "service()", returning = "result")
     public void afterReturn(Object result) {
         log.info("--------------------------");
         log.info("返回参数 : " + result);
         log.info("-------------------------");
     }
+
+
 }

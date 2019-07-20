@@ -34,9 +34,12 @@ jwt:
   expiration: 1296000
 
 filepath:
-  project-excel: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/file/
-  register-excel: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/file2/
+  project-excel: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/register-excel/
+  register-excel: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/project-info-excel/
+  evident: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/evidentiary/
 
+file:
+  zip-name: files
 
 default:
   password: 123456

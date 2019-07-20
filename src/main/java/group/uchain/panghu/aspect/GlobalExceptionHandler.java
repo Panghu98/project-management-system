@@ -1,15 +1,12 @@
 package group.uchain.panghu.aspect;
 
 
-import group.uchain.panghu.enums.CodeMsg;
 import group.uchain.panghu.exception.MyException;
 import group.uchain.panghu.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.sql.SQLException;
 
 /**
  * @author panghu
