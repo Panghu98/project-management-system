@@ -42,7 +42,7 @@ public class LeaderController {
     }
 
     @ApiOperation(value = "负责人个人所有项目信息")
-    @GetMapping("/getAllProjectInfo")
+    @GetMapping("/info/getAllProjectInfo")
     public Result<List<ProjectInfo>> getAllProjectInfo(){
         return infoService.getAllProjectInfo();
     }

@@ -65,7 +65,7 @@ public class PublicController {
     @ApiOperation(value = "获取所有项目分数分配详情")
     @GetMapping("/info/getAllScore")
     public Result getAllScore(){
-
+        return infoService.getAllScore();
     }
 
 }

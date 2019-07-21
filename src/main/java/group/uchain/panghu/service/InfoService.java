@@ -21,4 +21,6 @@ public interface InfoService {
 
     Result uploadAllocationInfo(Map<Long,Integer> list, String projectId);
 
+    Result getAllScore();
+
 }

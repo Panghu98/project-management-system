@@ -33,4 +33,10 @@ public class AllocationInfoMapperTest {
 
         allocationInfoMapper.uploadAllocationInfo(map,projectId);
     }
+
+    @Test
+    public void getUserAllocationInfo() {
+        String userId = "123456";
+        System.err.println(allocationInfoMapper.getUserAllocationInfo(userId));
+    }
 }

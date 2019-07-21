@@ -9,6 +9,7 @@ import group.uchain.panghu.mapper.UserFormMapper;
 import group.uchain.panghu.result.Result;
 import group.uchain.panghu.service.InfoService;
 import group.uchain.panghu.service.UserService;
+import group.uchain.panghu.vo.AllocationInfo;
 import group.uchain.panghu.vo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.Map;
 
 /**
  * @author panghu
- * @title: InfoServiceImpkl
+ * @title: InfoServiceImpl
  * @projectName panghu
  * @date 19-7-15 上午10:15
  */
@@ -64,5 +65,12 @@ public class InfoServiceImpl implements InfoService {
         }
         allocationInfoMapper.uploadAllocationInfo(map,projectId);
         return new Result();
+    }
+
+    @Override
+    public Result getAllScore() {
+        String userId = String.valueOf(userService.getCurrentUser().getUserId());
+        List<AllocationInfo> list =  allocationInfoMapper.getUserAllocationInfo(userId);
+        return Result.successData(list);
     }
 }

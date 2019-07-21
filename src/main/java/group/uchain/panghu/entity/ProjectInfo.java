@@ -59,7 +59,6 @@ public class ProjectInfo {
     /**
      * 分数
      */
-    @JsonIgnore
     private Double score;
 
     /**

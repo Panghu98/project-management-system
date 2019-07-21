@@ -13,4 +13,9 @@
             )
         </foreach>
     </insert>
+    <select id="getUserAllocationInfo" resultType="group.uchain.panghu.vo.AllocationInfo">
+        select a.project_id as projectId,a.user_score as userScore,p.category,p.leader,p.instruction
+        from allocation_info a inner join project_info p
+        on a.project_id=p.id where a.user_id = #{userId}
+    </select>
 </mapper>
