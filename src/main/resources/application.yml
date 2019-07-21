@@ -28,6 +28,8 @@ mybatis:
   #对应实体类的路径
   type-aliases-package: group.uchain.panghu.entity
 
+
+
 #jwt
 jwt:
   secret: swpu-uchain
