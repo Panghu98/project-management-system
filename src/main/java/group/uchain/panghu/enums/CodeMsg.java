@@ -27,11 +27,15 @@ public enum CodeMsg {
     //不能动这个
     PROJECT_ID_HAS_EXISTED(14,"项目编号已经存在"),
     ZIP_FILE_PACKAGE_ERROR(15,"文件压缩出错"),
+    FILE_IS_EMPTY(16,"当前目录下文件为空"),
 
     //文件格式要求出错
     USER_HAS_EXISTED(20,"用户已经存在"),
     ALL_USERS_HAS_EXISTED(21,"所有的用户都已经注册"),
-    DATABASE_ERROR(106,"数据库异常");
+
+    PROJECT_ID_NOI_EXIST(30,"项目编号不存在"),
+
+    DATABASE_ERROR(101,"数据库异常");
 
 
     private Integer code;

@@ -82,7 +82,7 @@ public class FileServiceImpl implements FileService {
 
         } catch (IOException e) {
 
-            log.error("文件上传失败");
+            log.error("项目信息文档上传失败");
             e.printStackTrace();
 
             throw new MyException(CodeMsg.FILE_UPLOAD_FAILED);
@@ -124,7 +124,7 @@ public class FileServiceImpl implements FileService {
         } catch (IOException e) {
 
             e.printStackTrace();
-            log.error("文件上传失败");
+            log.error("注册文档上传失败");
             throw new MyException(CodeMsg.FILE_UPLOAD_FAILED);
         }
 
@@ -184,14 +184,66 @@ public class FileServiceImpl implements FileService {
         return response;
     }
 
+    @Override
+    public Result getAllFilesName() {
+        List<String> list = new ArrayList<>();
+        File file = new File(evidentFilePath);
+
+        File[] fileList = file.listFiles();
+        if (fileList==null){
+            throw new MyException(CodeMsg.FILE_IS_EMPTY);
+        }
+
+        for (File value : fileList) {
+            if (value.isFile()) {
+                String fileName = value.getName();
+                list.add(fileName);
+            }
+        }
+        return Result.successData(list);
+    }
+
+    @Override
+    public Result uploadEvidentFile(MultipartFile file) {
+        if (file==null){
+            throw new MyException(CodeMsg.FILE_EMPTY_ERROR);
+        }
+
+        String pathFile = evidentFilePath+file.getOriginalFilename();
+
+        try{
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(pathFile);
+            Files.write(path,bytes);
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            log.error("证明材料上传失败");
+            throw new MyException(CodeMsg.FILE_UPLOAD_FAILED);
+        }
+        return new Result();
+    }
+
+
+
+
+
+
+    /*
+        -----------------------------------问价压缩下载的私有方法-------------------------------
+     */
+
     private static HttpServletResponse downloadZip(File file, HttpServletResponse response) {
         if (!file.exists()) {
             System.out.println("待压缩的文件目录：" + file + "不存在.");
         } else {
             try {
                 // 以流的形式下载文件。
+                log.info("进入压缩文件下载环节");
                 InputStream fis = new BufferedInputStream(new FileInputStream(file.getPath()));
                 byte[] buffer = new byte[fis.available()];
+                fis.read(buffer);
                 fis.close();
                 // 清空response
                 response.reset();
@@ -208,6 +260,13 @@ public class FileServiceImpl implements FileService {
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new MyException(CodeMsg.ZIP_FILE_PACKAGE_ERROR);
+            }  finally {
+                try {
+                    File f = new File(file.getPath());
+                    f.delete();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         return response;

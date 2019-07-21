@@ -9,10 +9,7 @@ import group.uchain.panghu.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +23,7 @@ import java.util.List;
  */
 @CrossOrigin
 @RestController
-@Api(tags = "文件操作接口")
+@Api(tags = "超级管理员接口")
 public class AdminController {
 
     private FileService fileService;
@@ -72,10 +69,19 @@ public class AdminController {
         return new Result();
     }
 
+
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "超级管理员进行文件下载")
+    @ApiOperation(value = "获取文件所有的文件名")
+    @GetMapping("/file/getAllFilesName")
+    public Result getAllFilesName(){
+        return fileService.getAllFilesName();
+    }
+
+
+    @RoleRequired(RoleEnum.SUPER_ADMIN)
+    @ApiOperation(value = "超级管理员进行zip文件下载")
     @GetMapping("/file/downloadZipFile")
-    public void downloadZipFile(HttpServletResponse response, List<String> files){
+    public void downloadZipFile(@RequestBody List<String> files, HttpServletResponse response ){
         fileService.downloadZipFile(files,response);
     }
 }

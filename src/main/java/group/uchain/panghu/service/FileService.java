@@ -27,4 +27,16 @@ public interface FileService {
      */
     HttpServletResponse downloadZipFile(List<String> files, HttpServletResponse response);
 
+    /**
+     * 获取证明材料的所有文件名
+     * @return
+     */
+    Result getAllFilesName();
+
+    /**
+     * 上传证明材料接口
+     * @return
+     */
+    Result uploadEvidentFile(MultipartFile multipartFile);
+
 }

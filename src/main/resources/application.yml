@@ -39,7 +39,7 @@ filepath:
   evident: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/evidentiary/
 
 file:
-  zip-name: files
+  zip-name: files.zip
 
 default:
   password: 123456

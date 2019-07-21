@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="group.uchain.panghu.mapper.AllocationInfoMapper">
+
+    <insert id="uploadAllocationInfo" parameterType="hashmap">
+        insert into allocation_info 
+            values 
+        <foreach collection="map" index="key" item="value" separator=",">
+            (
+                #{key},
+                #{value},
+                #{param2}
+            )
+        </foreach>
+    </insert>
+</mapper>

@@ -33,4 +33,11 @@ public interface ProjectInfoMapper {
      */
     List<ProjectInfo> getAllProjectInfo(String userId);
 
+    /**
+     * 传入项目编号判断项目是否存在
+     * @param projectId 项目编号
+     * @return  时候存在
+     */
+    Boolean isProjectExist(String projectId);
+
 }

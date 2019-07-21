@@ -84,9 +84,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         HttpMethod.POST,
                         "/test/**",
                         "/swagger**",
-                        "/anon/login",
-                        "/webjars/**",
-                        "/register-excel/**"
+                        "/login",
+                        "/webjars/**"
                 ).permitAll()
                 .anyRequest().authenticated();
 
