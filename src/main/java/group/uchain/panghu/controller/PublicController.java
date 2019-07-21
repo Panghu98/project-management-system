@@ -1,6 +1,7 @@
 package group.uchain.panghu.controller;
 
 import group.uchain.panghu.annotation.RoleRequired;
+import group.uchain.panghu.entity.LoginUser;
 import group.uchain.panghu.entity.ProjectInfo;
 import group.uchain.panghu.enums.RoleEnum;
 import group.uchain.panghu.result.Result;
@@ -11,11 +12,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -51,8 +50,8 @@ public class PublicController {
     })
     @ApiOperation(value = "用户登录接口",notes = "用户登录")
     @PostMapping("/login")
-    public Result login(Long userId, String password) {
-        return loginService.login(userId, password);
+    public Result login(LoginUser loginUser, HttpServletRequest request) {
+        return loginService.login(loginUser.getUserId(),loginUser.getPassword(),request);
     }
 
 

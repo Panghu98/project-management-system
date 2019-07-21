@@ -3,6 +3,8 @@ package group.uchain.panghu.service;
 
 import group.uchain.panghu.result.Result;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author panghu
  * @Title: LoginService
@@ -14,9 +16,10 @@ public interface LoginService {
      * @description 用户登录接口
      * @param userId 用户名
      * @param password 密码
+     * @param request http请求
      * @return 返回给前端的结果
      */
-    Result login(long userId, String password);
+    Result login(long userId, String password, HttpServletRequest request);
 
     /**
      * 用户更改密码

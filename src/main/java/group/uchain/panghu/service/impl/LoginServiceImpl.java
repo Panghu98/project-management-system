@@ -5,12 +5,12 @@ import group.uchain.panghu.dto.LoginInfo;
 import group.uchain.panghu.entity.User;
 import group.uchain.panghu.enums.CodeMsg;
 import group.uchain.panghu.mapper.UserFormMapper;
-import group.uchain.panghu.rabbitmq.MQReceiver;
 import group.uchain.panghu.rabbitmq.MQSender;
 import group.uchain.panghu.result.Result;
 import group.uchain.panghu.security.JwtTokenUtil;
 import group.uchain.panghu.service.LoginService;
 import group.uchain.panghu.service.UserService;
+import group.uchain.panghu.util.IpUtil;
 import group.uchain.panghu.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -58,7 +59,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public Result login(long userId, String password) {
+    public Result login(long userId, String password, HttpServletRequest request) {
         if (userFormMapper.selectUserByUserId(userId) == null) {
             log.info("用户不存在");
             return Result.error(CodeMsg.USER_NOT_EXIST);
@@ -81,10 +82,13 @@ public class LoginServiceImpl implements LoginService {
         //返回的对象中是带有权限信息的
         final UserDetails userDetails = userDetailsService.loadUserByUsername(String.valueOf(userId));
         log.info("加载userDetails:" + userDetails.getUsername());
+        //异步记录登录信息入库
         LoginInfo info = new LoginInfo();
         info.setDate(new Date());
         info.setUserId(userId);
+        info.setIp(IpUtil.getIpAddress(request));
         mqSender.sendLoginInfo(info);
+
         //将UserDetails放入Token的 payload中
         final String token = jwtTokenUtil.generateToken(userDetails);
         HashMap<String, String> r = new HashMap<>(10);

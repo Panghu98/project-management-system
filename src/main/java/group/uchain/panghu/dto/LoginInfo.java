@@ -19,6 +19,7 @@ public class LoginInfo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
+    private String ip;
 
 
 }
