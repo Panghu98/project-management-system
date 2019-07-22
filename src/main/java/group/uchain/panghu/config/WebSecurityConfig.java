@@ -78,14 +78,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/test/**",
                         "/v2/**",
                         "/webjars/**",
-                        "/register-excel/**"
+                        "/register-excel/**",
+                        "/druid/**"
                 ).permitAll()
                 .antMatchers(
                         HttpMethod.POST,
                         "/test/**",
                         "/swagger**",
                         "/login",
-                        "/webjars/**"
+                        "/webjars/**",
+                        "/druid/**"
                 ).permitAll()
                 .anyRequest().authenticated();
 
