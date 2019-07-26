@@ -33,7 +33,7 @@ mybatis:
 #jwt
 jwt:
   secret: swpu-uchain
-  expiration: 1296000
+  expiration: 86400
 
 filepath:
   project-excel: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/register-excel/
