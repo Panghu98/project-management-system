@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="group.uchain.panghu.mapper.AllocationInfoMapper">
+<mapper namespace="group.uchain.project_management_system.mapper.AllocationInfoMapper">
 
     <insert id="uploadAllocationInfo" parameterType="hashmap">
         insert into allocation_info 
@@ -13,7 +13,7 @@
             )
         </foreach>
     </insert>
-    <select id="getUserAllocationInfo" resultType="group.uchain.panghu.vo.AllocationInfo">
+    <select id="getUserAllocationInfo" resultType="group.uchain.project_management_system.vo.AllocationInfo">
         select a.project_id as projectId,a.user_score as userScore,p.category,p.leader,p.instruction
         from allocation_info a inner join project_info p
         on a.project_id=p.id where a.user_id = #{userId}

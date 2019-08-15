@@ -28,11 +28,16 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     compile 'com.alibaba:fastjson:1.2.49'
     compile("org.slf4j:slf4j-parent:2.0.0-alpha0")
-    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.9.4'
     annotationProcessor "org.projectlombok:lombok:1.18.8"
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.1.6.RELEASE'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    
+
+    // https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf
+    compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
+
+
     //wire mock
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.18.0', ext: 'pom'
 
