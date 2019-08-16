@@ -13,6 +13,7 @@ import group.uchain.project_management_system.result.Result;
 import group.uchain.project_management_system.service.FileService;
 import group.uchain.project_management_system.util.ExcelUtil;
 import group.uchain.project_management_system.util.TypeConvertUtil;
+import group.uchain.project_management_system.vo.FileInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -48,6 +50,7 @@ public class FileServiceImpl implements FileService {
     @Autowired
     public FileServiceImpl(ProjectInfoMapper projectInfoMapper,UserFormMapper userFormMapper,
                            MQSender mqSender) {
+
         this.projectInfoMapper = projectInfoMapper;
         this.userFormMapper = userFormMapper;
         this.mqSender = mqSender;
@@ -105,7 +108,7 @@ public class FileServiceImpl implements FileService {
         }
         List<String> idList = projectInfoMapper.getRepeatNums(listOfId);
         if(idList.size()!=0){
-            throw new MyException("项目编号"+idList.toString()+"已经存在",14);
+            return Result.error("项目编号"+idList.toString()+"已经存在");
         }
 
         //放入消息队列,插入数据库
@@ -119,6 +122,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public Result registerByExcel(MultipartFile file) {
         if (file==null){
+            //自定义异常类
             throw new MyException(CodeMsg.FILE_EMPTY_ERROR);
         }
 
@@ -138,24 +142,28 @@ public class FileServiceImpl implements FileService {
 
         //读取Excel表格存入数据库
         List<RegisterUser> list = ExcelUtil.getUsersByExcel(pathFile);
+        //真正用于注册的用户集合
         List<User> users = new ArrayList<>();
+        //记录注册用户的ID,用户判断用户是否已经存在
+        List<Long> idList = new ArrayList<>();
         for (RegisterUser registerUser:list
              ) {
-            User user = new User(registerUser);
-            //如果用户已经存在则不需要加入List当中在进行注册  -- 检测用户在数据库中是否存在
-            if (userFormMapper.selectUserByUserId(user.getUserId())==null){
+            idList.add(registerUser.getUserId());
+        }
+        //获取重复ID集合
+        List repeatIdList = userFormMapper.getRepeatUserId(idList);
+        if (repeatIdList.size() != 0){
+            log.error("项目编号"+repeatIdList.toString()+"已经存在");
+            return Result.error("项目编号"+repeatIdList.toString()+"已经存在");
+        }else {
+            for (RegisterUser registerUser:list
+            ) {
+                User user = new User(registerUser);
                 users.add(user);
-            }else {
-                log.error("工号为{}的用户已经存在",registerUser.getUserId());
             }
         }
-
-        //将用户数组插入数据库
-        if (users.size()==0){
-            return Result.error(CodeMsg.ALL_USERS_HAS_EXISTED);
-        }else {
-            userFormMapper.registerMultiUser(users);
-        }
+        //注册用户入库
+        userFormMapper.registerMultiUser(users);
         return Result.successData(users);
 
     }
@@ -194,19 +202,23 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Result getAllFilesName() {
-        List<String> list = new ArrayList<>();
+        List<FileInfo> list = new ArrayList<>();
         File file = new File(evidentFilePath);
 
         File[] fileList = file.listFiles();
-        //home/panghu/IdeaProjects/Project_Management_System/src/main/resources/evident
         if (fileList==null){
             throw new MyException(CodeMsg.FILE_IS_EMPTY);
         }
 
+        //遍历文件 返回文件的最后修改时间和文件名称
         for (File value : fileList) {
             if (value.isFile()) {
                 String fileName = value.getName();
-                list.add(fileName);
+                Long date = value.lastModified();
+                FileInfo fileInfo = new FileInfo();
+                fileInfo.setDate(date);
+                fileInfo.setFileName(fileName);
+                list.add(fileInfo);
             }
         }
         return Result.successData(list);
@@ -232,6 +244,15 @@ public class FileServiceImpl implements FileService {
             throw new MyException(CodeMsg.FILE_UPLOAD_FAILED);
         }
         return new Result();
+    }
+
+    /**
+     * 导出Excel 项目分配信息
+     * @param response
+     */
+    @Override
+    public void getAllocationExcel(HttpServletResponse response) {
+
     }
 
 

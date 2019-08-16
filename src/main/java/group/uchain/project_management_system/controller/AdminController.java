@@ -82,7 +82,13 @@ public class AdminController {
     @ApiOperation(value = "超级管理员进行zip文件下载")
     @GetMapping("/file/downloadZipFile")
     public void downloadZipFile(@RequestParam(value = "files") List<String> files, HttpServletResponse response ){
-        System.out.println(files);
         fileService.downloadZipFile(files,response);
+    }
+
+    @RoleRequired(RoleEnum.SUPER_ADMIN)
+    @ApiOperation(value = "超级管理员导出Excel--看每个项目具体分给了哪些老师")
+    @GetMapping("/file/getAllocationExcel")
+    public void getAllocationExcel(HttpServletResponse response){
+        fileService.getAllocationExcel(response);
     }
 }

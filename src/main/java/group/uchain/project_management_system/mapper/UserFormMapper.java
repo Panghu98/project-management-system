@@ -26,10 +26,10 @@ public interface UserFormMapper {
     List<User> selectUserByHalfUserId(long id);
     /**
      * 通过ID数组判断已经存在的用户
-     * @param list 用户IDLList
+     * @param list 用户IDList
      * @return
      */
-    List<Long> getRepeatUserId(@Param("list")List<String> list);
+    List<Long> getRepeatUserId(@Param("list")List<Long> list);
 
     /**
      * 更新密码

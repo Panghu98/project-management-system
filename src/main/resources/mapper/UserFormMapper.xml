@@ -42,9 +42,9 @@
     <select id="getRepeatUserId" resultType="java.lang.Long">
         select user_id as number
         from user
-        where id in
+        where user_id in
         <foreach collection="list" separator="," index="" item="id" open="(" close=")">
-            #{id,jdbcType=VARCHAR}
+            #{id}
         </foreach>
     </select>
 </mapper>

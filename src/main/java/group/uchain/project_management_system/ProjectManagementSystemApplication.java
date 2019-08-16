@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @author project_management_system
  */
-@MapperScan("group.uchain.project_management_system.mapper")
+@MapperScan(value = "group.uchain.project_management_system.mapper")
 @SpringBootApplication
 public class ProjectManagementSystemApplication {
 

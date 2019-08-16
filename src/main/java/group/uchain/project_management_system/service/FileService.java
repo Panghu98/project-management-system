@@ -38,4 +38,5 @@ public interface FileService {
      */
     Result uploadEvidentFile(MultipartFile multipartFile);
 
+    void getAllocationExcel(HttpServletResponse response);
 }
