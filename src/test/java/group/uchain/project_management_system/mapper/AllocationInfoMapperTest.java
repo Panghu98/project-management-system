@@ -1,4 +1,4 @@
-package group.uchain.panghu.mapper;
+package group.uchain.project_management_system.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,9 +9,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.HashMap;
 
 /**
- * @author panghu
+ * @author project_management_system
  * @title: AllocationInfoMapperTest
- * @projectName panghu
+ * @projectName project_management_system
  * @date 19-7-21 上午11:07
  */
 @RunWith(SpringRunner.class)

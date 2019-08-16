@@ -1,6 +1,6 @@
-package group.uchain.panghu.mapper;
+package group.uchain.project_management_system.mapper;
 
-import group.uchain.panghu.dto.LoginInfo;
+import group.uchain.project_management_system.dto.LoginInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +9,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
-
 /**
- * @author panghu
+ * @author project_management_system
  * @title: LoginInfoMapperTest
- * @projectName panghu
+ * @projectName project_management_system
  * @date 19-7-21 下午4:52
  */
 @RunWith(SpringRunner.class)

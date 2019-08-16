@@ -1,5 +1,6 @@
 package group.uchain.project_management_system.service.impl;
 
+import ch.qos.logback.core.pattern.ConverterUtil;
 import group.uchain.project_management_system.dto.RegisterUser;
 import group.uchain.project_management_system.entity.ProjectInfo;
 import group.uchain.project_management_system.entity.User;
@@ -7,9 +8,11 @@ import group.uchain.project_management_system.enums.CodeMsg;
 import group.uchain.project_management_system.exception.MyException;
 import group.uchain.project_management_system.mapper.ProjectInfoMapper;
 import group.uchain.project_management_system.mapper.UserFormMapper;
+import group.uchain.project_management_system.rabbitmq.MQSender;
 import group.uchain.project_management_system.result.Result;
 import group.uchain.project_management_system.service.FileService;
 import group.uchain.project_management_system.util.ExcelUtil;
+import group.uchain.project_management_system.util.TypeConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,10 +43,14 @@ public class FileServiceImpl implements FileService {
 
     private ProjectInfoMapper projectInfoMapper;
 
+    private MQSender mqSender;
+
     @Autowired
-    public FileServiceImpl(ProjectInfoMapper projectInfoMapper,UserFormMapper userFormMapper) {
+    public FileServiceImpl(ProjectInfoMapper projectInfoMapper,UserFormMapper userFormMapper,
+                           MQSender mqSender) {
         this.projectInfoMapper = projectInfoMapper;
         this.userFormMapper = userFormMapper;
+        this.mqSender = mqSender;
     }
 
     @Value(value = "${filepath.project-excel}")
@@ -61,7 +68,7 @@ public class FileServiceImpl implements FileService {
 
 
     /**
-     *
+     * 通过导入Excel查询导入数据库 分配项目信息
      * @param file  项目文件
      * @return
      */
@@ -101,8 +108,8 @@ public class FileServiceImpl implements FileService {
             throw new MyException("项目编号"+idList.toString()+"已经存在",14);
         }
 
-        //插入数据库
-        projectInfoMapper.readExcel(list);
+        //放入消息队列,插入数据库
+        mqSender.sendProjectInfo(list);
 
         log.info("文件上传成功");
         return new Result();
@@ -135,7 +142,7 @@ public class FileServiceImpl implements FileService {
         for (RegisterUser registerUser:list
              ) {
             User user = new User(registerUser);
-            //如果用户已经存在则不需要加入List当中在进行注册
+            //如果用户已经存在则不需要加入List当中在进行注册  -- 检测用户在数据库中是否存在
             if (userFormMapper.selectUserByUserId(user.getUserId())==null){
                 users.add(user);
             }else {

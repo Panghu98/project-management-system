@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  * @projectName project_management_system
  * @date 19-7-15 上午10:02
  */
-@CrossOrigin(origins = "192.168.8.106")
+@CrossOrigin(origins = "192.168.8.106:8080")
 @RestController
 @RequestMapping(produces = { "application/json;charset=UTF-8" })
 @Api(tags = "公共接口")
@@ -48,9 +48,11 @@ public class PublicController {
             @ApiImplicitParam(name = "userId",value = "用户名",required = true),
             @ApiImplicitParam(name = "password",value = "密码",required = true)
     })
+    @RoleRequired(RoleEnum.TEACHER)
     @ApiOperation(value = "用户登录接口",notes = "用户登录")
     @PostMapping(value = "/login")
-    public Result login(LoginUser loginUser, HttpServletRequest request) {
+    public Result login(@RequestBody LoginUser loginUser, HttpServletRequest request) {
+        System.out.println(loginUser);
         return loginService.login(loginUser.getUserId(),loginUser.getPassword(),request);
     }
 
@@ -66,5 +68,6 @@ public class PublicController {
     public Result getAllScore(){
         return infoService.getAllScore();
     }
+
 
 }

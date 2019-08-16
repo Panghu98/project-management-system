@@ -1,11 +1,14 @@
 package group.uchain.project_management_system.rabbitmq;
 
 import group.uchain.project_management_system.dto.LoginInfo;
+import group.uchain.project_management_system.entity.ProjectInfo;
 import group.uchain.project_management_system.util.TypeConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author project_management_system
@@ -26,6 +29,17 @@ public class MQSender {
 
     public void sendLoginInfo(LoginInfo loginInfo){
         String msg = TypeConvertUtil.beanToString(loginInfo);
-        amqpTemplate.convertAndSend(MQConfig.TOPIC_EXCHANGE,"topic.key1",msg);
+        amqpTemplate.convertAndSend(MQConfig.DIRECT_EXCHANGE,"direct.login",msg);
     }
+
+    public void sendProjectInfo(List<ProjectInfo> list){
+        String msg = TypeConvertUtil.convertListProjectToString(list);
+        amqpTemplate.convertAndSend(MQConfig.DIRECT_EXCHANGE,"direct.project",msg);
+    }
+
+
+
+
+
+
 }

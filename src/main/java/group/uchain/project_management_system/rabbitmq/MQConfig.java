@@ -1,9 +1,6 @@
 package group.uchain.project_management_system.rabbitmq;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,9 +13,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MQConfig {
 
-    static final String TOPIC_QUEUE = "topic.queue1";
+    static final String DIRECT_LOGIN = "direct.login";
 
-    static final String TOPIC_EXCHANGE = "topicExchange";
+    static final String DIRECT_PROJECT = "direct.project";
+
+    static final String DIRECT_EXCHANGE = "directExchange";
 
     /**
      * Topic模式 交换机Exchange
@@ -26,18 +25,31 @@ public class MQConfig {
      * */
 
     @Bean
-    public Queue topicQueue1(){
-        return new Queue(TOPIC_QUEUE,true);
+    public Queue directQueueLogin(){
+        return new Queue(DIRECT_LOGIN,true);
     }
 
     @Bean
-    public TopicExchange topicExchange(){
-        return new TopicExchange(TOPIC_EXCHANGE);
+    public Queue directQueueProject(){
+        return new Queue(DIRECT_PROJECT,true);
+    }
+
+
+    @Bean
+    public DirectExchange directExchange(){
+        return new DirectExchange(DIRECT_EXCHANGE);
     }
 
     @Bean
-    public Binding topicBinding1() {
-        return BindingBuilder.bind(topicQueue1()).to(topicExchange()).with("topic.#");
+    public Binding directLoginBinding() {
+        return BindingBuilder.bind(directQueueLogin()).to(directExchange()).with("direct.login");
     }
+
+    @Bean
+    Binding directProjectBinding(){
+        return BindingBuilder.bind(directQueueProject()).to(directExchange()).with("direct.project");
+    }
+
+
 
 }

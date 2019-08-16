@@ -1,4 +1,4 @@
-package group.uchain.panghu;
+package group.uchain.project_management_system;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

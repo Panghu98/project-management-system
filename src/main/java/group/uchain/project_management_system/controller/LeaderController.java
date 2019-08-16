@@ -22,7 +22,7 @@ import java.util.Map;
  * @projectName project_management_system
  * @date 19-7-21 上午10:26
  */
-@CrossOrigin(origins = "192.168.8.106")
+@CrossOrigin(origins = "192.168.8.106:8080")
 @Api(tags = "负责人接口")
 @RestController
 public class LeaderController {

@@ -22,7 +22,8 @@ public class MD5Util {
     private static String inputPassToFormPass(String inputPass){
         //避免在网络传输被截取然后反推出密码，所以在md5加密前先打乱密码
         //注意这里要和前端保持一致   加引号和不加引号是有区别的
-        String str =""+SALT.charAt((0))+SALT.charAt(2)+inputPass+SALT.charAt(5)+SALT.charAt(4);
+        String str = ""+SALT.charAt(0)+SALT.charAt(2)+inputPass+SALT.charAt(5)+SALT.charAt(4);
+        System.err.println(str);
         return md5(str);
     }
 
@@ -33,7 +34,7 @@ public class MD5Util {
      * @return
      */
     public static String formPassToDBPass(String inputPass,String salt){
-        String str = ""+ salt.charAt((0))+salt.charAt(2)+inputPass+salt.charAt(5);
+        String str = ""+ salt.charAt(0)+salt.charAt(2)+inputPass+salt.charAt(5);
         return md5(str);
     }
 
@@ -51,6 +52,7 @@ public class MD5Util {
     public static void main(String[] args) {
         //38a41052bb6fd70aeddb5370aafcbecc
         //4756a51e387552db1fa1dfc64cb6b194
+        System.out.println(md5("uchainc1108"));
         System.out.println(inputPassToFormPass("111111"));
         System.out.println(inputPassToDBPass("111111","4995bd91"));
     }

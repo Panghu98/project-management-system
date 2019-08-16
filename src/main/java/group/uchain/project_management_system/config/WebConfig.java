@@ -20,6 +20,15 @@ public class WebConfig implements WebMvcConfigurer {
     private AuthorityInterceptor authorityInterceptor;
 
     @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "DELETE", "PUT")
+                .maxAge(3600);
+    }
+
+    @Override
     public void configurePathMatch(PathMatchConfigurer pathMatchConfigurer) {
 
     }

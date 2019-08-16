@@ -39,4 +39,12 @@
     <select id="selectUserByHalfUserId" resultType="group.uchain.project_management_system.entity.User">
         select user_id as userId,username,position,office,salt,`role`,`password` from `user` where user_id like (concat('%',#{id},'%'))
     </select>
+    <select id="getRepeatUserId" resultType="java.lang.Long">
+        select user_id as number
+        from user
+        where id in
+        <foreach collection="list" separator="," index="" item="id" open="(" close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select>
 </mapper>

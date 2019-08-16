@@ -1,4 +1,4 @@
-package group.uchain.panghu.mapper;
+package group.uchain.project_management_system.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
-
 /**
- * @author panghu
+ * @author project_management_system
  * @title: ProjectInfoMapperTest
- * @projectName panghu
+ * @projectName project_management_system
  * @date 19-7-21 上午11:34
  */
 @RunWith(SpringRunner.class)

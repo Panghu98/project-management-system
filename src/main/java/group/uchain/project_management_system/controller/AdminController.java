@@ -21,7 +21,7 @@ import java.util.List;
  * @projectName project_management_system
  * @date 19-7-12 下午8:41
  */
-@CrossOrigin(origins = "192.168.8.106")
+@CrossOrigin(origins = "192.168.8.106:8080")
 @RestController
 @Api(tags = "超级管理员接口")
 public class AdminController {
@@ -42,15 +42,15 @@ public class AdminController {
      * @return
      */
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "文件上传--超管可用")
-    @PostMapping("/register-excel/upload")
+    @ApiOperation(value = "通过Excel导出个人项目分数分配信息")
+    @PostMapping("/excel/projectUpload")
     public Result uploadFile(MultipartFile file){
         return fileService.uploadFile(file);
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "通过Excel表格注册用户")
-    @PostMapping("/register-excel/register")
+    @PostMapping("/excel/register")
     public Result registerByExcel(MultipartFile file){
         return fileService.registerByExcel(file);
     }
