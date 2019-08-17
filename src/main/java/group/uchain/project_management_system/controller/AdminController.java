@@ -85,10 +85,9 @@ public class AdminController {
         fileService.downloadZipFile(files,response);
     }
 
-    @RoleRequired(RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "超级管理员导出Excel--看每个项目具体分给了哪些老师")
     @GetMapping("/file/getAllocationExcel")
-    public void getAllocationExcel(HttpServletResponse response){
-        fileService.getAllocationExcel(response);
+    public Result getAllocationExcel(HttpServletResponse response){
+        return fileService.getAllocationExcel(response);
     }
 }

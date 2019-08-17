@@ -6,6 +6,7 @@ import group.uchain.project_management_system.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -22,9 +23,15 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(MyException.class)
-    public Result handleOilException(MyException exception){
+    public Result handleSelfException(MyException exception){
         log.error(EXCEPTION_MSG_KEY+exception.getMessage());
         return Result.error(exception);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(NullPointerException.class)
+    public void handleNullPointException(MyException exception){
+        log.error(EXCEPTION_MSG_KEY+exception.getMessage());
     }
 
 }

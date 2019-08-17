@@ -6,6 +6,7 @@ import group.uchain.project_management_system.entity.ProjectInfo;
 import group.uchain.project_management_system.entity.User;
 import group.uchain.project_management_system.enums.CodeMsg;
 import group.uchain.project_management_system.exception.MyException;
+import group.uchain.project_management_system.mapper.AllocationInfoMapper;
 import group.uchain.project_management_system.mapper.ProjectInfoMapper;
 import group.uchain.project_management_system.mapper.UserFormMapper;
 import group.uchain.project_management_system.rabbitmq.MQSender;
@@ -16,6 +17,12 @@ import group.uchain.project_management_system.util.TypeConvertUtil;
 import group.uchain.project_management_system.vo.AllocationInfo2;
 import group.uchain.project_management_system.vo.FileInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,15 +53,18 @@ public class FileServiceImpl implements FileService {
 
     private ProjectInfoMapper projectInfoMapper;
 
+    private AllocationInfoMapper allocationInfoMapper;
+
     private MQSender mqSender;
 
     @Autowired
     public FileServiceImpl(ProjectInfoMapper projectInfoMapper,UserFormMapper userFormMapper,
-                           MQSender mqSender) {
+                           MQSender mqSender,AllocationInfoMapper allocationInfoMapper) {
 
         this.projectInfoMapper = projectInfoMapper;
         this.userFormMapper = userFormMapper;
         this.mqSender = mqSender;
+        this.allocationInfoMapper = allocationInfoMapper;
     }
 
     @Value(value = "${filepath.project-excel}")
@@ -252,8 +262,66 @@ public class FileServiceImpl implements FileService {
      * @param response
      */
     @Override
-    public void getAllocationExcel(HttpServletResponse response) {
-        List<AllocationInfo2> user
+    public Result getAllocationExcel(HttpServletResponse response) {
+        //管理员获取到所有的项目分配信息
+        List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo();
+        // 1.创建HSSFWorkbook，一个HSSFWorkbook对应一个Excel文件
+        XSSFWorkbook wb = new XSSFWorkbook();
+        // 2.在workbook中添加一个sheet,对应Excel文件中的sheet(工作栏)
+        XSSFSheet sheet = wb.createSheet("sheet1");
+        //3.设置格式  基本单位是1/256个字符
+        sheet.setColumnWidth(0,256*10);
+        sheet.setColumnWidth(1,256*14);
+        sheet.setColumnWidth(2,256*19);
+        sheet.setColumnWidth(3,256*15);
+        sheet.setColumnWidth(4,156*50);
+        sheet.setColumnWidth(5,256*100);
+        //3.1设置字体居中
+        XSSFCellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.CENTER_SELECTION);
+        // 4.设置表头，即每个列的列名
+        String[] title = {"项目编号","项目类别","项目负责人","项目说明","项目分配的成员信息"};
+        // 4.1创建第一行
+        XSSFRow row = sheet.createRow(0);
+        // 此处创建一个序号列
+        row.createCell(0).setCellValue("序号");
+        for (int i = 0; i < title.length; i++) {
+            // 给列写入数据,创建单元格，写入数据
+            row.createCell(i+1).setCellValue(title[i]);
+        }
+        //写入正式数据
+        for (int i = 0; i < list.size(); i++) {
+            //创建行
+            // 创建行
+            row = sheet.createRow(i+1);
+
+            //设置行高
+            row.setHeight((short) (16*180));
+            // 序号
+            row.createCell(0).setCellValue(i+1);
+            row.createCell(1).setCellValue(list.get(i).getProjectId());
+            row.createCell(2).setCellValue(list.get(i).getCategory());
+            row.createCell(3).setCellValue(list.get(i).getLeader());
+            row.createCell(4).setCellValue(list.get(i).getInstruction());
+            String teachers = list.get(i).getTeachers().toString();
+            //去除首尾的[]
+            teachers = teachers.substring(1,teachers.length()-1);
+            row.createCell(5).setCellValue(teachers);
+        }
+
+
+
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        response.setHeader("Content-disposition", "attachment;filename=AllocationInfo.xlsx");
+        try {
+            OutputStream os = response.getOutputStream();
+            wb.write(os);
+            os.flush();
+            os.close();
+            return null;
+        }catch (IOException e){
+            throw new MyException(CodeMsg.FILE_DOWNLOAD_ERROR);
+        }
     }
 
 

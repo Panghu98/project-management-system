@@ -50,7 +50,7 @@ public class LeaderController {
     }
 
     @ApiOperation(value = "上传项目的相关证明材料")
-    @PostMapping("/file/uploadEvidentFile")
+    @GetMapping("/file/uploadEvidentFile")
     public Result uploadEvidentFile(MultipartFile file){
         return fileService.uploadEvidentFile(file);
     }

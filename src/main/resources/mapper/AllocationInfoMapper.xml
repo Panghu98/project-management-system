@@ -67,7 +67,7 @@
         select p.id,p.category,p.leader,p.instruction,a.user_id as t_user_id,u.username as t_username
           from project_info p,allocation_info a
           inner join user u
-          on a.user_id = a.user_id
+          on a.user_id = u.user_id
         where p.id = a.project_id
     </select>
 </mapper>

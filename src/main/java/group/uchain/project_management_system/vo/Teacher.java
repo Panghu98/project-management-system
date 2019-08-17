@@ -15,4 +15,8 @@ public class Teacher {
      */
     private String userId;
 
+    @Override
+    public String toString() {
+        return "教师名称:"+username+" 教师工号"+userId+"\n";
+    }
 }
