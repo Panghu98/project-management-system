@@ -13,6 +13,7 @@ import group.uchain.project_management_system.result.Result;
 import group.uchain.project_management_system.service.FileService;
 import group.uchain.project_management_system.util.ExcelUtil;
 import group.uchain.project_management_system.util.TypeConvertUtil;
+import group.uchain.project_management_system.vo.AllocationInfo2;
 import group.uchain.project_management_system.vo.FileInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -252,7 +253,7 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     public void getAllocationExcel(HttpServletResponse response) {
-
+        List<AllocationInfo2> user
     }
 
 

@@ -3,8 +3,6 @@ package group.uchain.project_management_system.vo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * 文件信息
  * @author panghu

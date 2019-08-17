@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="group.uchain.project_management_system.mapper.AllocationInfoMapper">
 
+
+
     <insert id="uploadAllocationInfo" parameterType="hashmap">
         insert into allocation_info 
             values 
@@ -13,9 +15,59 @@
             )
         </foreach>
     </insert>
+
+    <update id="updateAllocationTime">
+        update project_info
+            <set>
+                <if test="param1 != null" >`date` = #{param1}</if>
+            </set>
+        where `id` = #{param2}
+    </update>
     <select id="getUserAllocationInfo" resultType="group.uchain.project_management_system.vo.AllocationInfo">
         select a.project_id as projectId,a.user_score as userScore,p.category,p.leader,p.instruction
         from allocation_info a inner join project_info p
         on a.project_id=p.id where a.user_id = #{userId}
+    </select>
+
+    <!--<resultMap id="Allocation2" type="group.uchain.project_management_system.vo.AllocationInfo2">-->
+        <!--<id column="id" property="projectId"/>-->
+        <!--<result column="category" property="category"/>-->
+        <!--<result column="leader" property="leader"/>-->
+        <!--<result column="instruction" property="instruction"/>-->
+        <!--<collection property="teachers" ofType="long">-->
+            <!--<constructor>-->
+                <!--&lt;!&ndash;对应真实筛选出的列名称&ndash;&gt;-->
+                <!--<arg column="teachers"/>-->
+            <!--</constructor>-->
+        <!--</collection>-->
+    <!--</resultMap>-->
+
+    <!--<select id="getAllAllocationInfoTest" resultMap="Allocation2" resultType="group.uchain.project_management_system.vo.AllocationInfo2">-->
+        <!--select p.id,p.category,p.leader,p.instruction,a.user_id as teachers-->
+            <!--from project_info p,allocation_info a-->
+        <!--where p.id = a.project_id-->
+    <!--</select>-->
+
+
+
+
+    <resultMap id="Allocation" type="group.uchain.project_management_system.vo.AllocationInfo2">
+        <id column="id" property="projectId"/>
+        <result column="category" property="category"/>
+        <result column="leader" property="leader"/>
+        <result column="instruction" property="instruction"/>
+        <collection property="teachers" ofType="group.uchain.project_management_system.vo.Teacher"
+        javaType="java.util.ArrayList" columnPrefix="t_">
+            <id column="user_id" property="userId" jdbcType="BIGINT"/>
+            <id column="username" property="username" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAllAllocationInfo" resultMap="Allocation" resultType="group.uchain.project_management_system.vo.AllocationInfo2">
+        select p.id,p.category,p.leader,p.instruction,a.user_id as t_user_id,u.username as t_username
+          from project_info p,allocation_info a
+          inner join user u
+          on a.user_id = a.user_id
+        where p.id = a.project_id
     </select>
 </mapper>

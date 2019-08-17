@@ -1,12 +1,15 @@
 package group.uchain.project_management_system.mapper;
 
+import group.uchain.project_management_system.vo.AllocationInfo2;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author project_management_system
@@ -38,5 +41,16 @@ public class AllocationInfoMapperTest {
     public void getUserAllocationInfo() {
         String userId = "123456";
         System.err.println(allocationInfoMapper.getUserAllocationInfo(userId));
+    }
+
+    @Test
+    public void  insertAllocationTime(){
+        allocationInfoMapper.updateAllocationTime(new Date(),"V27");
+    }
+
+    @Test
+    public void getAllAllocationInfo(){
+        List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo();
+        System.out.println(list);
     }
 }

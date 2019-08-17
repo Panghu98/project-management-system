@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
+ * 普通用户查看的分配信息
  * @author project_management_system
  * @title: AllocationInfo
  * @projectName project_management_system
@@ -21,18 +22,12 @@ public class AllocationInfo {
     @ApiModelProperty(value = "成绩")
     private Double userScore;
 
-    /**
-     * 类别
-     */
     @ApiModelProperty(value = "项目类别")
     private String category;
 
     @ApiModelProperty(value = "项目负责人")
     private String leader;
 
-    /**
-     * 项目说明
-     */
     @ApiModelProperty(value = "项目说明")
     private String instruction;
 

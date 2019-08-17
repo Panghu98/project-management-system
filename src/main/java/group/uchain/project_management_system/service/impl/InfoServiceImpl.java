@@ -13,7 +13,10 @@ import group.uchain.project_management_system.vo.AllocationInfo;
 import group.uchain.project_management_system.vo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -58,11 +61,13 @@ public class InfoServiceImpl implements InfoService {
 
 
     @Override
+    @Transactional(rollbackFor = SQLException.class)
     public Result uploadAllocationInfo(Map<Long, Integer> map, String projectId) {
         //如果项目编号不存在的话，抛出异常  项目编号应该是不会出错的，这样写只是为了确保
         if (!projectInfoMapper.isProjectExist(projectId)){
             throw new MyException(CodeMsg.PROJECT_ID_NOI_EXIST);
         }
+        allocationInfoMapper.updateAllocationTime(new Date(),projectId);
         allocationInfoMapper.uploadAllocationInfo(map,projectId);
         return new Result();
     }
