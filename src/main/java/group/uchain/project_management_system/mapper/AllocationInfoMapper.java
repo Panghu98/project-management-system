@@ -42,9 +42,11 @@ public interface AllocationInfoMapper {
 
     /**
      * 超级管理员获取所有的项目分配信息
+     * @param start
+     * @param end
      * @return
      */
-    List<AllocationInfo2> getAllAllocationInfo();
+    List<AllocationInfo2> getAllAllocationInfo(@Param("start") Date start,@Param("end") Date end);
 
 
 }

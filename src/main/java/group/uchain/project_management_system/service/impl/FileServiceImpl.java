@@ -162,7 +162,7 @@ public class FileServiceImpl implements FileService {
         List repeatIdList = userFormMapper.getRepeatUserId(idList);
         if (repeatIdList.size() != 0){
             log.error("项目编号"+repeatIdList.toString()+"已经存在");
-            return Result.error(20,"项目编号"+repeatIdList.toString()+"已经存在");
+            return Result.error(20,"用户工号"+repeatIdList.toString()+"已经存在");
         }else {
             for (RegisterUser registerUser:list
             ) {
@@ -256,12 +256,14 @@ public class FileServiceImpl implements FileService {
 
     /**
      * 导出Excel 项目分配信息
+     * @param endDate Excel中项目信息的开始时间
+     * @param startDate  Excel中项目信息的结束时间
      * @param response
      */
     @Override
     public Result getAllocationExcel(Date startDate, Date endDate, HttpServletResponse response) {
         //管理员获取到所有的项目分配信息
-        List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo();
+        List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo(startDate,endDate);
         // 1.创建HSSFWorkbook，一个HSSFWorkbook对应一个Excel文件
         XSSFWorkbook wb = new XSSFWorkbook();
         // 2.在workbook中添加一个sheet,对应Excel文件中的sheet(工作栏)
@@ -315,7 +317,7 @@ public class FileServiceImpl implements FileService {
             wb.write(os);
             os.flush();
             os.close();
-            return null;
+            return new Result();
         }catch (IOException e){
             throw new MyException(CodeMsg.FILE_DOWNLOAD_ERROR);
         }

@@ -50,7 +50,11 @@ public class AllocationInfoMapperTest {
 
     @Test
     public void getAllAllocationInfo(){
-        List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo();
+        Date start = new Date(System.currentTimeMillis()-60*60*60*24*50);
+        Date end = new Date(System.currentTimeMillis());
+        System.err.println(start);
+        System.err.println(end);
+        List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo(start,end);
         System.out.println(list);
     }
 }

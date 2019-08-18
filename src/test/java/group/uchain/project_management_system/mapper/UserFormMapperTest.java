@@ -30,4 +30,9 @@ public class UserFormMapperTest {
         list.add(2137478923L);
         System.out.println(userFormMapper.getRepeatUserId(list));
     }
+
+    @Test
+    public void getAllUser(){
+        System.out.println(userFormMapper.getAllUser());
+    }
 }

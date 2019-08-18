@@ -68,6 +68,7 @@
           from project_info p,allocation_info a
           inner join user u
           on a.user_id = u.user_id
-        where p.id = a.project_id
+        <!--p.date &lt;= #{end}(小于截止时间)  p.date  &gt;= #{start}(大于开始时间)-->
+        where p.id = a.project_id and p.date &lt;= #{end} and p.date  &gt;= #{start}
     </select>
 </mapper>
