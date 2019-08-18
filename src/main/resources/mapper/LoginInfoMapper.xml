@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="group.uchain.project_management_system.mapper.LoginInfoMapper">
+<mapper namespace="group.uchain.project.mapper.LoginInfoMapper">
 
     <insert id="insert">
         insert into login_info(user_id, date, ip) values (#{userId},#{date},#{ip})
