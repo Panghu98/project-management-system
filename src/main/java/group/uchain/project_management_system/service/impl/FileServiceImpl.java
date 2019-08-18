@@ -1,9 +1,8 @@
 package group.uchain.project_management_system.service.impl;
 
-import ch.qos.logback.core.pattern.ConverterUtil;
 import group.uchain.project_management_system.dto.RegisterUser;
-import group.uchain.project_management_system.entity.ProjectInfo;
-import group.uchain.project_management_system.entity.User;
+import group.uchain.project_management_system.dto.ProjectInfo;
+import group.uchain.project_management_system.dto.User;
 import group.uchain.project_management_system.enums.CodeMsg;
 import group.uchain.project_management_system.exception.MyException;
 import group.uchain.project_management_system.mapper.AllocationInfoMapper;
@@ -13,11 +12,9 @@ import group.uchain.project_management_system.rabbitmq.MQSender;
 import group.uchain.project_management_system.result.Result;
 import group.uchain.project_management_system.service.FileService;
 import group.uchain.project_management_system.util.ExcelUtil;
-import group.uchain.project_management_system.util.TypeConvertUtil;
 import group.uchain.project_management_system.vo.AllocationInfo2;
 import group.uchain.project_management_system.vo.FileInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -119,7 +116,7 @@ public class FileServiceImpl implements FileService {
         }
         List<String> idList = projectInfoMapper.getRepeatNums(listOfId);
         if(idList.size()!=0){
-            return Result.error("项目编号"+idList.toString()+"已经存在");
+            return Result.error(20,"项目编号"+idList.toString()+"已经存在");
         }
 
         //放入消息队列,插入数据库
@@ -165,7 +162,7 @@ public class FileServiceImpl implements FileService {
         List repeatIdList = userFormMapper.getRepeatUserId(idList);
         if (repeatIdList.size() != 0){
             log.error("项目编号"+repeatIdList.toString()+"已经存在");
-            return Result.error("项目编号"+repeatIdList.toString()+"已经存在");
+            return Result.error(20,"项目编号"+repeatIdList.toString()+"已经存在");
         }else {
             for (RegisterUser registerUser:list
             ) {
@@ -262,7 +259,7 @@ public class FileServiceImpl implements FileService {
      * @param response
      */
     @Override
-    public Result getAllocationExcel(HttpServletResponse response) {
+    public Result getAllocationExcel(Date startDate, Date endDate, HttpServletResponse response) {
         //管理员获取到所有的项目分配信息
         List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo();
         // 1.创建HSSFWorkbook，一个HSSFWorkbook对应一个Excel文件

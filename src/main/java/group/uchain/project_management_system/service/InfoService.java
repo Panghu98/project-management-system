@@ -1,6 +1,6 @@
 package group.uchain.project_management_system.service;
 
-import group.uchain.project_management_system.entity.ProjectInfo;
+import group.uchain.project_management_system.dto.ProjectInfo;
 import group.uchain.project_management_system.result.Result;
 import group.uchain.project_management_system.vo.User;
 

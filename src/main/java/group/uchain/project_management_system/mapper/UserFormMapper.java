@@ -1,6 +1,6 @@
 package group.uchain.project_management_system.mapper;
 
-import group.uchain.project_management_system.entity.User;
+import group.uchain.project_management_system.dto.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

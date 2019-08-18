@@ -1,7 +1,7 @@
 package group.uchain.project_management_system.mapper;
 
 import com.alibaba.fastjson.JSONArray;
-import group.uchain.project_management_system.entity.User;
+import group.uchain.project_management_system.dto.User;
 import group.uchain.project_management_system.util.SaltUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;

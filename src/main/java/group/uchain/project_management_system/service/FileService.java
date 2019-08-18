@@ -4,6 +4,7 @@ import group.uchain.project_management_system.result.Result;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,5 +39,5 @@ public interface FileService {
      */
     Result uploadEvidentFile(MultipartFile multipartFile);
 
-    Result getAllocationExcel(HttpServletResponse response);
+    Result getAllocationExcel(Date startDate,Date endDate, HttpServletResponse response);
 }

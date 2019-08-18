@@ -1,9 +1,13 @@
-package group.uchain.project_management_system.entity;
+package group.uchain.project_management_system.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author project_management_system
@@ -71,5 +75,14 @@ public class ProjectInfo {
      * 负责人最小划分比例
      */
     private Integer division;
+
+    /**
+     * 项目导入时间
+     */
+
+    @JsonIgnore
+    @JSONField(format = "yyyy-MM-dd")
+    private Date date;
+
 
 }

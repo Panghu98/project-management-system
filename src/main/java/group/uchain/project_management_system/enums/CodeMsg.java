@@ -25,9 +25,10 @@ public enum CodeMsg {
     XLS_FILE_READ_ERROR(12,"XLS文件读取异常"),
     XLS_FILE_FORMAT_ERROR(13,"表格格式有误"),
     PROJECT_ID_HAS_EXISTED(14,"项目编号已经存在"),
-    ZIP_FILE_PACKAGE_ERROR(15,"文件压缩出错"),
-    FILE_IS_EMPTY(16,"当前目录下文件为空"),
-    FILE_DOWNLOAD_ERROR(17,"文件传输错误"),
+    EXCEL_EMPTY_ERROR(15,"Excel存在空白信息"),
+    ZIP_FILE_PACKAGE_ERROR(16,"文件压缩出错"),
+    FILE_IS_EMPTY(17,"当前目录下文件为空"),
+    FILE_DOWNLOAD_ERROR(18,"文件传输错误"),
 
     //文件格式要求出错
     USER_HAS_EXISTED(20,"用户已经存在"),

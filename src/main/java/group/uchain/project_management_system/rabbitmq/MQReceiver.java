@@ -2,13 +2,12 @@ package group.uchain.project_management_system.rabbitmq;
 
 import com.alibaba.fastjson.JSONArray;
 import group.uchain.project_management_system.dto.LoginInfo;
-import group.uchain.project_management_system.entity.ProjectInfo;
+import group.uchain.project_management_system.dto.ProjectInfo;
 import group.uchain.project_management_system.mapper.LoginInfoMapper;
 import group.uchain.project_management_system.mapper.ProjectInfoMapper;
 import group.uchain.project_management_system.util.TypeConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.annotation.RabbitListeners;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

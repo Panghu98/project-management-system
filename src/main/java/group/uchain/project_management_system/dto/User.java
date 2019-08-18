@@ -1,4 +1,4 @@
-package group.uchain.project_management_system.entity;
+package group.uchain.project_management_system.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import group.uchain.project_management_system.dto.RegisterUser;

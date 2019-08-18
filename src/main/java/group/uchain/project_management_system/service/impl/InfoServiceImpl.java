@@ -1,6 +1,6 @@
 package group.uchain.project_management_system.service.impl;
 
-import group.uchain.project_management_system.entity.ProjectInfo;
+import group.uchain.project_management_system.dto.ProjectInfo;
 import group.uchain.project_management_system.enums.CodeMsg;
 import group.uchain.project_management_system.exception.MyException;
 import group.uchain.project_management_system.mapper.AllocationInfoMapper;

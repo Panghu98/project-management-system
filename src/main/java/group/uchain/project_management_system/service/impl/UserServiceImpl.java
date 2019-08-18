@@ -3,7 +3,7 @@ package group.uchain.project_management_system.service.impl;
 
 
 import group.uchain.project_management_system.dto.RegisterUser;
-import group.uchain.project_management_system.entity.User;
+import group.uchain.project_management_system.dto.User;
 import group.uchain.project_management_system.enums.CodeMsg;
 import group.uchain.project_management_system.mapper.UserFormMapper;
 import group.uchain.project_management_system.result.Result;

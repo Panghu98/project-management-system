@@ -3,7 +3,7 @@
 <mapper namespace="group.uchain.project_management_system.mapper.ProjectInfoMapper">
 
     <insert id="readExcel" parameterType="list">
-        insert into project.project_info (`id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`)
+        insert into project.project_info (`id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`,`date`)
         values
         <foreach collection="list" separator="," index="" item="projectInfo">
             (
@@ -16,7 +16,8 @@
             #{projectInfo.variety,jdbcType=VARCHAR},
             #{projectInfo.score,jdbcType=DOUBLE},
             #{projectInfo.leader,jdbcType=VARCHAR},
-            #{projectInfo.division,jdbcType=SMALLINT}
+            #{projectInfo.division,jdbcType=SMALLINT},
+            #{projectInfo.date,jdbcType=DATE}
             )
         </foreach>
     </insert>
@@ -31,7 +32,7 @@
     </select>
     <!--使用内连接代替子查询进行SQL优化-->
     <!--通过AuthenticationContext中放入用户ID（用户名无法作为用户的唯一标示）来获取用户所对应的项目信息-->
-    <select id="getAllProjectInfo" resultType="group.uchain.project_management_system.entity.ProjectInfo">
+    <select id="getAllProjectInfo" resultType="group.uchain.project_management_system.dto.ProjectInfo">
         select `id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`
         from project_info p inner join user u on (p.`leader` = u.username)  where u.user_id =#{userId}
     </select>

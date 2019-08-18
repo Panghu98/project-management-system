@@ -21,6 +21,11 @@ public class Result<T> {
         this.message = "操作成功";
     }
 
+    /**
+     * 用于错误处理
+     * @param code 错误码 与 CodeMsg对应
+     * @param message 错误提示信息
+     */
     public Result(Integer code,String message){
         this.code = code;
         this.message = message;
@@ -50,11 +55,10 @@ public class Result<T> {
     }
 
     public static <T> Result<T> error(MyException exception){
-        CodeMsg codeMsg;
         return new Result<T>(exception.getCode(),exception.getMessage());
     }
 
-    public static  Result<String> error(String msg){
-        return new Result<>(msg);
+    public static  Result<String> error(Integer code,String msg){
+        return new Result<>(code,msg);
     }
 }

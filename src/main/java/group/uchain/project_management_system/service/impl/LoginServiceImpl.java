@@ -2,7 +2,7 @@ package group.uchain.project_management_system.service.impl;
 
 
 import group.uchain.project_management_system.dto.LoginInfo;
-import group.uchain.project_management_system.entity.User;
+import group.uchain.project_management_system.dto.User;
 import group.uchain.project_management_system.enums.CodeMsg;
 import group.uchain.project_management_system.mapper.UserFormMapper;
 import group.uchain.project_management_system.rabbitmq.MQSender;
@@ -12,6 +12,7 @@ import group.uchain.project_management_system.service.LoginService;
 import group.uchain.project_management_system.service.UserService;
 import group.uchain.project_management_system.util.IpUtil;
 import group.uchain.project_management_system.util.MD5Util;
+import group.uchain.project_management_system.util.RoleConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -83,6 +84,7 @@ public class LoginServiceImpl implements LoginService {
         //返回的对象中是带有权限信息的
         final UserDetails userDetails = userDetailsService.loadUserByUsername(String.valueOf(userId));
         log.info("加载userDetails:" + userDetails.getUsername());
+
         //异步记录登录信息入库
         LoginInfo info = new LoginInfo();
         info.setDate(new Date());
@@ -94,6 +96,8 @@ public class LoginServiceImpl implements LoginService {
         final String token = jwtTokenUtil.generateToken(userDetails);
         HashMap<String, String> r = new HashMap<>(10);
         r.put("token", token);
+        r.put("role", RoleConvertUtil.getDescription(user.getRole()));
+        r.put("username",user.getUsername());
         System.out.println("-------------------------------------------------------");
         System.out.println(token);
         System.out.println("--------------------------------------------------------");

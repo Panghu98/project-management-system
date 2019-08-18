@@ -1,6 +1,6 @@
 package group.uchain.project_management_system.service.impl;
 
-import group.uchain.project_management_system.entity.User;
+import group.uchain.project_management_system.dto.User;
 import group.uchain.project_management_system.mapper.UserFormMapper;
 import group.uchain.project_management_system.security.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package group.uchain.project_management_system.rabbitmq;
 
 import group.uchain.project_management_system.dto.LoginInfo;
-import group.uchain.project_management_system.entity.ProjectInfo;
+import group.uchain.project_management_system.dto.ProjectInfo;
 import group.uchain.project_management_system.util.TypeConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;

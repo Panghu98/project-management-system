@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="group.uchain.project_management_system.mapper.UserFormMapper">
-    <resultMap id="UserResultMap" type="group.uchain.project_management_system.entity.User">
+    <resultMap id="UserResultMap" type="group.uchain.project_management_system.dto.User">
         <id column="user_id" property="userId" javaType="Long"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="CHAR"/>
@@ -30,13 +30,13 @@
     <update id="updatePassword">
         update user set password=#{param2} where user_id=#{param1}
     </update>
-    <select id="selectUserByUserId" resultType="group.uchain.project_management_system.entity.User">
+    <select id="selectUserByUserId" resultType="group.uchain.project_management_system.dto.User">
         select user_id as userId,username,salt,`role`,`password` from `user` where user_id = #{id}
     </select>
     <select id="getAllUser" resultType="group.uchain.project_management_system.vo.User">
         select user_id as userId,username,position,office  from user;
     </select>
-    <select id="selectUserByHalfUserId" resultType="group.uchain.project_management_system.entity.User">
+    <select id="selectUserByHalfUserId" resultType="group.uchain.project_management_system.dto.User">
         select user_id as userId,username,position,office,salt,`role`,`password` from `user` where user_id like (concat('%',#{id},'%'))
     </select>
     <select id="getRepeatUserId" resultType="java.lang.Long">

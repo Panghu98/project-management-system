@@ -1,6 +1,6 @@
 package group.uchain.project_management_system.controller;
 
-import group.uchain.project_management_system.entity.ProjectInfo;
+import group.uchain.project_management_system.dto.ProjectInfo;
 import group.uchain.project_management_system.result.Result;
 import group.uchain.project_management_system.service.FileService;
 import group.uchain.project_management_system.service.InfoService;

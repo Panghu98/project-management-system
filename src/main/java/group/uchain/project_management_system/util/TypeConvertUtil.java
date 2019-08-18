@@ -2,7 +2,7 @@ package group.uchain.project_management_system.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import group.uchain.project_management_system.entity.ProjectInfo;
+import group.uchain.project_management_system.dto.ProjectInfo;
 
 import java.util.Collections;
 import java.util.List;

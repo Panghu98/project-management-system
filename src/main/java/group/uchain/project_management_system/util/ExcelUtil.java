@@ -1,7 +1,7 @@
 package group.uchain.project_management_system.util;
 
 import group.uchain.project_management_system.dto.RegisterUser;
-import group.uchain.project_management_system.entity.ProjectInfo;
+import group.uchain.project_management_system.dto.ProjectInfo;
 import group.uchain.project_management_system.enums.CodeMsg;
 import group.uchain.project_management_system.exception.MyException;
 import org.apache.poi.ss.usermodel.Row;
@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public class ExcelUtil {
             //2、获取Excel工作簿对象
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
 
+            //3.创建工作栏
             XSSFSheet sheetAt = workbook.getSheetAt(0);
             //4、循环读取表格数据
             for (Row row : sheetAt) {
@@ -45,7 +47,7 @@ public class ExcelUtil {
 
                 String id = row.getCell(0).getStringCellValue();
                 if (id == null){
-                    throw new MyException("项目编号不能为空",11);
+                    throw new MyException("项目编号不能为空",12);
                 }
                 String category = row.getCell(1).getStringCellValue();
                 String instruction = row.getCell(2).getStringCellValue();
@@ -68,6 +70,7 @@ public class ExcelUtil {
                 projectInfo.setNumber(number);
                 projectInfo.setScore(score);
                 projectInfo.setVariety(variety);
+                projectInfo.setDate(new Date());
 
                 list.add(projectInfo);
             }
@@ -77,9 +80,9 @@ public class ExcelUtil {
         } catch (IOException e) {
             e.printStackTrace();
             throw new MyException(CodeMsg.XLS_FILE_READ_ERROR);
-        } catch (IllegalStateException | NumberFormatException e){
+        } catch (NullPointerException e){
             e.printStackTrace();
-            throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
+            throw new MyException(CodeMsg.EXCEL_EMPTY_ERROR);
         }catch (Exception e){
             throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
         }
@@ -132,6 +135,7 @@ public class ExcelUtil {
             e.printStackTrace();
             throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
         }catch (Exception e) {
+            e.printStackTrace();
             throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
         }
 

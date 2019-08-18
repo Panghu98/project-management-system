@@ -19,10 +19,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author cyg
- * @date 18-9-12 下午3:28
- **/
 
 @Configuration
 @EnableSwagger2
