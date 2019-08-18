@@ -34,7 +34,8 @@
         select user_id as userId,username,salt,`role`,`password` from `user` where user_id = #{id}
     </select>
     <select id="getAllUser" resultType="group.uchain.project_management_system.vo.User">
-        select user_id as userId,username,position,office  from user;
+        select (@r :=@r + 1) as rowNum, user_id as userId,username,position,office
+          from (select @r := 0) r,`user` u order by userId asc;
     </select>
     <select id="selectUserByHalfUserId" resultType="group.uchain.project_management_system.dto.User">
         select user_id as userId,username,position,office,salt,`role`,`password` from `user` where user_id like (concat('%',#{id},'%'))

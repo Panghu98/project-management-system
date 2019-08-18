@@ -11,10 +11,14 @@ import lombok.Data;
 @Data
 public class User {
 
-    /**
-     * 用户ID
-     */
 
+    /**
+     * 序列号
+     */
+    private Integer rowNum;
+    /**
+     * 用户ID  主键
+     */
     private Long userId;
 
     /**
