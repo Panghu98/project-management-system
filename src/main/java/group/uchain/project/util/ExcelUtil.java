@@ -53,7 +53,7 @@ public class ExcelUtil {
                 String instruction = row.getCell(2).getStringCellValue();
                 String level = row.getCell(3).getStringCellValue();
                 String grade = row.getCell(4).getStringCellValue();
-                Double number = row.getCell(5).getNumericCellValue();
+                String number = row.getCell(5).getStringCellValue();
                 String variety = row.getCell(6).getStringCellValue();
                 Double score = row.getCell(7).getNumericCellValue();
                 String leader = row.getCell(8).getStringCellValue();

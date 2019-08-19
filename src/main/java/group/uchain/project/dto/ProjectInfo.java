@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -16,7 +17,9 @@ import java.util.Date;
  */
 @Data
 @ApiModel(description = "项目信息")
-public class ProjectInfo {
+public class ProjectInfo implements Serializable {
+
+
 
     /**
      * 主键
@@ -52,7 +55,7 @@ public class ProjectInfo {
      * 项目数量
      */
     @JsonIgnore
-    private Double number;
+    private String number;
 
     /**
      * 类型
@@ -79,9 +82,13 @@ public class ProjectInfo {
      * 项目导入时间
      */
 
-    @JsonIgnore
     @JSONField(format = "yyyy-MM-dd")
     private Date date;
+
+    /**
+     * 项目时候分配  1,已经分配 0,未分配
+     */
+    private Integer allocationStatus;
 
 
 }

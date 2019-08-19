@@ -41,7 +41,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
         }
         String str = new String(bytes, DEFAULT_CHARSET);
         //解决com.alibaba.fastjson.JSONException: autoType is not support,添加白名单
-        ParserConfig.getGlobalInstance().addAccept("com.example.demo");
+        ParserConfig.getGlobalInstance().addAccept("group.uchain.project");
         return JSON.parseObject(str, clazz);
     }
 

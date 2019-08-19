@@ -5,9 +5,11 @@ import group.uchain.project.dto.RegisterUser;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;
+import group.uchain.project.service.InfoService;
 import group.uchain.project.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Info;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,10 +33,14 @@ public class AdminController {
 
     private UserService userService;
 
+    private InfoService infoService;
+
     @Autowired
-    public AdminController(FileService fileService,UserService userService) {
+    public AdminController(FileService fileService,UserService userService,
+                           InfoService infoService) {
         this.userService = userService;
         this.fileService = fileService;
+        this.infoService = infoService;
     }
 
     /**
@@ -43,10 +49,10 @@ public class AdminController {
      * @return
      */
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "Excel导入--个人项目分数分配信息")
+    @ApiOperation(value = "Excel导入--项目信息导入")
     @PostMapping("/excel/projectUpload")
-    public Result uploadFile(MultipartFile file){
-        return fileService.uploadFile(file);
+    public Result importProjectByExcel(MultipartFile file){
+        return fileService.importProjectByExcel(file);
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
@@ -91,4 +97,11 @@ public class AdminController {
     public Result getAllocationExcel(@RequestParam("start") Date startDate,@RequestParam("end") Date enddate, HttpServletResponse response){
         return fileService.getAllocationExcel(startDate,enddate,response);
     }
+
+    @ApiOperation(value = "查看项目分配信息")
+    @GetMapping("/info/getAllProjectInfo")
+    public Result getAllProjectInfo(){
+        return infoService.getAllProjectInfo();
+    }
+
 }

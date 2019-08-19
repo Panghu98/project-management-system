@@ -15,7 +15,10 @@ import java.util.List;
  */
 public interface FileService {
 
-    Result uploadFile(MultipartFile file);
+    String REDIS_HASH_KEY = "project_info:";
+
+
+    Result importProjectByExcel(MultipartFile file);
 
     Result registerByExcel(MultipartFile file);
 

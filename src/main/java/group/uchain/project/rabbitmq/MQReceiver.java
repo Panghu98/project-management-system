@@ -5,6 +5,7 @@ import group.uchain.project.dto.LoginInfo;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.mapper.LoginInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
+import group.uchain.project.redis.RedisUtil;
 import group.uchain.project.util.TypeConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -27,10 +28,15 @@ public class MQReceiver {
 
     private ProjectInfoMapper projectInfoMapper;
 
+    private RedisUtil redisUtil;
+
+
     @Autowired
-    public MQReceiver(LoginInfoMapper loginInfoMapper,ProjectInfoMapper projectInfoMapper) {
+    public MQReceiver(LoginInfoMapper loginInfoMapper,ProjectInfoMapper projectInfoMapper,
+                      RedisUtil redisUtil) {
         this.loginInfoMapper = loginInfoMapper;
         this.projectInfoMapper = projectInfoMapper;
+        this.redisUtil = redisUtil;
     }
 
     /**
@@ -50,7 +56,9 @@ public class MQReceiver {
     @RabbitListener(queues = MQConfig.DIRECT_PROJECT )
     public void receiveProjectMessage(String message){
         List<ProjectInfo> list = JSONArray.parseArray(message,ProjectInfo.class);
-        projectInfoMapper.readExcel(list);
+        projectInfoMapper.excelToDatabase(list);
+        //标记数据库是否更新
+        redisUtil.set("project-info-flag","Y");
     }
 
 }

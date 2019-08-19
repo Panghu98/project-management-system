@@ -44,9 +44,9 @@ public class LeaderController {
     }
 
     @ApiOperation(value = "负责人de个人所有项目信息")
-    @GetMapping("/info/getAllProjectInfo")
-    public Result<List<ProjectInfo>> getAllProjectInfo(){
-        return infoService.getAllProjectInfo();
+    @GetMapping("/info/getAllProjectInfoByUserId")
+    public Result<List<ProjectInfo>> getAllProjectInfoByUserId(){
+        return infoService.getAllProjectInfoByUserId();
     }
 
     @ApiOperation(value = "上传项目的相关证明材料")

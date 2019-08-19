@@ -4,6 +4,7 @@ package group.uchain.project.redis;
 
 import group.uchain.project.redis.key.KeyStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 在RedisConfig类中完成了RedisUtil的Bean所以这里不需要给该类加Service方法
  * 待解决的问题
  * 这里使用redisTemplate可以将数据存入指定的数据库,但是只能获取到数据库1中的数据
  */
@@ -93,7 +95,6 @@ public class RedisUtil {
      * @return 值
      */
     public Object get(String key) {
-        RedisTemplate.indexdb.set(1);
         return key == null ? null : redisTemplate.opsForValue().get(key);
     }
 
@@ -106,7 +107,6 @@ public class RedisUtil {
      */
     public boolean set(String key, Object value) {
         try {
-            RedisTemplate.indexdb.set(1);
             redisTemplate.opsForValue().set(key, value);
             return true;
         } catch (Exception e) {
@@ -166,6 +166,7 @@ public class RedisUtil {
     }
 
     //================================Map=================================
+
 
     /**
      * HashGet

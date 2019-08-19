@@ -23,4 +23,9 @@ public class ProjectInfoMapperTest {
     public void isProjectExist() {
         System.err.println(projectInfoMapper.isProjectExist("27"));
     }
+
+    @Test
+    public void getAllProjectInfo(){
+        System.err.println(projectInfoMapper.getAllProjectInfo());
+    }
 }

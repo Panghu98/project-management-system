@@ -2,6 +2,7 @@ package group.uchain.project.rabbitmq;
 
 import group.uchain.project.dto.LoginInfo;
 import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.redis.RedisUtil;
 import group.uchain.project.util.TypeConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;

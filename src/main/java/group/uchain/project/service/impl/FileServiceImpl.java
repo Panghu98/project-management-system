@@ -9,6 +9,7 @@ import group.uchain.project.mapper.AllocationInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
 import group.uchain.project.mapper.UserFormMapper;
 import group.uchain.project.rabbitmq.MQSender;
+import group.uchain.project.redis.RedisUtil;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;
 import group.uchain.project.util.ExcelUtil;
@@ -33,6 +34,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -54,9 +57,13 @@ public class FileServiceImpl implements FileService {
 
     private MQSender mqSender;
 
+    private RedisUtil redisUtil;
+
+
     @Autowired
     public FileServiceImpl(ProjectInfoMapper projectInfoMapper,UserFormMapper userFormMapper,
-                           MQSender mqSender,AllocationInfoMapper allocationInfoMapper) {
+                           MQSender mqSender,AllocationInfoMapper allocationInfoMapper,
+                           RedisUtil redisUtil) {
 
         this.projectInfoMapper = projectInfoMapper;
         this.userFormMapper = userFormMapper;
@@ -84,7 +91,7 @@ public class FileServiceImpl implements FileService {
      * @return
      */
     @Override
-    public Result uploadFile(MultipartFile file) {
+    public Result importProjectByExcel(MultipartFile file) {
         if (file==null){
             throw new MyException(CodeMsg.FILE_EMPTY_ERROR);
         }
@@ -107,6 +114,7 @@ public class FileServiceImpl implements FileService {
             throw new MyException(CodeMsg.FILE_UPLOAD_FAILED);
         }
 
+        log.info("文件上传成功");
         //读取Excel表格 存入数据库
         List<ProjectInfo> list = ExcelUtil.importProjectXLS(pathFile);
         List<String> listOfId = new ArrayList<>();
@@ -120,9 +128,12 @@ public class FileServiceImpl implements FileService {
         }
 
         //放入消息队列,插入数据库
+        log.info("异步发送消息");
         mqSender.sendProjectInfo(list);
 
-        log.info("文件上传成功");
+        //将导入的数据放入缓存,并且通过redis标记数据库更新
+        Map<String, Object> map = list.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
+        redisUtil.hmset(REDIS_HASH_KEY,map,60*30);
         return new Result();
 
     }

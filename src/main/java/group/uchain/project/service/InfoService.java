@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public interface InfoService {
 
-    Result<List<ProjectInfo>> getAllProjectInfo();
+    Result<List<ProjectInfo>> getAllProjectInfoByUserId();
 
     Result<List<User>> getAllUser();
 
@@ -23,4 +23,5 @@ public interface InfoService {
 
     Result getAllScore();
 
+    Result getAllProjectInfo();
 }

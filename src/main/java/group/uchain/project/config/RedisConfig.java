@@ -2,7 +2,6 @@ package group.uchain.project.config;
 
 import com.alibaba.fastjson.parser.ParserConfig;
 import group.uchain.project.redis.FastJson2JsonRedisSerializer;
-import group.uchain.project.redis.RedisTemplate;
 import group.uchain.project.redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +14,7 @@ import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -101,7 +101,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
     public RedisSerializer<Object> fastJson2JsonRedisSerializer() {
-        ParserConfig.getGlobalInstance().addAccept("group.uchain.project.dto");
         return new FastJson2JsonRedisSerializer<>(Object.class);
     }
 
@@ -109,7 +108,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         //如果不配置Serializer，那么存储的时候缺省使用String，如果用User类型存储，那么会提示错误User can't cast to String！
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setHashValueSerializer(fastJson2JsonRedisSerializer());
         redisTemplate.setValueSerializer(fastJson2JsonRedisSerializer());
         // 开启事务
         redisTemplate.setEnableTransactionSupport(true);

@@ -17,7 +17,7 @@ public interface ProjectInfoMapper {
      * 通过读取Excel注册
      * @param list
      */
-    void readExcel(@Param("list")List<ProjectInfo> list);
+    void excelToDatabase(@Param("list")List<ProjectInfo> list);
 
     /**
      * 获取ID重复的数量
@@ -31,7 +31,7 @@ public interface ProjectInfoMapper {
      * @param userId
      * @return
      */
-    List<ProjectInfo> getAllProjectInfo(String userId);
+    List<ProjectInfo> getAllProjectInfoByUserId(String userId);
 
     /**
      * 传入项目编号判断项目是否存在
@@ -39,5 +39,11 @@ public interface ProjectInfoMapper {
      * @return  时候存在
      */
     Boolean isProjectExist(String projectId);
+
+    /**
+     * 管理员获取所有的项目信息
+     * @return
+     */
+    List<ProjectInfo> getAllProjectInfo();
 
 }
