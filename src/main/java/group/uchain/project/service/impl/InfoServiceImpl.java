@@ -1,7 +1,6 @@
 package group.uchain.project.service.impl;
 
 import group.uchain.project.dto.ProjectInfo;
-import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.mapper.AllocationInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
@@ -26,6 +25,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static group.uchain.project.enums.CodeMsg.PROJECT_ID_NOI_EXIST;
+
 /**
  * @author project
  * @title: InfoServiceImpl
@@ -44,12 +45,14 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     private AllocationInfoMapper allocationInfoMapper;
 
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
+
+    private static final String FLAG_KEY = "project-info-flag";
 
     @Autowired
     public InfoServiceImpl(UserFormMapper userFormMapper, ProjectInfoMapper projectInfoMapper,
                            UserService userService, AllocationInfoMapper allocationInfoMapper,
-                           RedisTemplate redisTemplate) {
+                           RedisTemplate<String, String> redisTemplate) {
         this.userFormMapper = userFormMapper;
         this.projectInfoMapper =projectInfoMapper;
         this.userService = userService;
@@ -76,7 +79,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     public Result uploadAllocationInfo(Map<Long, Integer> map, String projectId) {
         //如果项目编号不存在的话，抛出异常  项目编号应该是不会出错的，这样写只是为了确保
         if (!projectInfoMapper.isProjectExist(projectId)){
-            throw new MyException(CodeMsg.PROJECT_ID_NOI_EXIST);
+            throw new MyException(PROJECT_ID_NOI_EXIST);
         }
         allocationInfoMapper.updateAllocationTime(new Date(),projectId);
         allocationInfoMapper.uploadAllocationInfo(map,projectId);
@@ -94,7 +97,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     public Result getAllProjectInfo() {
         // Y有新的数据写入 ,N无新的数据写入
         //获取标记状态并且在刷新缓存之后重置状态为N
-        String columnFlag = redisTemplate.opsForValue().get("project-info-columnFlag").toString();
+        String columnFlag = redisTemplate.opsForValue().get(FLAG_KEY);
         String hashKey = FileService.REDIS_HASH_KEY;
         if ("Y".equals(columnFlag)){
             log.info("数据存在更新,从数据库中读取数据");
@@ -103,11 +106,11 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             Map<String, Object> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
             //更新缓存 单位是秒
             redisTemplate.opsForHash().putAll(hashKey,map);
-            redisTemplate.opsForValue().set("project-info-columnFlag","N");
+            redisTemplate.opsForValue().set(FLAG_KEY,"N");
             return Result.successData(projectInfoList);
         }else {
             log.info("缓存中中为最新的键值,直接从缓存中取值");
-            Set projectIdSet = redisTemplate.opsForHash().keys(hashKey);
+            Set<Object> projectIdSet = redisTemplate.opsForHash().keys(hashKey);
             List list = redisTemplate.opsForHash().multiGet(hashKey,projectIdSet);
             return Result.successData(list);
         }
@@ -121,8 +124,12 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     public Result deleteProjectInfo(String id) {
-        projectInfoMapper.deleteProjectInfo(id);
-        return null;
+        int result = projectInfoMapper.deleteProjectInfo(id);
+        if (result == 1){
+            return new Result();
+        }else {
+            return Result.error(PROJECT_ID_NOI_EXIST);
+        }
     }
 
     /**
@@ -130,7 +137,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
      */
     @Override
     public void afterPropertiesSet() {
-        redisTemplate.opsForValue().set("project-info-columnFlag","N");
+        redisTemplate.opsForValue().set(FLAG_KEY,"N");
 
     }
 }

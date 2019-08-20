@@ -31,6 +31,6 @@ public class ProjectInfoMapperTest {
 
     @Test
     public void deleteProjectInfo(){
-        System.out.println(projectInfoMapper.deleteProjectInfo("f123"));
+        System.out.println(projectInfoMapper.deleteProjectInfo("f12"));
     }
 }

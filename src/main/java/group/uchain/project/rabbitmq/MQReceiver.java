@@ -58,7 +58,7 @@ public class MQReceiver {
         List<ProjectInfo> list = JSONArray.parseArray(message,ProjectInfo.class);
         projectInfoMapper.excelToDatabase(list);
         //标记数据库是否更新
-        redisTemplate.opsForValue().set("project-info-columnFlag","Y");
+        redisTemplate.opsForValue().set(FLAG_KEY,"Y");
     }
 
 }
