@@ -21,6 +21,15 @@
             )
         </foreach>
     </insert>
+
+    <update id="updateProjectInfo">
+#         update project_info set id,
+    </update>
+
+    <delete id="deleteProjectInfo" parameterType="string">
+        delete from project_info where id = #{id}
+    </delete>
+
     <!--通过获取ID信息  判断数据库中项目编号是否已经存在-->
     <select id="getRepeatNums" resultType="java.lang.String">
         select id as number

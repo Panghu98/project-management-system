@@ -46,4 +46,7 @@ public interface ProjectInfoMapper {
      */
     List<ProjectInfo> getAllProjectInfo();
 
+    int updateProjectInfo(ProjectInfo projectInfo);
+
+    int deleteProjectInfo(String id);
 }

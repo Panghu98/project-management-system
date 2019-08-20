@@ -97,6 +97,9 @@ public class FileServiceImpl implements FileService {
             throw new MyException(CodeMsg.FILE_EMPTY_ERROR);
         }
 
+        if (!file.getContentType().contains(".xlsx")){
+            throw new MyException(CodeMsg.FILE_TYPE_ERROR);
+        }
         String pathFile = projectFilePath+file.getOriginalFilename();
 
         try{
@@ -144,6 +147,11 @@ public class FileServiceImpl implements FileService {
         if (file==null){
             //自定义异常类
             throw new MyException(CodeMsg.FILE_EMPTY_ERROR);
+        }
+
+        //判断文件后缀名
+        if (!file.getContentType().contains(".xlsx")){
+            throw new MyException(CodeMsg.FILE_TYPE_ERROR);
         }
 
         String pathFile = registerFilePath+file.getOriginalFilename();
@@ -323,7 +331,7 @@ public class FileServiceImpl implements FileService {
 
 
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
-        response.setHeader("Content-disposition", "attachment;filename=AllocationInfo.xlsx");
+        response.setHeader("Content-disposition", "attachment;filename=项目分配信息表.xlsx");
         try {
             OutputStream os = response.getOutputStream();
             wb.write(os);
@@ -395,19 +403,19 @@ public class FileServiceImpl implements FileService {
     /**
      * 根据输入的文件与输出流对文件进行打包
      */
-    private static void zipFile(File inputFile, ZipOutputStream ouputStream) {
+    private static void zipFile(File inputFile, ZipOutputStream outputStream) {
         try {
             if (inputFile.exists()) {
                 if (inputFile.isFile()) {
                     FileInputStream fileInputStream = new FileInputStream(inputFile);
                     BufferedInputStream bins = new BufferedInputStream(fileInputStream, 512);
                     ZipEntry entry = new ZipEntry(inputFile.getName());
-                    ouputStream.putNextEntry(entry);
+                    outputStream.putNextEntry(entry);
                     // 向压缩文件中输出数据
                     int nNumber;
                     byte[] buffer = new byte[512];
                     while ((nNumber = bins.read(buffer)) != -1) {
-                        ouputStream.write(buffer, 0, nNumber);
+                        outputStream.write(buffer, 0, nNumber);
                     }
                     // 关闭创建的流对象
                     bins.close();
@@ -417,7 +425,7 @@ public class FileServiceImpl implements FileService {
                         File[] files = inputFile.listFiles();
                         assert files != null;
                         for (File file : files) {
-                            zipFile(file, ouputStream);
+                            zipFile(file, outputStream);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -29,6 +29,7 @@ public enum CodeMsg {
     ZIP_FILE_PACKAGE_ERROR(16,"文件压缩出错"),
     FILE_IS_EMPTY(17,"当前目录下文件为空"),
     FILE_DOWNLOAD_ERROR(18,"文件传输错误"),
+    FILE_TYPE_ERROR(19,"文件格式有误,请上传xlsx文件"),
 
     //文件格式要求出错
     USER_HAS_EXISTED(20,"用户已经存在"),

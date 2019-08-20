@@ -113,6 +113,18 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         }
     }
 
+    @Override
+    public Result updateProjectInfo(ProjectInfo projectInfo) {
+        projectInfoMapper.updateProjectInfo(projectInfo);
+        return null;
+    }
+
+    @Override
+    public Result deleteProjectInfo(String id) {
+        projectInfoMapper.deleteProjectInfo(id);
+        return null;
+    }
+
     /**
      * 在开始的时候就初始化键值,以免出现空指针异常
      */

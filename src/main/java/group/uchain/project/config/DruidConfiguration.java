@@ -57,7 +57,9 @@ public class DruidConfiguration {
         return filterRegistrationBean;
     }
 
-    //解决 spring.datasource.filters=stat,wall,log4j 无法正常注册进去
+    /**
+     *     解决 spring.datasource.filters=stat,wall,log4j 无法正常注册进去
+     */
     @Component
     @ConfigurationProperties(prefix = DB_PREFIX)
     class IDataSourceProperties {

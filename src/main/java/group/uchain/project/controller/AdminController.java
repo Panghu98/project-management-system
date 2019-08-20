@@ -1,6 +1,7 @@
 package group.uchain.project.controller;
 
 import group.uchain.project.annotation.RoleRequired;
+import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.dto.RegisterUser;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
@@ -63,15 +64,15 @@ public class AdminController {
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "超级管理员进行用户注册")
-    @PostMapping("/admin/register")
+    @ApiOperation(value = "通过表单进行用户注册")
+    @PostMapping("/action/register")
     public Result registerByForm(RegisterUser registerUser){
         return userService.register(registerUser);
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "更新用户信息")
-    @GetMapping("/updateUserInfo")
+    @GetMapping("/action/updateUserInfo")
     public Result updateInfo(){
         return new Result();
     }
@@ -92,16 +93,37 @@ public class AdminController {
         fileService.downloadZipFile(files,response);
     }
 
-    @ApiOperation(value = "文件下载--Excel查看每个项目具体分给了哪些老师")
+    @RoleRequired(RoleEnum.SUPER_ADMIN)
+    @ApiOperation(value = "文件下载--Excel查看:查看项目分数分配信息")
     @GetMapping("/file/getAllocationExcel")
     public Result getAllocationExcel(@RequestParam("start") Date startDate,@RequestParam("end") Date enddate, HttpServletResponse response){
         return fileService.getAllocationExcel(startDate,enddate,response);
     }
 
-    @ApiOperation(value = "get all projects info by admin")
+    @RoleRequired(RoleEnum.SUPER_ADMIN)
+    @ApiOperation(value = "获取所有的项目信息")
     @GetMapping("/info/getAllProjectInfo")
     public Result getAllProjectInfo(){
         return infoService.getAllProjectInfo();
+    }
+
+    @RoleRequired(RoleEnum.SUPER_ADMIN)
+    @ApiOperation(value = "修改项目信息")
+    @PostMapping(value = "/action/updateProjectInfo")
+    public Result updateProjectInfo(ProjectInfo projectInfo){
+        return infoService.updateProjectInfo(projectInfo);
+    }
+
+    /**
+     * 通过ID删除项目
+     * @param id  项目ID
+     * @return
+     */
+    @RoleRequired(RoleEnum.SUPER_ADMIN)
+    @ApiOperation(value = "删除项目信息")
+    @PostMapping(value = "/action/deleteProjectInfo")
+    public Result deleteProjectInfo(String id){
+        return infoService.deleteProjectInfo(id);
     }
 
 }

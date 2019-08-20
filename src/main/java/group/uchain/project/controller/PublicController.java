@@ -58,7 +58,7 @@ public class PublicController {
 
 
     @ApiOperation(value = "更改密码")
-    @PostMapping("/updatePassword")
+    @PostMapping("/action/updatePassword")
     public Result updatePassword(String password){
         return loginService.updatePassword(password);
     }

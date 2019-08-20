@@ -28,4 +28,9 @@ public class ProjectInfoMapperTest {
     public void getAllProjectInfo(){
         System.err.println(projectInfoMapper.getAllProjectInfo());
     }
+
+    @Test
+    public void deleteProjectInfo(){
+        System.out.println(projectInfoMapper.deleteProjectInfo("f123"));
+    }
 }
