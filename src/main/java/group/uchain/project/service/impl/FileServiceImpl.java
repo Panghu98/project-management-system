@@ -9,7 +9,6 @@ import group.uchain.project.mapper.AllocationInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
 import group.uchain.project.mapper.UserFormMapper;
 import group.uchain.project.rabbitmq.MQSender;
-import group.uchain.project.redis.RedisUtil;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;
 import group.uchain.project.util.ExcelUtil;
@@ -23,6 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,18 +57,19 @@ public class FileServiceImpl implements FileService {
 
     private MQSender mqSender;
 
-    private RedisUtil redisUtil;
+    private RedisTemplate redisTemplate;
 
 
     @Autowired
-    public FileServiceImpl(ProjectInfoMapper projectInfoMapper,UserFormMapper userFormMapper,
-                           MQSender mqSender,AllocationInfoMapper allocationInfoMapper,
-                           RedisUtil redisUtil) {
+    public FileServiceImpl(ProjectInfoMapper projectInfoMapper, UserFormMapper userFormMapper,
+                           MQSender mqSender, AllocationInfoMapper allocationInfoMapper,
+                           RedisTemplate redisTemplate) {
 
         this.projectInfoMapper = projectInfoMapper;
         this.userFormMapper = userFormMapper;
         this.mqSender = mqSender;
         this.allocationInfoMapper = allocationInfoMapper;
+        this.redisTemplate = redisTemplate;
     }
 
     @Value(value = "${filepath.project-excel}")
@@ -133,8 +134,8 @@ public class FileServiceImpl implements FileService {
 
         //将导入的数据放入缓存,并且通过redis标记数据库更新
         Map<String, Object> map = list.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
-        redisUtil.hmset(REDIS_HASH_KEY,map,60*30);
-        return new Result();
+        redisTemplate.opsForHash().putAll(REDIS_HASH_KEY,map);
+        return new Result(list);
 
     }
 
@@ -170,7 +171,7 @@ public class FileServiceImpl implements FileService {
             idList.add(registerUser.getUserId());
         }
         //获取重复ID集合
-        List repeatIdList = userFormMapper.getRepeatUserId(idList);
+        List<Long> repeatIdList = userFormMapper.getRepeatUserId(idList);
         if (repeatIdList.size() != 0){
             log.error("项目编号"+repeatIdList.toString()+"已经存在");
             return Result.error(20,"用户工号"+repeatIdList.toString()+"已经存在");

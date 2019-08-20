@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/project?useSSL=false&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
-    password: "root"
+    password: "000411"
     driver-class-name: com.mysql.cj.jdbc.Driver
   # RabbitMQ
   rabbitmq:
@@ -30,7 +30,7 @@ mybatis:
   #对应mapper映射xml文件所在的路径
   mapper-locations: classpath:mapper/*.xml
   #对应实体类的路径
-  type-aliases-package: group.uchain.project_management_system.entity
+  type-aliases-package: group.uchain.project.entity
 
 
 

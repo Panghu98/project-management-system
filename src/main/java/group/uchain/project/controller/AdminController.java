@@ -98,7 +98,7 @@ public class AdminController {
         return fileService.getAllocationExcel(startDate,enddate,response);
     }
 
-    @ApiOperation(value = "查看项目分配信息")
+    @ApiOperation(value = "get all projects info by admin")
     @GetMapping("/info/getAllProjectInfo")
     public Result getAllProjectInfo(){
         return infoService.getAllProjectInfo();

@@ -5,11 +5,11 @@ import group.uchain.project.dto.LoginInfo;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.mapper.LoginInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
-import group.uchain.project.redis.RedisUtil;
 import group.uchain.project.util.TypeConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,15 +28,15 @@ public class MQReceiver {
 
     private ProjectInfoMapper projectInfoMapper;
 
-    private RedisUtil redisUtil;
+    private RedisTemplate<String, String> redisTemplate;
 
 
     @Autowired
-    public MQReceiver(LoginInfoMapper loginInfoMapper,ProjectInfoMapper projectInfoMapper,
-                      RedisUtil redisUtil) {
+    public MQReceiver(LoginInfoMapper loginInfoMapper, ProjectInfoMapper projectInfoMapper,
+                      RedisTemplate<String, String> redisTemplate) {
         this.loginInfoMapper = loginInfoMapper;
         this.projectInfoMapper = projectInfoMapper;
-        this.redisUtil = redisUtil;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -45,7 +45,7 @@ public class MQReceiver {
      */
     @RabbitListener(queues = MQConfig.DIRECT_LOGIN)
     public void receiveLoginMessage(String message){
-        LoginInfo info = TypeConvertUtil.stringToBean(message,LoginInfo.class);
+        LoginInfo info = TypeConvertUtil.stringToBean(message, LoginInfo.class);
         log.info("用户"+info.getUserId()+"在"+info.getDate()+"进行登录操作  "+"ip为"+info.getIp());
         loginInfoMapper.insert(info);
     }
@@ -58,7 +58,7 @@ public class MQReceiver {
         List<ProjectInfo> list = JSONArray.parseArray(message,ProjectInfo.class);
         projectInfoMapper.excelToDatabase(list);
         //标记数据库是否更新
-        redisUtil.set("project-info-flag","Y");
+        redisTemplate.opsForValue().set("project-info-columnFlag","Y");
     }
 
 }

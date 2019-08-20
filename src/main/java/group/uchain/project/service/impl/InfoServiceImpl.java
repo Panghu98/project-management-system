@@ -6,7 +6,6 @@ import group.uchain.project.exception.MyException;
 import group.uchain.project.mapper.AllocationInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
 import group.uchain.project.mapper.UserFormMapper;
-import group.uchain.project.redis.RedisUtil;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;
 import group.uchain.project.service.InfoService;
@@ -45,19 +44,16 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     private AllocationInfoMapper allocationInfoMapper;
 
-    private RedisUtil redisUtil;
-
-    private RedisTemplate<String,ProjectInfo> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @Autowired
     public InfoServiceImpl(UserFormMapper userFormMapper, ProjectInfoMapper projectInfoMapper,
                            UserService userService, AllocationInfoMapper allocationInfoMapper,
-                           RedisUtil redisUtil, RedisTemplate<String, ProjectInfo> redisTemplate) {
+                           RedisTemplate redisTemplate) {
         this.userFormMapper = userFormMapper;
         this.projectInfoMapper =projectInfoMapper;
         this.userService = userService;
         this.allocationInfoMapper = allocationInfoMapper;
-        this.redisUtil = redisUtil;
         this.redisTemplate = redisTemplate;
     }
 
@@ -98,22 +94,21 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     public Result getAllProjectInfo() {
         // Y有新的数据写入 ,N无新的数据写入
         //获取标记状态并且在刷新缓存之后重置状态为N
-        String flag = redisUtil.get("project-info-flag").toString();
+        String columnFlag = redisTemplate.opsForValue().get("project-info-columnFlag").toString();
         String hashKey = FileService.REDIS_HASH_KEY;
-        if ("Y".equals(flag)){
+        if ("Y".equals(columnFlag)){
             log.info("数据存在更新,从数据库中读取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
             log.info("将最新的数据放入缓存");
             Map<String, Object> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
             //更新缓存 单位是秒
-            redisUtil.hmset(hashKey,map,60*60*24);
-            redisUtil.set("project-info-flag","N");
+            redisTemplate.opsForHash().putAll(hashKey,map);
+            redisTemplate.opsForValue().set("project-info-columnFlag","N");
             return Result.successData(projectInfoList);
         }else {
             log.info("缓存中中为最新的键值,直接从缓存中取值");
-            Set<Object> projectIdSet = redisTemplate.opsForHash().keys(hashKey);
+            Set projectIdSet = redisTemplate.opsForHash().keys(hashKey);
             List list = redisTemplate.opsForHash().multiGet(hashKey,projectIdSet);
-            redisUtil.set("project-info-flag","N");
             return Result.successData(list);
         }
     }
@@ -123,6 +118,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
      */
     @Override
     public void afterPropertiesSet() {
-        redisUtil.set("project-info-flag","Y");
+        redisTemplate.opsForValue().set("project-info-columnFlag","N");
+
     }
 }

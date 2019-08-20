@@ -24,69 +24,97 @@ import java.util.List;
 public class ExcelUtil {
 
 
-    public static List<ProjectInfo> importProjectXLS(String fileName){
+    public static List<ProjectInfo> importProjectXLS(String fileName) {
 
         ArrayList<ProjectInfo> list = new ArrayList<>();
-        try{
 
-            //1.获取文件输入流
-            InputStream inputStream = new FileInputStream(fileName);
 
-            //2、获取Excel工作簿对象
-            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+        //1.获取文件输入流
+        InputStream inputStream;
 
-            //3.创建工作栏
-            XSSFSheet sheetAt = workbook.getSheetAt(0);
-            //4、循环读取表格数据
-            for (Row row : sheetAt) {
+        //2、获取Excel工作簿对象
+        XSSFWorkbook workbook;
 
-                //首行（即表头）不读取
-                if (row.getRowNum() == 0) {
-                    continue;
-                }
-
-                String id = row.getCell(0).getStringCellValue();
-                if (id == null){
-                    throw new MyException("项目编号不能为空",12);
-                }
-                String category = row.getCell(1).getStringCellValue();
-                String instruction = row.getCell(2).getStringCellValue();
-                String level = row.getCell(3).getStringCellValue();
-                String grade = row.getCell(4).getStringCellValue();
-                String number = row.getCell(5).getStringCellValue();
-                String variety = row.getCell(6).getStringCellValue();
-                Double score = row.getCell(7).getNumericCellValue();
-                String leader = row.getCell(8).getStringCellValue();
-                String division = row.getCell(9).getStringCellValue();
-
-                ProjectInfo projectInfo = new ProjectInfo();
-                projectInfo.setId(id);
-                projectInfo.setCategory(category);
-                projectInfo.setDivision(AllocationInfoUtil.getInfo(division));
-                projectInfo.setGrade(grade);
-                projectInfo.setInstruction(instruction);
-                projectInfo.setLeader(leader);
-                projectInfo.setLevel(level);
-                projectInfo.setNumber(number);
-                projectInfo.setScore(score);
-                projectInfo.setVariety(variety);
-                projectInfo.setDate(new Date());
-
-                list.add(projectInfo);
-            }
-
-            workbook.close();
-
+        try {
+            inputStream = new FileInputStream(fileName);
+            workbook = new XSSFWorkbook(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
             throw new MyException(CodeMsg.XLS_FILE_READ_ERROR);
-        } catch (NullPointerException e){
-            e.printStackTrace();
-            throw new MyException(CodeMsg.EXCEL_EMPTY_ERROR);
-        }catch (Exception e){
-            throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
         }
 
+        //3.创建工作栏
+        XSSFSheet sheetAt = workbook.getSheetAt(0);
+        //4、循环读取表格数据
+        for (Row row : sheetAt) {
+
+            //首行（即表头）不读取
+            if (row.getRowNum() == 0) {
+                if (!row.getCell(0).getStringCellValue().equals("项目编号")){
+                    throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
+                }
+                continue;
+            }
+
+            String id = row.getCell(0).getStringCellValue();
+            if (id == null) {
+                throw new MyException("第"+(row.getRowNum()+1)+""+"项目编号不能为空", 12);
+            }
+
+            //所在列错误标记
+            int columnFlag = 1;
+
+            String category;
+            String division;
+            String grade;
+            String instruction;
+            String leader;
+            String level;
+            String number;
+            Double score;
+            String variety;
+            try {
+                category = row.getCell(columnFlag++).getStringCellValue();
+                instruction = row.getCell(columnFlag++).getStringCellValue();
+                level = row.getCell(columnFlag++).getStringCellValue();
+                grade = row.getCell(columnFlag++).getStringCellValue();
+                number = row.getCell(columnFlag++).getStringCellValue();
+                variety = row.getCell(columnFlag++).getStringCellValue();
+                score = row.getCell(columnFlag++).getNumericCellValue();
+                leader = row.getCell(columnFlag++).getStringCellValue();
+                division = row.getCell(columnFlag).getStringCellValue();
+            }catch (IllegalStateException e){
+                e.printStackTrace();
+                throw new MyException("第"+(row.getRowNum()+1)+"行"+"第"+(columnFlag+1)+"列数据格式错误",13);
+            }catch (NullPointerException e){
+                e.printStackTrace();
+                throw new MyException("第"+(row.getRowNum()+1)+"行"+"第"+(columnFlag+1)+"存在空值",13);
+            }
+
+
+            ProjectInfo projectInfo = new ProjectInfo();
+            projectInfo.setId(id);
+            projectInfo.setCategory(category);
+            projectInfo.setDivision(AllocationInfoUtil.getInfo(division));
+            projectInfo.setGrade(grade);
+            projectInfo.setInstruction(instruction);
+            projectInfo.setLeader(leader);
+            projectInfo.setLevel(level);
+            projectInfo.setNumber(number);
+            projectInfo.setScore(score);
+            projectInfo.setVariety(variety);
+            projectInfo.setDate(new Date());
+            projectInfo.setAllocationStatus(0);
+
+            list.add(projectInfo);
+        }
+
+        try {
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new MyException(CodeMsg.XLS_FILE_READ_ERROR);
+        }
         return list;
 
     }

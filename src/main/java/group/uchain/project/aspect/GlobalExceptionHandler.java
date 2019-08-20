@@ -4,6 +4,7 @@ package group.uchain.project.aspect;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.result.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @date 19-4-7 下午5:28
  */
 @Slf4j
-//@ControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     private final static String EXCEPTION_MSG_KEY = "Exception message : ";
