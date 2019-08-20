@@ -50,7 +50,7 @@ public class ExcelUtil {
 
             //首行（即表头）不读取
             if (row.getRowNum() == 0) {
-                if (!row.getCell(0).getStringCellValue().equals("项目编号")){
+                if (!"项目编号".equals(row.getCell(0).getStringCellValue())){
                     throw new MyException(CodeMsg.XLS_FILE_FORMAT_ERROR);
                 }
                 continue;
