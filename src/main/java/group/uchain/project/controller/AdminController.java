@@ -25,7 +25,7 @@ import java.util.List;
  * @projectName project
  * @date 19-7-12 下午8:41
  */
-@CrossOrigin(origins = "192.168.8.106:8080")
+@CrossOrigin(origins = "*")
 @RestController
 @Api(tags = "超级管理员接口")
 public class AdminController {

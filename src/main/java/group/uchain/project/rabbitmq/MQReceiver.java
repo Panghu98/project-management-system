@@ -30,6 +30,8 @@ public class MQReceiver {
 
     private RedisTemplate<String, String> redisTemplate;
 
+    private static final String FLAG_KEY = "project-info-flag";
+
 
     @Autowired
     public MQReceiver(LoginInfoMapper loginInfoMapper, ProjectInfoMapper projectInfoMapper,
