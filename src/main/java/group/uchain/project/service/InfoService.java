@@ -59,4 +59,11 @@ public interface InfoService {
      * @return  是否删除成功
      */
     Result deleteProjectInfo(String id);
+
+    /**
+     * @param id  项目编号ID
+     * @param date 截止日期
+     * @return
+     */
+    Result setDeadline(String id, Long date);
 }

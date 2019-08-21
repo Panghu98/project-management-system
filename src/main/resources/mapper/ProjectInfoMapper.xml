@@ -25,6 +25,9 @@
     <update id="updateProjectInfo">
 #         update project_info set id,
     </update>
+    <update id="setDeadline">
+        update project_info set deadline = #{date} where id = #{id}
+    </update>
 
     <delete id="deleteProjectInfo" parameterType="string">
         delete from project_info where id = #{id}

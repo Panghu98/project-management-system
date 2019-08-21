@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
+
 /**
  * @author project
  * @title: ProjectInfoMapperTest
@@ -29,8 +31,9 @@ public class ProjectInfoMapperTest {
         System.err.println(projectInfoMapper.getAllProjectInfo());
     }
 
+
     @Test
-    public void deleteProjectInfo(){
-        System.out.println(projectInfoMapper.deleteProjectInfo("f12"));
+    public void setDeadline(){
+        projectInfoMapper.setDeadline("V27",new Date(System.currentTimeMillis()));
     }
 }

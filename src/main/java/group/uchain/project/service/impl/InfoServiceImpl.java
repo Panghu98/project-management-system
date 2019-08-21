@@ -136,6 +136,11 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         }
     }
 
+    @Override
+    public Result setDeadline(String id, Long date) {
+        return Result.successData(projectInfoMapper.setDeadline(id,new Date(date)));
+    }
+
     /**
      * 在开始的时候就初始化键值,以免出现空指针异常
      */
