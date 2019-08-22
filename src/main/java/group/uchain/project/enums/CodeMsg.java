@@ -36,6 +36,8 @@ public enum CodeMsg {
     ALL_USERS_HAS_EXISTED(21,"所有的用户都已经注册"),
 
     PROJECT_ID_NOI_EXIST(30,"项目编号不存在"),
+    PROJECT_ID_NULL(31,"项目编号为空"),
+    DATE_ERROR(32,"时间有误"),
 
     DATABASE_ERROR(101,"数据库异常");
 

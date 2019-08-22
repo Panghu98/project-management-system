@@ -29,27 +29,6 @@
         on a.project_id=p.id where a.user_id = #{userId}
     </select>
 
-    <!--<resultMap id="Allocation2" type="group.uchain.project2">-->
-        <!--<id column="id" property="projectId"/>-->
-        <!--<result column="category" property="category"/>-->
-        <!--<result column="leader" property="leader"/>-->
-        <!--<result column="instruction" property="instruction"/>-->
-        <!--<collection property="teachers" ofType="long">-->
-            <!--<constructor>-->
-                <!--&lt;!&ndash;对应真实筛选出的列名称&ndash;&gt;-->
-                <!--<arg column="teachers"/>-->
-            <!--</constructor>-->
-        <!--</collection>-->
-    <!--</resultMap>-->
-
-    <!--<select id="getAllAllocationInfoTest" resultMap="Allocation2" resultType="group.uchain.project2">-->
-        <!--select p.id,p.category,p.leader,p.instruction,a.user_id as teachers-->
-            <!--from project_info p,allocation_info a-->
-        <!--where p.id = a.project_id-->
-    <!--</select>-->
-
-
-
 
     <resultMap id="Allocation" type="group.uchain.project.vo.AllocationInfo2">
         <id column="id" property="projectId"/>

@@ -52,7 +52,6 @@ public class PublicController {
     @ApiOperation(value = "用户登录接口",notes = "用户登录")
     @PostMapping(value = "/login")
     public Result login(@RequestBody LoginUser loginUser, HttpServletRequest request) {
-        System.out.println(loginUser);
         return loginService.login(loginUser.getUserId(),loginUser.getPassword(),request);
     }
 

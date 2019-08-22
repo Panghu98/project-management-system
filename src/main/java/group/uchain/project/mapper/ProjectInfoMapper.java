@@ -40,13 +40,19 @@ public interface ProjectInfoMapper {
      * @param projectId 项目编号
      * @return  时候存在
      */
-    Boolean isProjectExist(String projectId);
+    Boolean isProjectExist(@Param("id") String projectId);
 
     /**
-     * 管理员获取所有的项目信息
+     * 管理员获取所有未分配的项目信息
      * @return
      */
     List<ProjectInfo> getAllProjectInfo();
+
+    /**
+     *获取已经设置截止日期的项目信息.
+     * @return
+     */
+    List<ProjectInfo> getDeadlineProjectInfo();
 
     int updateProjectInfo(ProjectInfo projectInfo);
 

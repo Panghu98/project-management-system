@@ -101,5 +101,8 @@ public class ProjectInfo implements Serializable{
      */
     private Integer allocationStatus;
 
+    @JSONField(format = "yyyy-MM-dd")
+    private Date deadline;
+
 
 }

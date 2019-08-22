@@ -1,6 +1,7 @@
 package group.uchain.project.service.impl;
 
 import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.mapper.AllocationInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static group.uchain.project.enums.CodeMsg.PROJECT_ID_NOI_EXIST;
+import static group.uchain.project.enums.CodeMsg.PROJECT_ID_NULL;
 
 /**
  * @author project
@@ -138,7 +140,20 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     public Result setDeadline(String id, Long date) {
-        return Result.successData(projectInfoMapper.setDeadline(id,new Date(date)));
+        //项目ID为空
+        if (id == null){
+            return Result.error(CodeMsg.PROJECT_ID_NULL);
+        }
+        //日期格式错误
+        if (date<System.currentTimeMillis()){
+            return Result.error(CodeMsg.DATE_ERROR);
+        }
+        //如果项目编号不存在
+        Boolean flag = projectInfoMapper.isProjectExist(id);
+        if (!flag){
+            return Result.error(PROJECT_ID_NOI_EXIST);
+        }
+        return new Result();
     }
 
     /**

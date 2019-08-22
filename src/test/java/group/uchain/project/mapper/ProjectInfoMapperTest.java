@@ -23,17 +23,22 @@ public class ProjectInfoMapperTest {
 
     @Test
     public void isProjectExist() {
-        System.err.println(projectInfoMapper.isProjectExist("27"));
+        System.err.println(projectInfoMapper.isProjectExist("V27"));
     }
 
     @Test
     public void getAllProjectInfo(){
-        System.err.println(projectInfoMapper.getAllProjectInfo());
+        System.err.println(projectInfoMapper.getDeadlineProjectInfo());
     }
 
 
     @Test
     public void setDeadline(){
-        projectInfoMapper.setDeadline("V27",new Date(System.currentTimeMillis()));
+        System.out.println(projectInfoMapper.setDeadline("V27",new Date(System.currentTimeMillis())));
+    }
+
+    @Test
+    public void getTime(){
+        System.out.println(new Date(0));
     }
 }

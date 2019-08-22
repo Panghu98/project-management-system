@@ -80,7 +80,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webjars/**",
                         "/register-excel/**",
                         "/druid/**",
-                        "/index"
+                        "/index",
+                        "/action/**"
                 ).permitAll()
                 .antMatchers(
                         HttpMethod.POST,

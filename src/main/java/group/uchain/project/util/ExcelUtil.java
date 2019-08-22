@@ -105,6 +105,7 @@ public class ExcelUtil {
             projectInfo.setVariety(variety);
             projectInfo.setDate(new Date());
             projectInfo.setAllocationStatus(0);
+            projectInfo.setDeadline(new Date(0));
 
             list.add(projectInfo);
         }
