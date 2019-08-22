@@ -26,12 +26,13 @@
 #         update project_info set id,
     </update>
     <update id="setDeadline">
-        update project_info
-    <set>
-        <if test="id!=null">
-            deadline = #{date,jdbcType=DATE}
-        </if>
-    </set>
+            update project_info
+        <set>
+            <if test="id!=null">
+                deadline = #{date,jdbcType=DATE}
+            </if>
+        </set>
+            where id = #{id}
     </update>
 
     <delete id="deleteProjectInfo" parameterType="string">
@@ -62,12 +63,17 @@
     <select id="getAllProjectInfo" resultType="group.uchain.project.dto.ProjectInfo">
         select `id`,`category`, `instruction`, `level`, `grade`, `number`,
           `variety`, `score`, `leader`, `division`,`deadline`,`allocation_status` as allocationStatus
-          from project_info p inner join user u on (p.`leader` = u.username) where deadline = '1970-01-01' order by allocation_status asc ,date asc
+          from project_info  where deadline = '1970-01-01' order by allocation_status asc ,date asc
     </select>
     <!--获取所有已设置截止日期的项目-->
     <select id="getDeadlineProjectInfo" resultType="group.uchain.project.dto.ProjectInfo">
         select `id`,`category`, `instruction`, `level`, `grade`, `number`,
-               `variety`, `score`, `leader`, `division`,`date`,`allocation_status` as allocationStatus
-        from project_info p inner join user u on (p.`leader` = u.username) where deadline != '1970-01-01' order by allocation_status asc ,date asc
+               `variety`, `score`, `leader`, `division`,`date`,`allocation_status` as allocationStatus,deadline
+        from project_info  where deadline != '1970-01-01' order by allocation_status asc ,date asc
+    </select>
+    <select id="getProjectInfoByProjectId" resultType="group.uchain.project.dto.ProjectInfo">
+        select `id`,`category`, `instruction`, `level`, `grade`, `number`,
+               `variety`, `score`, `leader`, `division`,`date`,`allocation_status` as allocationStatus,deadline
+        from project_info where id = #{id}
     </select>
 </mapper>

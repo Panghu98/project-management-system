@@ -102,10 +102,17 @@ public class AdminController {
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "获取所有的项目信息")
+    @ApiOperation(value = "获取所有未分配的项目信息")
     @GetMapping("/info/getAllProjectInfo")
     public Result getAllProjectInfo(){
         return infoService.getAllProjectInfo();
+    }
+
+    @RoleRequired(RoleEnum.SUPER_ADMIN)
+    @ApiOperation(value = "获取所有未分配的项目信息")
+    @GetMapping("/info/getDeadlineProjectInfo")
+    public Result getDeadlineProjectInfo(){
+        return infoService.getDeadlineProjectInfo();
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)

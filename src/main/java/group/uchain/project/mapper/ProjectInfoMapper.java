@@ -28,6 +28,11 @@ public interface ProjectInfoMapper {
      */
     List<String> getRepeatNums(@Param("list")List<String> list);
 
+
+    /**
+     *
+     */
+    ProjectInfo getProjectInfoByProjectId(@Param("id") String id);
     /**
      * 负责人获取个人所拥有的项目信息
      * @param userId

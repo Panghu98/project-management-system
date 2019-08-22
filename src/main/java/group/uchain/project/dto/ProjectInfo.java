@@ -1,6 +1,7 @@
 package group.uchain.project.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -93,7 +94,7 @@ public class ProjectInfo implements Serializable{
      * 项目导入时间
      */
 
-    @JSONField(format = "yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     private Date date;
 
     /**
@@ -101,7 +102,7 @@ public class ProjectInfo implements Serializable{
      */
     private Integer allocationStatus;
 
-    @JSONField(format = "yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     private Date deadline;
 
 

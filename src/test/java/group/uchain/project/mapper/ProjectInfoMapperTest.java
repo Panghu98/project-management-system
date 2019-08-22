@@ -28,13 +28,13 @@ public class ProjectInfoMapperTest {
 
     @Test
     public void getAllProjectInfo(){
-        System.err.println(projectInfoMapper.getDeadlineProjectInfo());
+        System.err.println(projectInfoMapper.getAllProjectInfo());
     }
 
 
     @Test
     public void setDeadline(){
-        System.out.println(projectInfoMapper.setDeadline("V27",new Date(System.currentTimeMillis())));
+        System.out.println(projectInfoMapper.setDeadline("V25",new Date(System.currentTimeMillis())));
     }
 
     @Test

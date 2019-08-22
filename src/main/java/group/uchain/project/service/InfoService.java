@@ -66,4 +66,6 @@ public interface InfoService {
      * @return
      */
     Result setDeadline(String id, Long date);
+
+    Result getDeadlineProjectInfo();
 }
