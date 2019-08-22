@@ -105,5 +105,22 @@ public class ProjectInfo implements Serializable{
     @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     private Date deadline;
 
-
+    @Override
+    public String toString() {
+        return "ProjectInfo{" +
+                "id='" + id + '\'' +
+                ", category='" + category + '\'' +
+                ", instruction='" + instruction + '\'' +
+                ", level='" + level + '\'' +
+                ", grade='" + grade + '\'' +
+                ", number='" + number + '\'' +
+                ", variety='" + variety + '\'' +
+                ", score=" + score +
+                ", leader='" + leader + '\'' +
+                ", division=" + division +
+                ", date=" + date +
+                ", allocationStatus=" + allocationStatus +
+                ", deadline=" + deadline +
+                '}';
+    }
 }

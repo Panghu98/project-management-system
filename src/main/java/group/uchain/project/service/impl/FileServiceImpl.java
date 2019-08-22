@@ -97,7 +97,8 @@ public class FileServiceImpl implements FileService {
             throw new MyException(CodeMsg.FILE_EMPTY_ERROR);
         }
 
-        if (!file.getContentType().contains(".xlsx")){
+        if (!file.getOriginalFilename().contains(".xlsx")){
+            System.err.println(file.getName());
             throw new MyException(CodeMsg.FILE_TYPE_ERROR);
         }
         String pathFile = projectFilePath+file.getOriginalFilename();

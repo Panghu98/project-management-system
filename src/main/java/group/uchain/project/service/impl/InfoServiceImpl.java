@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -138,15 +140,21 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     @Override
     public Result getDeadlineProjectInfo() {
         String flag = redisTemplate.opsForValue().get(DEADLINE_FLAG).toString();
+        SetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForSet();
         if ("Y".equals(flag)){
             log.info("缓存中不是最新的值,从数据库中获取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getDeadlineProjectInfo();
-            redisTemplate.opsForSet().add(projectInfoList);
+            for (ProjectInfo projectInfo:projectInfoList
+                 ) {
+                    setOperations.add(setKey,projectInfo);
+
+            }
             return Result.successData(projectInfoList);
         }else {
             log.info("缓存中中为最新的键值,直接从缓存中取值");
-            Set set = redisTemplate.opsForSet().members(setKey);
-            return Result.successData(set);
+            Set set = setOperations.members(setKey);
+            List list = new ArrayList(set);
+            return Result.successData(list);
         }
     }
 
@@ -217,16 +225,23 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
         //将最新的数据放入缓存
         Map<String, Object> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
+
+        ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         //更新缓存 并设置过期时间为一天
         redisTemplate.opsForHash().putAll(hashKey,map);
         //更新标志最好在最后一步进行
-        redisTemplate.opsForValue().set(FLAG_KEY,"N");
+        valueOperations.set(FLAG_KEY,"N");
 
 
         //对已经设置截止时间的项目进行预热操
-        List<ProjectInfo> projectInfos = projectInfoMapper.getDeadlineProjectInfo();
-        redisTemplate.opsForSet().add(setKey,projectInfos);
-        redisTemplate.opsForValue().set(DEADLINE_FLAG,"N");
+        List<ProjectInfo> deadlineProjectInfos = projectInfoMapper.getDeadlineProjectInfo();
+        SetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForSet();
+        for (ProjectInfo projectInfo:deadlineProjectInfos
+        ) {
+            setOperations.add(setKey,projectInfo);
+
+        }
+        valueOperations.set(DEADLINE_FLAG,"N");
 
     }
 
