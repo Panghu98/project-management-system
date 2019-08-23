@@ -151,7 +151,6 @@ public class ExcelUtil {
                 registerUser.setUsername(username);
                 registerUser.setPosition(position);
                 registerUser.setOffice(office);
-
                 list.add(registerUser);
             }
 
