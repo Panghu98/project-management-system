@@ -42,5 +42,11 @@ public interface FileService {
      */
     Result uploadEvidentFile(MultipartFile multipartFile);
 
-    Result getAllocationExcel(Date startDate,Date endDate, HttpServletResponse response);
+    /**
+     * 根据文件导入时间导出分配信息的excel
+     * @param startDate 开始
+     * @param endDate 结束
+     * @return 是否成功
+     */
+    void getAllocationExcel(Long startDate,Long endDate, HttpServletResponse response);
 }

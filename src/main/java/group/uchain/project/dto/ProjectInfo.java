@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -50,27 +51,28 @@ public class ProjectInfo implements Serializable{
      * 级别 省级 国家级 等
      */
     @JsonIgnore
-    @NonNull
+    @ApiModelProperty("级别,省级,或者国家级")
     private String level;
 
     /**
      * 等级
      */
     @JsonIgnore
-    @NonNull
+    @ApiModelProperty("等级,一等奖,二等奖")
     private String grade;
 
     /**
-     * 项目数量
+     * 奖项数量
      */
     @JsonIgnore
-    @NonNull
-    private String number;
+    @ApiModelProperty("奖项数量")
+    private Integer number;
 
     /**
-     * 类型
+     * 分数类型
      */
     @NonNull
+    @ApiModelProperty("分数类型")
     private String variety;
 
     /**

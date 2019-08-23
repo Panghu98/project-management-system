@@ -197,8 +197,9 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             return Result.error(PROJECT_ID_NOI_EXIST);
         }
 
-        //写入内存,删除缓存  缓存和数据库同时删除,不用更新key
-        projectInfoMapper.setDeadline(id,new Date(date));
+        //写入内存,删除缓存  缓存和数据库同时删除,不用更新key  到当天晚上,所以加上一天
+        Date date1 = new Date(date+1000*60*60*24);
+        projectInfoMapper.setDeadline(id,date1);
         redisTemplate.opsForHash().delete(hashKey,id);
 
         //将设置了截止日期的项目信息放入另一个缓存当中

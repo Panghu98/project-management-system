@@ -6,7 +6,6 @@ import lombok.Getter;
  * @author project
  * @Title: RoleEnum
  * @ProjectName oil-supply-chain
- * @Description: TODO
  * @date 19-2-24 下午5:01
  */
 @Getter

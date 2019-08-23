@@ -52,9 +52,7 @@ public class MD5Util {
     public static void main(String[] args) {
         //38a41052bb6fd70aeddb5370aafcbecc
         //4756a51e387552db1fa1dfc64cb6b194
-        System.out.println(md5("uchainc1108"));
-        System.out.println(inputPassToFormPass("111111"));
-        System.out.println(inputPassToDBPass("111111","4995bd91"));
+        System.out.println(inputPassToDBPass("123456","4e62b380"));
     }
 
 }

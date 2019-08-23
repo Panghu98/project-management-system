@@ -70,7 +70,7 @@ public class ExcelUtil {
             String instruction;
             String leader;
             String level;
-            String number;
+            double number;
             Double score;
             String variety;
             try {
@@ -78,7 +78,7 @@ public class ExcelUtil {
                 instruction = row.getCell(columnFlag++).getStringCellValue();
                 level = row.getCell(columnFlag++).getStringCellValue();
                 grade = row.getCell(columnFlag++).getStringCellValue();
-                number = row.getCell(columnFlag++).getStringCellValue();
+                number = row.getCell(columnFlag++).getNumericCellValue();
                 variety = row.getCell(columnFlag++).getStringCellValue();
                 score = row.getCell(columnFlag++).getNumericCellValue();
                 leader = row.getCell(columnFlag++).getStringCellValue();
@@ -100,7 +100,7 @@ public class ExcelUtil {
             projectInfo.setInstruction(instruction);
             projectInfo.setLeader(leader);
             projectInfo.setLevel(level);
-            projectInfo.setNumber(number);
+            projectInfo.setNumber(Integer.valueOf(Double.toString(number)));
             projectInfo.setScore(score);
             projectInfo.setVariety(variety);
             projectInfo.setDate(new Date());

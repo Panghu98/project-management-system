@@ -18,6 +18,7 @@ public enum CodeMsg {
     USER_NOT_EXIST(4,"用户不存在"),
     PASSWORD_ERROR(5,"密码错误"),
     PASSWORD_UPDATE_ERROR(6,"新密码和原密码不能一样"),
+    USER_ID_IS_NULL(7,"教师工号为空"),
 
     //文件出错
     FILE_UPLOAD_FAILED(10,"文件上传服务器失败"),

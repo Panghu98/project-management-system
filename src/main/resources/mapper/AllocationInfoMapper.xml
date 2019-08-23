@@ -24,9 +24,15 @@
         where `id` = #{param2}
     </update>
     <select id="getUserAllocationInfo" resultType="group.uchain.project.vo.AllocationInfo">
-        select a.project_id as projectId,a.user_score as userScore,p.category,p.leader,p.instruction
-        from allocation_info a inner join project_info p
-        on a.project_id=p.id where a.user_id = #{userId}
+        select a.project_id as projectId,
+               a.user_score as userScore,
+               p.category,
+               p.leader,
+               p.instruction
+        from allocation_info a
+            inner join project_info p
+        on a.project_id=p.id
+        where a.user_id = #{userId}
     </select>
 
 
@@ -35,15 +41,33 @@
         <result column="category" property="category"/>
         <result column="leader" property="leader"/>
         <result column="instruction" property="instruction"/>
-        <collection property="teachers" ofType="group.uchain.project.vo.Teacher"
+        <result column="level" property="level"/>
+        <result column="grade" property="grade"/>
+        <result column="number" property="number"/>
+        <result column="variety" property="variety"/>
+        <result column="score" property="score"/>
+        <collection property="teacherInfos" ofType="group.uchain.project.vo.TeacherInfo"
         javaType="java.util.ArrayList" columnPrefix="t_">
-            <id column="user_id" property="userId" jdbcType="BIGINT"/>
+            <!--column指的是查询结果中的列名-->
             <id column="username" property="username" jdbcType="VARCHAR"/>
+            <id column="user_score" property="score"/>
+            <id column="proportion" property="proportion"/>
         </collection>
     </resultMap>
 
     <select id="getAllAllocationInfo" resultMap="Allocation" resultType="group.uchain.project.vo.AllocationInfo2">
-        select p.id,p.category,p.leader,p.instruction,a.user_id as t_user_id,u.username as t_username
+        select p.id,
+               p.category,
+               p.leader,
+               p.instruction,
+               p.level,
+               p.grade,
+               p.number,
+               p.variety,
+               p.score,
+               u.username as t_username,
+               a.user_score as t_user_score,
+               a.proportion as t_proportion
           from project_info p,allocation_info a
           inner join user u
           on a.user_id = u.user_id

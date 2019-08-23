@@ -50,7 +50,7 @@ public class AllocationInfoMapperTest {
 
     @Test
     public void getAllAllocationInfo(){
-        Date start = new Date(System.currentTimeMillis()-60*60*60*24*50);
+        Date start = new Date(System.currentTimeMillis()-10*60*60*24*1000);
         Date end = new Date(System.currentTimeMillis());
         System.err.println(start);
         System.err.println(end);

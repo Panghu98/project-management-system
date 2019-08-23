@@ -28,19 +28,16 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(produces = { "application/json;charset=UTF-8" })
-@Api(tags = "超级管理员接口")
-public class AdminController {
+@Api(tags = "超级管理员项目接口")
+public class AdminProjectController {
 
     private FileService fileService;
 
-    private UserService userService;
 
     private InfoService infoService;
 
     @Autowired
-    public AdminController(FileService fileService,UserService userService,
-                           InfoService infoService) {
-        this.userService = userService;
+    public AdminProjectController(FileService fileService, InfoService infoService) {
         this.fileService = fileService;
         this.infoService = infoService;
     }
@@ -55,27 +52,6 @@ public class AdminController {
     @PostMapping("/excel/projectUpload")
     public Result importProjectByExcel(MultipartFile file){
         return fileService.importProjectByExcel(file);
-    }
-
-    @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "Excel导入--表格注册用户")
-    @PostMapping("/excel/register")
-    public Result registerByExcel(MultipartFile file){
-        return fileService.registerByExcel(file);
-    }
-
-    @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "通过表单进行用户注册")
-    @PostMapping("/action/register")
-    public Result registerByForm(RegisterUser registerUser){
-        return userService.register(registerUser);
-    }
-
-    @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "更新用户信息")
-    @GetMapping("/action/updateUserInfo")
-    public Result updateInfo(){
-        return new Result();
     }
 
 
@@ -97,8 +73,8 @@ public class AdminController {
     @RoleRequired(RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "文件下载--Excel查看:查看项目分数分配信息")
     @GetMapping("/file/getAllocationExcel")
-    public Result getAllocationExcel(@RequestParam("start") Date startDate,@RequestParam("end") Date enddate, HttpServletResponse response){
-        return fileService.getAllocationExcel(startDate,enddate,response);
+    public void getAllocationExcel(@RequestParam("start") Long startDate,@RequestParam("end") Long deadline, HttpServletResponse response){
+        fileService.getAllocationExcel(startDate,deadline,response);
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
@@ -144,7 +120,6 @@ public class AdminController {
         System.out.println(form.getId()+" "+form.getDate());
         return infoService.setDeadline(form.getId(), form.getDate());
     }
-
 
 
 }

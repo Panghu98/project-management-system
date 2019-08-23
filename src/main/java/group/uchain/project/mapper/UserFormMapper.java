@@ -1,6 +1,7 @@
 package group.uchain.project.mapper;
 
 import group.uchain.project.dto.User;
+import group.uchain.project.util.MD5Util;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,6 +14,18 @@ import java.util.List;
  */
 public interface UserFormMapper {
 
+    /**
+     * 修改用户密码
+     * @param userId  用户ID
+     * @param salt 盐值
+     * @param password 密码
+     */
+    void resetPassword(@Param("id") Long userId,@Param("salt") String salt,@Param("password") String password);
+
+    /**
+     * 用户注册
+     * @param user 用户表单
+     */
     void register(User user);
 
     /**
@@ -21,9 +34,9 @@ public interface UserFormMapper {
      */
     void registerMultiUser(List<User> list);
 
-    User selectUserByUserId(long id);
+    User selectUserByUserId(Long id);
 
-    List<User> selectUserByHalfUserId(long id);
+    List<User> selectUserByHalfUserId(Long id);
     /**
      * 通过ID数组判断已经存在的用户
      * @param list 用户IDList
@@ -44,4 +57,9 @@ public interface UserFormMapper {
      */
     List<group.uchain.project.vo.User> getAllUser();
 
+    /**
+     * 通过用户ID删除用户
+     * @param userId
+     */
+    void deleteUser(@Param("id") Long userId);
 }

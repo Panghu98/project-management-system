@@ -21,7 +21,7 @@ public interface AllocationInfoMapper {
      * @param map  用户ID以及对应的分配比例
      * @param projectId  项目的ID
      */
-    void uploadAllocationInfo(@Param("map") Map<Long,Integer> map, String projectId);
+    void uploadAllocationInfo(@Param("map") Map<Long,Integer> map, String projectId);//TODO
 
     /**
      * 上传项目分配的时间
@@ -31,6 +31,7 @@ public interface AllocationInfoMapper {
     void updateAllocationTime(Date date,String projectId);
 
     /**
+     * 限于普通教师使用
      * 获取项目成绩分配信息
      * @param userId 用户ID
      * @return

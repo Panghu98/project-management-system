@@ -35,4 +35,5 @@ public class UserFormMapperTest {
     public void getAllUser(){
         System.out.println(userFormMapper.getAllUser());
     }
+
 }

@@ -30,6 +30,19 @@
     <update id="updatePassword">
         update user set password=#{param2} where user_id=#{param1}
     </update>
+    <update id="resetPassword">
+        update user
+        <set>
+            <if test="id!=null">
+                `password` = #{password},
+                `salt` = #{salt}
+            </if>
+        </set>
+            where user_id = #{id}
+    </update>
+    <delete id="deleteUser">
+        delete from user where user_id = #{id}
+    </delete>
     <select id="selectUserByUserId" resultType="group.uchain.project.dto.User">
         select user_id as userId,username,salt,`role`,`password` from `user` where user_id = #{id}
     </select>

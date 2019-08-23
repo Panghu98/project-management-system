@@ -11,6 +11,8 @@ import group.uchain.project.result.Result;
  */
 public interface UserService {
 
+    String DEFAULT_PASSWORD = "123456";
+
     /**
      * @return  当前登录用户的信息
      */
@@ -23,4 +25,9 @@ public interface UserService {
      */
     Result register(RegisterUser user);
 
+    Result resetPassword(Long userId);
+
+    Result updatePassword(String newPassword);
+
+    Result deleteUser(Long userId);
 }

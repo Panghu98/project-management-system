@@ -1,6 +1,7 @@
 package group.uchain.project.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import group.uchain.project.service.UserService;
 import group.uchain.project.util.MD5Util;
 import group.uchain.project.util.SaltUtil;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,10 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 @Data
 @NoArgsConstructor
 public class User {
-
-    @JsonIgnore
-    @Value(value = "${default.password}")
-    private String defaultPassword;
 
     /**
      * 教师工号
@@ -66,7 +63,7 @@ public class User {
 
 
     public User(RegisterUser registerUser) {
-
+        String defaultPassword = UserService.DEFAULT_PASSWORD;
         this.setUserId(registerUser.getUserId());
         this.setUsername(registerUser.getUsername());
         this.setPosition(registerUser.getPosition());

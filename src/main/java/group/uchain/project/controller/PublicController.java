@@ -6,6 +6,7 @@ import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.InfoService;
 import group.uchain.project.service.LoginService;
+import group.uchain.project.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,10 +32,14 @@ public class PublicController {
 
     private LoginService loginService;
 
+    private UserService userService;
+
     @Autowired
-    public PublicController(InfoService infoService,LoginService loginService) {
+    public PublicController(InfoService infoService,LoginService loginService,
+                            UserService userService) {
         this.infoService = infoService;
         this.loginService = loginService;
+        this.userService = userService;
     }
 
     @RoleRequired(value = RoleEnum.PROJECT_LEADER)
@@ -59,7 +64,7 @@ public class PublicController {
     @ApiOperation(value = "更改密码")
     @PostMapping("/action/updatePassword")
     public Result updatePassword(String password){
-        return loginService.updatePassword(password);
+        return userService.updatePassword(password);
     }
 
     @ApiOperation(value = "获取所有项目分数分配详情")

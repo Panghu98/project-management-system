@@ -43,19 +43,16 @@ public class LoginServiceImpl implements LoginService {
 
     private UserFormMapper userFormMapper;
 
-    private UserService userService;
-
     private MQSender mqSender;
 
     @Autowired
     public LoginServiceImpl(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil,
                             UserDetailsService userDetailsService, UserFormMapper userFormMapper,
-                            UserService userService,MQSender mqSender) {
+                            MQSender mqSender) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userFormMapper = userFormMapper;
-        this.userService = userService;
         this.mqSender = mqSender;
     }
 
@@ -105,29 +102,8 @@ public class LoginServiceImpl implements LoginService {
         return Result.successData(r);
     }
 
-    @Override
-    public Result updatePassword(String newPassword) {
 
-        //从Token中获取用户信息
-        User user = userService.getCurrentUser();
-        if (user == null){
-            return Result.error(CodeMsg.AUTHENTICATION_ERROR);
-        }
-        String salt = user.getSalt();
-        //判断更改的密码和用户原密码是否相同
-        String oldPassword = user.getPassword();
 
-        String encryptNewPassword = MD5Util.formPassToDBPass(newPassword,salt);
-        if (oldPassword.equals(encryptNewPassword)) {
-            log.info("新密码和原密码相同");
-            return Result.error(CodeMsg.PASSWORD_UPDATE_ERROR);
-        }
-
-        long userId = user.getUserId();
-        userFormMapper.updatePassword(userId,encryptNewPassword);
-        //默认返回成功
-        return new Result();
-    }
 
 
 }

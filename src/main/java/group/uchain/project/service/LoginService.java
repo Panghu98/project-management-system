@@ -21,12 +21,6 @@ public interface LoginService {
      */
     Result login(long userId, String password, HttpServletRequest request);
 
-    /**
-     * 用户更改密码
-     * @param newPassword
-     * @return
-     */
-    Result updatePassword(String newPassword);
 
 
 }

@@ -1,8 +1,11 @@
 package group.uchain.project.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NonNull;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -11,12 +14,12 @@ import java.util.List;
  * @author panghu
  */
 @Data
-public class AllocationInfo2 {
+public class AllocationInfo2 implements Serializable {
 
     @ApiModelProperty(value = "项目编号")
     private String projectId;
 
-    @ApiModelProperty(value = "项目类别")
+    @ApiModelProperty(value = "项目类别/类别")
     private String category;
 
     @ApiModelProperty(value = "项目负责人")
@@ -25,8 +28,23 @@ public class AllocationInfo2 {
     @ApiModelProperty(value = "项目说明")
     private String instruction;
 
-    @ApiModelProperty(value = "项目分配的成员信息")
-    private List<Teacher> teachers;
+    @ApiModelProperty("级别,省级,或者国家级")
+    private String level;
+
+    @ApiModelProperty("等级,一等奖,二等奖")
+    private String grade;
+
+    @ApiModelProperty("奖项数量")
+    private Integer number;
+
+    @ApiModelProperty("分数类型")
+    private String variety;
+
+    @ApiModelProperty("项目分数")
+    private Integer score;
+
+    @ApiModelProperty(value = "项目成员分配信息")
+    private List<TeacherInfo> teacherInfos;
 
 
 }
