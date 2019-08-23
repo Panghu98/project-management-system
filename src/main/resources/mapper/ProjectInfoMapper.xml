@@ -3,7 +3,7 @@
 <mapper namespace="group.uchain.project.mapper.ProjectInfoMapper">
 
     <insert id="excelToDatabase" parameterType="list">
-        insert into project.project_info (`id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`,`date`)
+        insert into project.project_info (`id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`,`date`,deadline)
         values
         <foreach collection="list" separator="," index="" item="projectInfo">
             (
@@ -17,7 +17,8 @@
             #{projectInfo.score,jdbcType=DOUBLE},
             #{projectInfo.leader,jdbcType=VARCHAR},
             #{projectInfo.division,jdbcType=SMALLINT},
-            #{projectInfo.date,jdbcType=DATE}
+            #{projectInfo.date,jdbcType=DATE},
+            #{projectInfo.deadline,jdbcType=DATE}
             )
         </foreach>
     </insert>

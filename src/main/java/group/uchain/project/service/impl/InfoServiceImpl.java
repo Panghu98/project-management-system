@@ -168,7 +168,13 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     @Override
     public Result deleteProjectInfo(String id) {
         int result = projectInfoMapper.deleteProjectInfo(id);
-        if (result == 1){
+        System.out.println(result);
+        if (result >= 1){
+            //删除成功,同时刷新缓存
+            //未设置截止时间的项目删除占多数,所以使用缓存刷新
+            redisTemplate.opsForHash().delete(hashKey,id);
+            //设置了截止时间的项目占极少数,使用数据库刷新
+            redisTemplate.opsForValue().set(DEADLINE_FLAG,"Y");
             return new Result();
         }else {
             return Result.error(PROJECT_ID_NOI_EXIST);
@@ -224,22 +230,26 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
      */
     private void preheatingRedis(){
 
+        HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
+        SetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForSet();
+
         //未设置截止时间的项目缓存预热操作
         List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
         //将最新的数据放入缓存
-        Map<String, Object> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
+        Map<String, ProjectInfo> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
 
         ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         //更新缓存 并设置过期时间为一天
-        redisTemplate.opsForHash().putAll(hashKey,map);
+        hashOperations.putAll(hashKey,map);
         redisTemplate.expire(hashKey,1,TimeUnit.DAYS);
         //更新标志最好在最后一步进行
         valueOperations.set(FLAG_KEY,"N");
 
 
+        setOperations.getOperations().delete(setKey);
         //对已经设置截止时间的项目进行预热操
         List<ProjectInfo> deadlineProjectInfos = projectInfoMapper.getDeadlineProjectInfo();
-        SetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForSet();
+
         for (ProjectInfo projectInfo:deadlineProjectInfos
         ) {
             setOperations.add(setKey,projectInfo);

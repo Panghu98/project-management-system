@@ -66,7 +66,7 @@ public class ProjectInfo implements Serializable{
      */
     @JsonIgnore
     @ApiModelProperty("奖项数量")
-    private Integer number;
+    private Double number;
 
     /**
      * 分数类型

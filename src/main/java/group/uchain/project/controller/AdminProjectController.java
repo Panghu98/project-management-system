@@ -78,7 +78,7 @@ public class AdminProjectController {
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "获取所有未分配的项目信息")
+    @ApiOperation(value = "获取所有已经分配的项目信息")
     @GetMapping("/info/getAllProjectInfo")
     public Result getAllProjectInfo(){
         return infoService.getAllProjectInfo();
@@ -105,7 +105,7 @@ public class AdminProjectController {
      */
     @RoleRequired(RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "删除项目信息")
-    @PostMapping(value = "/action/deleteProjectInfo")
+    @GetMapping(value = "/action/deleteProjectInfo")
     public Result deleteProjectInfo(String id){
         return infoService.deleteProjectInfo(id);
     }

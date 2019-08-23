@@ -93,8 +93,12 @@ public class UserServiceImpl implements UserService {
         if (userId == null){
             return Result.error(CodeMsg.USER_ID_IS_NULL);
         }
-        if (userMapper.selectUserByUserId(userId) == null){
+        User user = userMapper.selectUserByUserId(userId);
+        if (user == null){
             return Result.error(CodeMsg.USER_NOT_EXIST);
+        }
+        if (user.getRole().equals("3")) {
+            return Result.error(CodeMsg.NO_PERMISSION);
         }
         userMapper.deleteUser(userId);
         return new Result();

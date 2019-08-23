@@ -100,7 +100,7 @@ public class ExcelUtil {
             projectInfo.setInstruction(instruction);
             projectInfo.setLeader(leader);
             projectInfo.setLevel(level);
-            projectInfo.setNumber(Integer.valueOf(Double.toString(number)));
+            projectInfo.setNumber(number);
             projectInfo.setScore(score);
             projectInfo.setVariety(variety);
             projectInfo.setDate(new Date());

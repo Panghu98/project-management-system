@@ -36,7 +36,7 @@ public class InfoServiceImplTest {
 
     @Test
     public void getDeadlineProjectInfo() {
-        Result result = infoService.getDeadlineProjectInfo();
+        Result result = infoService.deleteProjectInfo("Q12");
         System.out.println(result);
     }
 

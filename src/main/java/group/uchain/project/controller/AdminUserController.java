@@ -35,6 +35,7 @@ public class AdminUserController {
     @ApiOperation(value = "通过表单进行用户注册")
     @PostMapping("/action/register")
     public Result registerByForm(@RequestBody RegisterUser registerUser){
+        System.out.println(registerUser);
         return userService.register(registerUser);
     }
 

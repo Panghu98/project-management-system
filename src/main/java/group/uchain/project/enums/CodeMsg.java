@@ -2,6 +2,7 @@ package group.uchain.project.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.omg.CORBA.NO_PERMISSION;
 
 
 /**
@@ -40,7 +41,8 @@ public enum CodeMsg {
     PROJECT_ID_NULL(31,"项目编号为空"),
     DATE_ERROR(32,"时间有误"),
 
-    DATABASE_ERROR(101,"数据库异常");
+    DATABASE_ERROR(101,"数据库异常"),
+    NO_PERMISSION(102,"您无权进行此项操作");
 
 
     private Integer code;
