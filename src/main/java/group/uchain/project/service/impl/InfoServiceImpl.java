@@ -15,10 +15,7 @@ import group.uchain.project.vo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,24 +111,27 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     public Result getAllProjectInfo() {
         // Y有新的数据写入 ,N无新的数据写入
         //获取标记状态并且在刷新缓存之后重置状态为N
-        String columnFlag = redisTemplate.opsForValue().get(FLAG_KEY).toString();
-        if ("Y".equals(columnFlag)){
+        String columnFlag = Objects.requireNonNull(redisTemplate.opsForValue().get(FLAG_KEY)).toString();
+        HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
+        ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
+        if ("Y".equals(columnFlag) || hashOperations.keys(hashKey).size() == 0){
             log.info("数据存在更新,从数据库中读取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
             //将最新的数据放入缓存
-            Map<String, Object> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
+            Map<String, ProjectInfo> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
             //更新缓存 并设置过期时间为一天
-            redisTemplate.opsForHash().putAll(hashKey,map);
+            hashOperations.putAll(hashKey,map);
+            hashOperations.getOperations().expire(hashKey,1,TimeUnit.DAYS);
 
             //更新缓存状态
-            redisTemplate.opsForValue().set(FLAG_KEY,"N");
+            valueOperations.set(FLAG_KEY,"N");
             return Result.successData(projectInfoList);
         }else {
             log.info("缓存中中为最新的键值,直接从缓存中取值");
             //获取所有的Key
-            Set<Object> projectIdSet = redisTemplate.opsForHash().keys(hashKey);
+            Set<String> projectIdSet = hashOperations.keys(hashKey);
             //获取所有的结果
-            List list = redisTemplate.opsForHash().multiGet(hashKey,projectIdSet);
+            List list = hashOperations.multiGet(hashKey,projectIdSet);
             return Result.successData(list);
         }
     }
@@ -141,13 +141,14 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     public Result getDeadlineProjectInfo() {
         String flag = redisTemplate.opsForValue().get(DEADLINE_FLAG).toString();
         SetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForSet();
-        if ("Y".equals(flag)){
+        if ("Y".equals(flag) || setOperations.size(setKey) == 0){
             log.info("缓存中不是最新的值,从数据库中获取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getDeadlineProjectInfo();
             for (ProjectInfo projectInfo:projectInfoList
                  ) {
                     setOperations.add(setKey,projectInfo);
-
+                    //设置过期时间为一天
+                    setOperations.getOperations().expire(setKey,1,TimeUnit.DAYS);
             }
             return Result.successData(projectInfoList);
         }else {
@@ -203,6 +204,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         //将设置了截止日期的项目信息放入另一个缓存当中
         ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(id);
         redisTemplate.opsForSet().add(setKey,projectInfo);
+        redisTemplate.expire(setKey,1,TimeUnit.DAYS);
         return new Result();
     }
 
@@ -229,6 +231,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         //更新缓存 并设置过期时间为一天
         redisTemplate.opsForHash().putAll(hashKey,map);
+        redisTemplate.expire(hashKey,1,TimeUnit.DAYS);
         //更新标志最好在最后一步进行
         valueOperations.set(FLAG_KEY,"N");
 
@@ -239,8 +242,8 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         for (ProjectInfo projectInfo:deadlineProjectInfos
         ) {
             setOperations.add(setKey,projectInfo);
-
         }
+        setOperations.getOperations().expire(setKey,1,TimeUnit.DAYS);
         valueOperations.set(DEADLINE_FLAG,"N");
 
     }

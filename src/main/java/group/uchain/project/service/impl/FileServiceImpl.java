@@ -139,7 +139,7 @@ public class FileServiceImpl implements FileService {
         //将导入的数据放入缓存,并且通过redis标记数据库更新
         Map<String, Object> map = list.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
         redisTemplate.opsForHash().putAll(REDIS_HASH_KEY,map);
-        return new Result(list);
+        return new Result<>(list);
 
     }
 
