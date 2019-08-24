@@ -59,6 +59,7 @@ public class MQReceiver {
     public void receiveProjectMessage(String message){
         List<ProjectInfo> list = JSONArray.parseArray(message,ProjectInfo.class);
         projectInfoMapper.excelToDatabase(list);
+        //在上传项目之后,负责人的的role通过触发器升级为2
         //标记数据库是否更新
         redisTemplate.opsForValue().set(FLAG_KEY,"Y");
     }
