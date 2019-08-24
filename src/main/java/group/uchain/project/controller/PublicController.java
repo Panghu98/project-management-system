@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * @author project
@@ -56,7 +57,7 @@ public class PublicController {
     @RoleRequired(RoleEnum.TEACHER)
     @ApiOperation(value = "用户登录接口",notes = "用户登录")
     @PostMapping(value = "/login")
-    public Result login(@RequestBody LoginUser loginUser, HttpServletRequest request) {
+    public Result login(@Valid @RequestBody LoginUser loginUser, HttpServletRequest request) {
         return loginService.login(loginUser.getUserId(),loginUser.getPassword(),request);
     }
 
