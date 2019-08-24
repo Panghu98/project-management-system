@@ -1,9 +1,10 @@
-package group.uchain.project.dto;
+package group.uchain.project.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+
+import javax.validation.constraints.*;
 
 /**
  * @author project
@@ -16,10 +17,11 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class RegisterUser {
 
-    @NonNull
+
+    @NotNull(message = "ID不能为空")
     private Long userId;
 
-    @NonNull
+    @NotNull(message = "用户名不能为空")
     private String username;
 
 

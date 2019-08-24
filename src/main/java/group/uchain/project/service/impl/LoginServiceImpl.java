@@ -58,7 +58,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Result login(long userId, String password, HttpServletRequest request) {
-        System.out.println();
         if (userFormMapper.selectUserByUserId(userId) == null) {
             log.info("用户不存在");
             return Result.error(CodeMsg.USER_NOT_EXIST);

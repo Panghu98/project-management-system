@@ -189,10 +189,6 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
      */
     @Override
     public Result setDeadline(String id, Long date) {
-        //项目ID为空
-        if (id == null){
-            return Result.error(CodeMsg.PROJECT_ID_NULL);
-        }
         //日期格式错误
         if (date<System.currentTimeMillis()){
             return Result.error(CodeMsg.DATE_ERROR);

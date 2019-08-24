@@ -1,6 +1,6 @@
 package group.uchain.project.util;
 
-import group.uchain.project.dto.RegisterUser;
+import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.exception.MyException;

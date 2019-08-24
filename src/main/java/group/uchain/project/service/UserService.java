@@ -1,7 +1,7 @@
 package group.uchain.project.service;
 
 
-import group.uchain.project.dto.RegisterUser;
+import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.dto.User;
 import group.uchain.project.result.Result;
 

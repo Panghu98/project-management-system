@@ -4,9 +4,12 @@ package group.uchain.project.aspect;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.result.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Objects;
 
 /**
  * @author project
@@ -33,4 +36,11 @@ public class GlobalExceptionHandler {
         log.error(EXCEPTION_MSG_KEY+exception.getMessage());
     }
 
+
+    @ResponseBody
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result handleValidException(MethodArgumentNotValidException e){
+        log.error(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
+        return Result.error(103,e.getBindingResult().getFieldError().getDefaultMessage());
+    }
 }

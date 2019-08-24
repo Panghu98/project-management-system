@@ -42,7 +42,8 @@ public enum CodeMsg {
     DATE_ERROR(32,"时间有误"),
 
     DATABASE_ERROR(101,"数据库异常"),
-    NO_PERMISSION(102,"您无权进行此项操作");
+    NO_PERMISSION(102,"您无权进行此项操作"),
+    FORM_PARAMETER_FORMAT_ERROR(103,"表单参数错误");
 
 
     private Integer code;

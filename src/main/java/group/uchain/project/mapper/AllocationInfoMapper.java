@@ -39,8 +39,6 @@ public interface AllocationInfoMapper {
     List<AllocationInfo> getUserAllocationInfo(String userId);
 
 
-//    List<AllocationInfo2> getAllAllocationInfoTest();
-
     /**
      * 超级管理员获取所有的项目分配信息
      * @param start

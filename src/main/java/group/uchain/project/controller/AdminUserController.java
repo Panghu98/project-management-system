@@ -1,7 +1,7 @@
 package group.uchain.project.controller;
 
 import group.uchain.project.annotation.RoleRequired;
-import group.uchain.project.dto.RegisterUser;
+import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;
@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
 
 /**
  * @author panghu
@@ -34,7 +36,7 @@ public class AdminUserController {
     @RoleRequired(RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "通过表单进行用户注册")
     @PostMapping("/action/register")
-    public Result registerByForm(@RequestBody RegisterUser registerUser){
+    public Result registerByForm(@Valid @RequestBody RegisterUser registerUser){
         return userService.register(registerUser);
     }
 

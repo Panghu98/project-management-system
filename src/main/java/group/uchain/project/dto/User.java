@@ -1,13 +1,13 @@
 package group.uchain.project.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.service.UserService;
 import group.uchain.project.util.MD5Util;
 import group.uchain.project.util.SaltUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author project

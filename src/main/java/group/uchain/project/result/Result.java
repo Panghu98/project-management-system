@@ -7,7 +7,7 @@ import lombok.Data;
 
 /**
  * 结果返回类封装
- * @author clf
+ * @author panghu
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
