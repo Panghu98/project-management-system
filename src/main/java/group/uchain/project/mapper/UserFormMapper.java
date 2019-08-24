@@ -62,4 +62,10 @@ public interface UserFormMapper {
      * @param userId
      */
     void deleteUser(@Param("id") Long userId);
+
+    /**
+     * 将普通用户升级为负责人
+     * @param name 教师工号
+     */
+    void updateUserToLeader(String name);//TODO
 }

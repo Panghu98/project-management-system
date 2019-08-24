@@ -40,7 +40,7 @@ public class User {
      * 用户角色
      */
     @ApiModelProperty(value = "教师角色  1，普通教师 2，项目负责人")
-    private String role;
+    private Integer role;
 
     /**
      * 用于加密的随机盐值
@@ -68,7 +68,8 @@ public class User {
         this.setUsername(registerUser.getUsername());
         this.setPosition(registerUser.getPosition());
         this.setOffice(registerUser.getOffice());
-        this.setRole("1");
+        //默认注册用户均为1
+        this.setRole(1);
         String salt = SaltUtil.getSalt();
         this.setSalt(salt);
         String password = MD5Util.inputPassToDBPass(defaultPassword,salt);

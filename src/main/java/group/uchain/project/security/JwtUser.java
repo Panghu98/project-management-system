@@ -1,5 +1,6 @@
 package group.uchain.project.security;
 
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,10 +24,10 @@ public class JwtUser implements UserDetails {
 
     private String username;
     private String password;
-    private String role;
+    private Integer role;
 
 
-    public JwtUser(String username, String password,String role) {
+    public JwtUser(String username, String password, Integer role) {
         this.username = username;
         this.password = new BCryptPasswordEncoder().encode(password);
         this.role = role;

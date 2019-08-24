@@ -1,11 +1,8 @@
 package group.uchain.project.dto;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -50,28 +47,24 @@ public class ProjectInfo implements Serializable{
     /**
      * 级别 省级 国家级 等
      */
-    @JsonIgnore
     @ApiModelProperty("级别,省级,或者国家级")
     private String level;
 
     /**
      * 等级
      */
-    @JsonIgnore
     @ApiModelProperty("等级,一等奖,二等奖")
     private String grade;
 
     /**
      * 奖项数量
      */
-    @JsonIgnore
     @ApiModelProperty("奖项数量")
     private Double number;
 
     /**
      * 分数类型
      */
-    @NonNull
     @ApiModelProperty("分数类型")
     private String variety;
 

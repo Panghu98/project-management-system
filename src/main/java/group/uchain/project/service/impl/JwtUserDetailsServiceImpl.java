@@ -33,7 +33,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
         } else {
             User user = userFormMapper.selectUserByUserId(userId);
             String password = user.getPassword();
-            String role =  user.getRole();
+            Integer role =  user.getRole();
             //返回一个JwtUser并将这个对象的相关信息放入Token的负载当中,调用JwtTokenUtils中的generateToken方法
             //这里其实可以不放入role,获取role的方式还是在security中的Context获取用户名.再通过用户名查询role
             return new JwtUser(username, password,role);

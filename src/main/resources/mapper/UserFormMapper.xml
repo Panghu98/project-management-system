@@ -40,6 +40,9 @@
         </set>
             where user_id = #{id}
     </update>
+    <update id="updateUserToLeader">
+
+    </update>
     <delete id="deleteUser">
         delete from user where user_id = #{id}
     </delete>

@@ -28,7 +28,7 @@ public class ProjectInfoMapperTest {
 
     @Test
     public void getAllProjectInfo(){
-        System.err.println(projectInfoMapper.getAllProjectInfo());
+        System.err.println(projectInfoMapper.getDeadlineProjectInfo());
     }
 
 

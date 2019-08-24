@@ -6,6 +6,7 @@ import group.uchain.project.dto.User;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.mapper.AllocationInfoMapper;
+import group.uchain.project.mapper.FileInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
 import group.uchain.project.mapper.UserFormMapper;
 import group.uchain.project.rabbitmq.MQSender;
@@ -59,17 +60,20 @@ public class FileServiceImpl implements FileService {
 
     private RedisTemplate redisTemplate;
 
+    private FileInfoMapper fileInfoMapper;
+
 
     @Autowired
     public FileServiceImpl(ProjectInfoMapper projectInfoMapper, UserFormMapper userFormMapper,
                            MQSender mqSender, AllocationInfoMapper allocationInfoMapper,
-                           RedisTemplate redisTemplate) {
+                           RedisTemplate redisTemplate,FileInfoMapper fileInfoMapper) {
 
         this.projectInfoMapper = projectInfoMapper;
         this.userFormMapper = userFormMapper;
         this.mqSender = mqSender;
         this.allocationInfoMapper = allocationInfoMapper;
         this.redisTemplate = redisTemplate;
+        this.fileInfoMapper = fileInfoMapper;
     }
 
     @Value(value = "${filepath.project-excel}")
@@ -198,9 +202,10 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public HttpServletResponse downloadZipFile(List<String> fileNameList, HttpServletResponse response) {
+    public HttpServletResponse downloadZipFile(List<String> projectIdList, HttpServletResponse response) {
+        List<String> filenameList = fileInfoMapper.getCompleteFileNameListByProjectId(projectIdList);
         List<File> fileList = new ArrayList<>();
-        for (String fileName:fileNameList
+        for (String fileName:filenameList
              ) {
             String pathFile = evidentFilePath+fileName;
             File file = new File(pathFile);
@@ -228,6 +233,54 @@ public class FileServiceImpl implements FileService {
         }
         return response;
     }
+
+    @Override
+    public void downloadSingleFile(String id,HttpServletResponse response) {
+
+        String fileName = fileInfoMapper.getCompleteFileNameByProjectId(id);
+        if (fileName == null){
+            throw new MyException(CodeMsg.ID_HAS_NO_FILE);
+        }
+        File file = new File(evidentFilePath+fileName);
+        if(file.exists()){
+            response.setContentType("application/force-download");
+            response.setHeader("name",fileName);
+            response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+
+            byte[] buffer = new byte[1024];
+            //文件输入流
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+
+            //输出流
+            OutputStream os = null;
+            try {
+                os = response.getOutputStream();
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                int i = bis.read(buffer);
+                while(i != -1){
+                    os.write(buffer);
+                    i = bis.read(buffer);
+                }
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            log.info("文件下载中........");
+            try {
+                assert bis != null;
+                bis.close();
+                fis.close();
+                assert os != null;
+                os.close();
+            } catch (IOException e) {
+                log.error("error:{}",e.getMessage());
+            }
+        }
+        log.info("文件下载完成");
+    }
+
 
     @Override
     public Result getAllFilesName() {

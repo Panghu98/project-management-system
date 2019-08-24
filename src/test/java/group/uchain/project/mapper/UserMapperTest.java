@@ -31,7 +31,7 @@ public class UserMapperTest {
 
         User user = new User();
         user.setPassword("127384");
-        user.setRole("1");
+        user.setRole(1);
         user.setUserId(111124314L);
         user.setUsername("刘忠慧");
         user.setSalt(SaltUtil.getSalt());

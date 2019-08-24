@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -62,11 +63,20 @@ public class AdminProjectController {
 
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "文件下载--指定文件名")
-    @GetMapping("/file/downloadZipFile")
-    public void downloadZipFile(@RequestParam(value = "files") List<String> files, HttpServletResponse response ){
-        fileService.downloadZipFile(files,response);
+    @ApiOperation(value = "多文件下载--指定文项目ID")
+    @PostMapping("/file/downloadZipFile")
+    public void downloadZipFile(@RequestParam(value = "idList") List<String> idList, HttpServletResponse response ){
+        fileService.downloadZipFile(idList,response);
     }
+
+    @RoleRequired(RoleEnum.SUPER_ADMIN)
+    @ApiOperation(value = "单文件下载--指定项目ID")
+    @PostMapping("/file/downloadSingleFile")
+    public void downloadSingleFile(@RequestBody String id,HttpServletResponse response){
+        System.err.println(id);
+        fileService.downloadSingleFile(id,response);
+    }
+
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "文件下载--Excel查看:查看项目分数分配信息")
@@ -76,14 +86,14 @@ public class AdminProjectController {
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "获取所有已经分配的项目信息")
+    @ApiOperation(value = "获取所有已经设置截止日期的项目信息")
     @GetMapping("/info/getAllProjectInfo")
     public Result getAllProjectInfo(){
         return infoService.getAllProjectInfo();
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "获取所有未分配的项目信息")
+    @ApiOperation(value = "获取所有未为设置截止日期的项目信息")
     @GetMapping("/info/getDeadlineProjectInfo")
     public Result getDeadlineProjectInfo(){
         return infoService.getDeadlineProjectInfo();
@@ -118,6 +128,8 @@ public class AdminProjectController {
         System.out.println(form.getId()+" "+form.getDate());
         return infoService.setDeadline(form.getId(), form.getDate());
     }
+
+
 
 
 }

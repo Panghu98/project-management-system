@@ -32,14 +32,15 @@ public enum CodeMsg {
     FILE_IS_EMPTY(17,"当前目录下文件为空"),
     FILE_DOWNLOAD_ERROR(18,"文件传输错误"),
     FILE_TYPE_ERROR(19,"文件格式有误,请上传xlsx文件"),
+    ID_HAS_NO_FILE(20,"项目不存在证明材料"),
 
     //文件格式要求出错
-    USER_HAS_EXISTED(20,"用户已经存在"),
-    ALL_USERS_HAS_EXISTED(21,"所有的用户都已经注册"),
+    USER_HAS_EXISTED(50,"用户已经存在"),
+    ALL_USERS_HAS_EXISTED(51,"所有的用户都已经注册"),
 
-    PROJECT_ID_NOI_EXIST(30,"项目编号不存在"),
-    PROJECT_ID_NULL(31,"项目编号为空"),
-    DATE_ERROR(32,"时间有误"),
+    PROJECT_ID_NOI_EXIST(80,"项目编号不存在"),
+    PROJECT_ID_NULL(81,"项目编号为空"),
+    DATE_ERROR(82,"时间有误"),
 
     DATABASE_ERROR(101,"数据库异常"),
     NO_PERMISSION(102,"您无权进行此项操作"),

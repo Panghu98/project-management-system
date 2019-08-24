@@ -140,20 +140,20 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     @Override
     public Result getDeadlineProjectInfo() {
         String flag = redisTemplate.opsForValue().get(DEADLINE_FLAG).toString();
-        SetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForSet();
+        ZSetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForZSet();
         if ("Y".equals(flag) || setOperations.size(setKey) == 0){
             log.info("缓存中不是最新的值,从数据库中获取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getDeadlineProjectInfo();
             for (ProjectInfo projectInfo:projectInfoList
                  ) {
-                    setOperations.add(setKey,projectInfo);
+                    setOperations.add(setKey,projectInfo,projectInfo.getAllocationStatus());
                     //设置过期时间为一天
                     setOperations.getOperations().expire(setKey,1,TimeUnit.DAYS);
             }
             return Result.successData(projectInfoList);
         }else {
             log.info("缓存中中为最新的键值,直接从缓存中取值");
-            Set set = setOperations.members(setKey);
+            Set set = setOperations.rangeByScore(setKey,0,1);
             List list = new ArrayList(set);
             return Result.successData(list);
         }
@@ -227,7 +227,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     private void preheatingRedis(){
 
         HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
-        SetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForSet();
+        ZSetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForZSet();
 
         //未设置截止时间的项目缓存预热操作
         List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
@@ -248,7 +248,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
         for (ProjectInfo projectInfo:deadlineProjectInfos
         ) {
-            setOperations.add(setKey,projectInfo);
+            setOperations.add(setKey,projectInfo,projectInfo.getAllocationStatus());
         }
         setOperations.getOperations().expire(setKey,1,TimeUnit.DAYS);
         valueOperations.set(DEADLINE_FLAG,"N");
