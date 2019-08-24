@@ -32,6 +32,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -412,11 +413,12 @@ public class FileServiceImpl implements FileService {
             row.createCell(10).setCellValue(teachers);
         }
 
-
+        Date date = new Date();
+        String dateFormat = new SimpleDateFormat("yyyy-MM-dd").format(date);
 
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
-        response.setHeader("name","项目分配信息.xlsx");
-        response.setHeader("Content-disposition", "attachment;filename=项目分配信息.xlsx");
+        response.setHeader("name",dateFormat+".xlsx");
+        response.setHeader("Content-disposition", "attachment;filename="+dateFormat+".xlsx");
         try {
             OutputStream os = response.getOutputStream();
             wb.write(os);
