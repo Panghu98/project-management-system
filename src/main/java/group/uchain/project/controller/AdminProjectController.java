@@ -3,6 +3,7 @@ package group.uchain.project.controller;
 import group.uchain.project.annotation.RoleRequired;
 import group.uchain.project.entity.DeadLineForm;
 import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.entity.TimeLimit;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;
@@ -73,16 +74,18 @@ public class AdminProjectController {
     @ApiOperation(value = "单文件下载--指定项目ID")
     @PostMapping("/file/downloadSingleFile")
     public void downloadSingleFile(@RequestBody String id,HttpServletResponse response){
-        System.err.println(id);
         fileService.downloadSingleFile(id,response);
+        System.err.println(response.getHeaderNames());
+        System.err.println(response.getHeader("name"));
     }
 
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "文件下载--Excel查看:查看项目分数分配信息")
-    @GetMapping("/file/getAllocationExcel")
-    public void getAllocationExcel(@RequestParam("start") Long startDate,@RequestParam("end") Long deadline, HttpServletResponse response){
-        fileService.getAllocationExcel(startDate,deadline,response);
+    @PostMapping("/file/getAllocationExcel")
+    public void getAllocationExcel(@RequestBody TimeLimit timeLimit, HttpServletResponse response){
+        System.err.println(timeLimit);
+        fileService.getAllocationExcel(timeLimit.getStart(),timeLimit.getEnd(),response);
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
@@ -125,7 +128,6 @@ public class AdminProjectController {
     @ApiOperation(value = "设置项目分配信息提交的截止日期")
     @PostMapping("/action/setDeadline")
     public Result setDeadline(@Valid @RequestBody DeadLineForm form){
-        System.out.println(form.getId()+" "+form.getDate());
         return infoService.setDeadline(form.getId(), form.getDate());
     }
 

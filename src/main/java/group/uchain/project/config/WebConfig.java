@@ -23,7 +23,29 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowCredentials(true)
                 .allowedMethods("GET", "POST", "DELETE", "PUT")
-                .maxAge(3600);
+                .maxAge(3600)
+                .allowedHeaders("*")
+                /**
+                 * 解决前端获取不到Header核心代码
+                 */
+                .exposedHeaders(
+                        "X-Requested-With",
+                        "Content-Type",
+                        "Accept",
+                        "token",
+                        "Origin",
+                        "No-Cache",
+                        "Captcha",
+                        "authorization",
+                        "Pragma",
+                        "Last-Modified",
+                        "Content-disposition",
+                        "Cache-Control",
+                        "Expires",
+                        "Authorization",
+                        "Token",
+                        //自定义header名称
+                        "name");
     }
 
 

@@ -230,6 +230,7 @@ public class FileServiceImpl implements FileService {
             return downloadZip(file, response);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
         return response;
     }
@@ -414,7 +415,8 @@ public class FileServiceImpl implements FileService {
 
 
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
-        response.setHeader("Content-disposition", "attachment;filename=demo.xlsx");
+        response.setHeader("name","项目分配信息.xlsx");
+        response.setHeader("Content-disposition", "attachment;filename=项目分配信息.xlsx");
         try {
             OutputStream os = response.getOutputStream();
             wb.write(os);

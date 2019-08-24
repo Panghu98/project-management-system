@@ -17,7 +17,7 @@ import javax.validation.Valid;
 /**
  * @author panghu
  */
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RestController
 @RequestMapping(produces = { "application/json;charset=UTF-8" })
 @Api(tags = "超级管理员用户操作接口")
