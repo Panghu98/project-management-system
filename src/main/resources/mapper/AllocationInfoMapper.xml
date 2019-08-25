@@ -6,6 +6,7 @@
 
     <insert id="uploadAllocationInfo" parameterType="hashmap">
         insert into allocation_info
+            (user_id, proportion, project_id)
             values
         <foreach collection="map" index="key" item="value" separator=",">
             (

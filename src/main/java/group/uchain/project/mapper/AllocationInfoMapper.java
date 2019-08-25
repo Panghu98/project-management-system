@@ -4,6 +4,7 @@ import group.uchain.project.vo.AllocationInfo;
 import group.uchain.project.vo.AllocationInfo2;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public interface AllocationInfoMapper {
      * @param map  用户ID以及对应的分配比例
      * @param projectId  项目的ID
      */
-    void uploadAllocationInfo(@Param("map") Map<Long,Integer> map, String projectId);
+    void uploadAllocationInfo(@Param("map") Map<Long, BigDecimal> map, String projectId);
 
     /**
      * 上传项目分配的时间

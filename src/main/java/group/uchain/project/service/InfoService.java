@@ -1,9 +1,11 @@
 package group.uchain.project.service;
 
 import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.entity.Allocation;
 import group.uchain.project.result.Result;
 import group.uchain.project.vo.User;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -29,11 +31,9 @@ public interface InfoService {
 
     /**
      * 上传项目分配信息
-     * @param list
-     * @param projectId
      * @return
      */
-    Result uploadAllocationInfo(Map<Long,Integer> list, String projectId);
+    Result uploadAllocationInfo(Allocation allocation);
 
     /**
      * 获取项目分配的信息

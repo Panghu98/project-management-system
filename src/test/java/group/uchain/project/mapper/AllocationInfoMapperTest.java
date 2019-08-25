@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,12 +28,12 @@ public class AllocationInfoMapperTest {
     @Test
     public void uploadAllocationInfo() {
 
-        HashMap<Long,Integer> map = new HashMap<>();
-        map.put(201731062632L,12);
-        map.put(201731062631L,12);
-        map.put(201731062630L,12);
-        map.put(201731062629L,12);
-        String projectId = "V27";
+        HashMap<Long, BigDecimal> map = new HashMap<>();
+        map.put(201731062632L, BigDecimal.valueOf(12));
+        map.put(201731062631L, BigDecimal.valueOf(12));
+        map.put(201731062630L, BigDecimal.valueOf(12));
+        map.put(201731062629L, BigDecimal.valueOf(12));
+        String projectId = "H27";
 
         allocationInfoMapper.uploadAllocationInfo(map,projectId);
     }

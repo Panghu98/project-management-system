@@ -1,6 +1,7 @@
 package group.uchain.project.service.impl;
 
 import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.entity.Allocation;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.mapper.AllocationInfoMapper;
@@ -19,6 +20,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -90,12 +92,14 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     @Transactional(rollbackFor = SQLException.class)
-    public Result uploadAllocationInfo(Map<Long, Integer> map, String projectId) {
+    public Result uploadAllocationInfo(Allocation allocation) {
+        Map<Long, BigDecimal> map = allocation.getMap();
+        String projectId = allocation.getProjectId();
         //如果项目编号不存在的话，抛出异常  项目编号应该是不会出错的，这样写只是为了确保
         if (!projectInfoMapper.isProjectExist(projectId)){
             throw new MyException(PROJECT_ID_NOI_EXIST);
         }
-        allocationInfoMapper.updateAllocationTime(new Date(),projectId);
+//        allocationInfoMapper.updateAllocationTime(new Date(),projectId);
         allocationInfoMapper.uploadAllocationInfo(map,projectId);
         return new Result();
     }
