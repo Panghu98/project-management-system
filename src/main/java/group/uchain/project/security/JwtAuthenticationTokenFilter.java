@@ -1,6 +1,8 @@
 package group.uchain.project.security;
 
 
+import group.uchain.project.enums.CodeMsg;
+import group.uchain.project.exception.MyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -76,6 +78,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 log.info("authenticated user " + username + ", setting security context");
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            }else {
+                throw new MyException(CodeMsg.AUTHENTICATION_ERROR);
             }
         }
 

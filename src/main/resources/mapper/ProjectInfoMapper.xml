@@ -52,8 +52,8 @@
     <!--使用内连接代替子查询进行SQL优化-->
     <!--通过AuthenticationContext中放入用户ID（用户名无法作为用户的唯一标示）来获取用户所对应的项目信息-->
     <select id="getAllProjectInfoByUserId" resultType="group.uchain.project.dto.ProjectInfo">
-        select `id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`
-        from project_info p inner join user u on (p.`leader` = u.username)  where u.user_id =#{userId}
+        select `id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`,allocation_status as allocationStatus
+        from project_info p inner join user u on (p.`leader` = u.username)  where u.user_id =#{userId} and p.deadline != '1970-01-01' order by allocationStatus desc
     </select>
     <!--Mybatis是根据查询到的记录数进行转换的(1表示为true,0表示为false) 。
             然而，如果查询到多条记录(大于1)，则返回的布尔值为false-->

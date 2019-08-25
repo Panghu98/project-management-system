@@ -41,4 +41,10 @@ public class ProjectInfoMapperTest {
     public void getTime(){
         System.out.println(new Date(0));
     }
+
+
+    @Test
+    public void getAllProjectById(){
+        System.err.println(projectInfoMapper.getAllProjectInfoByUserId("123456789102"));
+    }
 }

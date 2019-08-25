@@ -21,7 +21,7 @@ public interface AllocationInfoMapper {
      * @param map  用户ID以及对应的分配比例
      * @param projectId  项目的ID
      */
-    void uploadAllocationInfo(@Param("map") Map<Long,Integer> map, String projectId);//TODO
+    void uploadAllocationInfo(@Param("map") Map<Long,Integer> map, String projectId);
 
     /**
      * 上传项目分配的时间

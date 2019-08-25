@@ -50,8 +50,10 @@
         select user_id as userId,username,salt,`role`,`password` from `user` where user_id = #{id}
     </select>
     <select id="getAllUser" resultType="group.uchain.project.vo.User">
-        select (@r :=@r + 1) as rowNum, user_id as userId,username,position,office
-          from (select @r := 0) r,`user` u order by userId asc;
+        select user_id as userId,username,position,office
+          from`user`
+        <!--使用中文排序需要转码-->
+        order by convert(username using gbk) asc;
     </select>
     <select id="selectUserByHalfUserId" resultType="group.uchain.project.dto.User">
         select user_id as userId,username,position,office,salt,`role`,`password` from `user` where user_id like (concat('%',#{id},'%'))

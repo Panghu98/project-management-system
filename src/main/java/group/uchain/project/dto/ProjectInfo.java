@@ -1,6 +1,7 @@
 package group.uchain.project.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.util.Date;
  * @date 19-7-13 下午9:17
  */
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(description = "项目信息")
 public class ProjectInfo implements Serializable{
 

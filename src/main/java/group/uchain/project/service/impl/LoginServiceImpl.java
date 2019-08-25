@@ -92,6 +92,7 @@ public class LoginServiceImpl implements LoginService {
         final String token = jwtTokenUtil.generateToken(userDetails);
         HashMap<String, String> r = new HashMap<>(10);
         r.put("token", token);
+        r.put("flag",user.getRole().toString());
         r.put("role", RoleConvertUtil.getDescription(user.getRole()));
         r.put("username",user.getUsername());
         System.out.println("-------------------------------------------------------");

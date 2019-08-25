@@ -13,10 +13,6 @@ public class User {
 
 
     /**
-     * 序列号
-     */
-    private Integer rowNum;
-    /**
      * 用户ID  主键
      */
     private Long userId;

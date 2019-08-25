@@ -66,4 +66,10 @@ dependencies {
     //增加阿里的druid数据源
     compile group: 'com.alibaba', name: 'druid', version: '1.1.10'
 
+    // 拼音转字母
+//    compile group: 'com.belerweb', name: 'pinyin4j', version: '2.5.1'
+    
+
+
+
 }
