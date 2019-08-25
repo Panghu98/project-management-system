@@ -2,6 +2,8 @@ package group.uchain.project.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author project
  * @title: User
@@ -9,7 +11,7 @@ import lombok.Data;
  * @date 19-7-15 上午10:09
  */
 @Data
-public class User {
+public class User implements Serializable {
 
 
     /**

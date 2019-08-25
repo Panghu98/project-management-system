@@ -58,12 +58,15 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
      */
     private static final String DEADLINE_FLAG = "project-info-has-deadline-flag";
 
+    private static final String USER_REDIS_PREFIX = "user-prefix";
+
     private String hashKey = FileService.REDIS_HASH_KEY;
 
     /**
      * 设置了截止时间项目集合的集合名称
      */
     private String setKey = "deadline-set-key";
+
 
     @Autowired
     public InfoServiceImpl(UserFormMapper userFormMapper, ProjectInfoMapper projectInfoMapper,
@@ -85,7 +88,18 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     public Result<List<User>> getAllUser() {
-        return Result.successData(userFormMapper.getAllUser());
+        HashOperations<String,Long,User> hashOperations = redisTemplate.opsForHash();
+        if (hashOperations.keys(USER_REDIS_PREFIX).size() == 0){
+            List<User> list = userFormMapper.getAllUser();
+            Map<Long,User> map = list.stream().collect(Collectors.toMap(User::getUserId,(p)->p));
+            hashOperations.putAll(USER_REDIS_PREFIX,map);
+            hashOperations.getOperations().expire(USER_REDIS_PREFIX,1,TimeUnit.DAYS);
+            return Result.successData(list);
+        }else {
+            log.info("缓存不为空,从缓存中获取用户");
+            Set<Long> set =hashOperations.keys(USER_REDIS_PREFIX);
+            return Result.successData(hashOperations.multiGet(USER_REDIS_PREFIX,set)) ;
+        }
     }
 
 
@@ -99,7 +113,6 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         if (!projectInfoMapper.isProjectExist(projectId)){
             throw new MyException(PROJECT_ID_NOI_EXIST);
         }
-//        allocationInfoMapper.updateAllocationTime(new Date(),projectId);
         allocationInfoMapper.uploadAllocationInfo(map,projectId);
         return new Result();
     }
@@ -113,11 +126,11 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     public Result getAllProjectInfo() {
+        HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
+        ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         // Y有新的数据写入 ,N无新的数据写入
         //获取标记状态并且在刷新缓存之后重置状态为N
         String columnFlag = Objects.requireNonNull(redisTemplate.opsForValue().get(FLAG_KEY)).toString();
-        HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
-        ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         if ("Y".equals(columnFlag) || hashOperations.keys(hashKey).size() == 0){
             log.info("数据存在更新,从数据库中读取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
@@ -143,21 +156,21 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     public Result getDeadlineProjectInfo() {
+        ZSetOperations<String,ProjectInfo> zSetOperations = redisTemplate.opsForZSet();
         String flag = redisTemplate.opsForValue().get(DEADLINE_FLAG).toString();
-        ZSetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForZSet();
-        if ("Y".equals(flag) || setOperations.size(setKey) == 0){
+        if ("Y".equals(flag) || zSetOperations.size(setKey) == 0){
             log.info("缓存中不是最新的值,从数据库中获取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getDeadlineProjectInfo();
             for (ProjectInfo projectInfo:projectInfoList
                  ) {
-                    setOperations.add(setKey,projectInfo,projectInfo.getAllocationStatus());
+                    zSetOperations.add(setKey,projectInfo,projectInfo.getAllocationStatus());
                     //设置过期时间为一天
-                    setOperations.getOperations().expire(setKey,1,TimeUnit.DAYS);
+                    zSetOperations.getOperations().expire(setKey,1,TimeUnit.DAYS);
             }
             return Result.successData(projectInfoList);
         }else {
             log.info("缓存中中为最新的键值,直接从缓存中取值");
-            Set set = setOperations.rangeByScore(setKey,0,1);
+            Set set = zSetOperations.rangeByScore(setKey,0,1);
             List list = new ArrayList(set);
             return Result.successData(list);
         }
@@ -171,12 +184,13 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     public Result deleteProjectInfo(String id) {
+        HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
         int result = projectInfoMapper.deleteProjectInfo(id);
         System.out.println(result);
         if (result >= 1){
             //删除成功,同时刷新缓存
             //未设置截止时间的项目删除占多数,所以使用缓存刷新
-            redisTemplate.opsForHash().delete(hashKey,id);
+            hashOperations.delete(hashKey,id);
             //设置了截止时间的项目占极少数,使用数据库刷新
             redisTemplate.opsForValue().set(DEADLINE_FLAG,"Y");
             return new Result();
@@ -193,6 +207,8 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
      */
     @Override
     public Result setDeadline(String id, Long date) {
+        HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
+        ZSetOperations<String,ProjectInfo> zSetOperations = redisTemplate.opsForZSet();
         //日期格式错误
         if (date<System.currentTimeMillis()){
             return Result.error(CodeMsg.DATE_ERROR);
@@ -206,11 +222,11 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         //写入内存,删除缓存  缓存和数据库同时删除,不用更新key  到当天晚上,所以加上一天
         Date date1 = new Date(date+1000*60*60*24);
         projectInfoMapper.setDeadline(id,date1);
-        redisTemplate.opsForHash().delete(hashKey,id);
+        hashOperations.delete(hashKey,id);
 
         //将设置了截止日期的项目信息放入另一个缓存当中
         ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(id);
-        redisTemplate.opsForSet().add(setKey,projectInfo);
+        zSetOperations.add(setKey,projectInfo,projectInfo.getAllocationStatus());
         redisTemplate.expire(setKey,1,TimeUnit.DAYS);
         return new Result();
     }
@@ -229,10 +245,8 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
      * 进行缓存预热
      */
     private void preheatingRedis(){
-
         HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
-        ZSetOperations<String,ProjectInfo> setOperations = redisTemplate.opsForZSet();
-
+        ZSetOperations<String,ProjectInfo> zSetOperations = redisTemplate.opsForZSet();
         //未设置截止时间的项目缓存预热操作
         List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
         //将最新的数据放入缓存
@@ -246,15 +260,15 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         valueOperations.set(FLAG_KEY,"N");
 
 
-        setOperations.getOperations().delete(setKey);
+        zSetOperations.getOperations().delete(setKey);
         //对已经设置截止时间的项目进行预热操
         List<ProjectInfo> deadlineProjectInfos = projectInfoMapper.getDeadlineProjectInfo();
 
         for (ProjectInfo projectInfo:deadlineProjectInfos
         ) {
-            setOperations.add(setKey,projectInfo,projectInfo.getAllocationStatus());
+            zSetOperations.add(setKey,projectInfo,projectInfo.getAllocationStatus());
         }
-        setOperations.getOperations().expire(setKey,1,TimeUnit.DAYS);
+        zSetOperations.getOperations().expire(setKey,1,TimeUnit.DAYS);
         valueOperations.set(DEADLINE_FLAG,"N");
 
     }
