@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * @date 19-7-21 下午4:34
  */
 @Data
-public class LoginUser {
+public class LoginUser{
 
     @NotNull(message = "用户ID不能为空")
     private Long userId;
