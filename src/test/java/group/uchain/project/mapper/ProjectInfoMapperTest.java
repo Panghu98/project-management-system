@@ -47,4 +47,9 @@ public class ProjectInfoMapperTest {
     public void getAllProjectById(){
         System.err.println(projectInfoMapper.getAllProjectInfoByUserId("123456789102"));
     }
+
+    @Test
+    public void updateAllocationStatus(){
+        System.out.println(projectInfoMapper.updateAllocationStatus("N111"));
+    }
 }

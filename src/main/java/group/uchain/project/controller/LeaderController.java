@@ -11,9 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigDecimal;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author project
@@ -39,7 +38,7 @@ public class LeaderController {
 
     @ApiOperation(value = "上传分数分配信息")
     @PostMapping("/uploadAllocationInfo")
-    public Result uploadAllocationInfo(@RequestBody Allocation allocation){
+    public Result uploadAllocationInfo(@Valid @RequestBody Allocation allocation){
         return infoService.uploadAllocationInfo(allocation);
     }
 

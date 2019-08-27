@@ -35,6 +35,11 @@
         </set>
             where id = #{id}
     </update>
+    <update id="updateAllocationStatus">
+        update project_info
+            set allocation_status = 1
+            where id = #{id}
+    </update>
 
     <delete id="deleteProjectInfo" parameterType="string">
         delete from project_info where id = #{id}

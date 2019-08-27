@@ -2,6 +2,7 @@ package group.uchain.project.entity;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ public class Allocation {
     /**
      * 项目编号
      */
+    @NotNull
     private String projectId;
 
     /**

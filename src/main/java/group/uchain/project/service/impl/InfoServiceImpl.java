@@ -118,6 +118,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             throw new MyException(PROJECT_ID_NOI_EXIST);
         }
         allocationInfoMapper.uploadAllocationInfo(map,projectId);
+        projectInfoMapper.updateAllocationStatus(projectId);
         return new Result();
     }
 

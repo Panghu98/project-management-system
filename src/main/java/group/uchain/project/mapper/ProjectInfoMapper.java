@@ -1,7 +1,6 @@
 package group.uchain.project.mapper;
 
 import group.uchain.project.dto.ProjectInfo;
-import group.uchain.project.result.Result;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -65,4 +64,6 @@ public interface ProjectInfoMapper {
     int deleteProjectInfo(String id);
 
     int setDeadline(@Param("id") String id,@Param("date") Date date);
+
+    int updateAllocationStatus(@Param("id") String projectId);
 }
