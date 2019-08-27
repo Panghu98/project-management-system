@@ -6,6 +6,7 @@ import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.mapper.UserFormMapper;
 import group.uchain.project.result.Result;
+import group.uchain.project.security.JwtTokenUtil;
 import group.uchain.project.service.UserService;
 import group.uchain.project.util.MD5Util;
 import group.uchain.project.util.SaltUtil;
@@ -15,6 +16,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author project
@@ -32,10 +35,14 @@ public class UserServiceImpl implements UserService {
 
     private UserFormMapper userMapper;
 
+    private JwtTokenUtil jwtTokenUtil;
+
     @Autowired
-    public UserServiceImpl(UserFormMapper userMapper,RedisTemplate redisTemplate) {
+    public UserServiceImpl(UserFormMapper userMapper,RedisTemplate redisTemplate,
+                           JwtTokenUtil jwtTokenUtil) {
         this.userMapper = userMapper;
         this.redisTemplate = redisTemplate;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
@@ -70,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result updatePassword(String newPassword) {
+    public Result updatePassword(String newPassword, HttpServletRequest request) {
         //从Token中获取用户信息,注意这里直接调用上面的getCurrentUser方法,否则会出现Bean依赖循环的问题
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
@@ -82,16 +89,20 @@ public class UserServiceImpl implements UserService {
         //判断更改的密码和用户原密码是否相同
         String oldPassword = user.getPassword();
 
-        String encryptNewPassword = MD5Util.formPassToDBPass(newPassword,salt);
+        String encryptNewPassword = MD5Util.inputPassToDBPass(newPassword,salt);
         if (oldPassword.equals(encryptNewPassword)) {
             log.info("新密码和原密码相同");
             return Result.error(CodeMsg.PASSWORD_UPDATE_ERROR);
         }
-
         long userId = user.getUserId();
-        userMapper.updatePassword(userId,encryptNewPassword);
-        //默认返回成功
-        return new Result();
+        int result = userMapper.updatePassword(userId,encryptNewPassword);
+        if (result == 1){
+            System.err.println(request.getHeader("Authorization"));
+            jwtTokenUtil.refreshToken(request.getHeader("Authorization"));
+            return new Result();
+        }else {
+            return Result.error(CodeMsg.DATABASE_ERROR);
+        }
     }
 
     @Override

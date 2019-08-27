@@ -2,7 +2,6 @@ package group.uchain.project.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.omg.CORBA.NO_PERMISSION;
 
 
 /**
@@ -13,7 +12,7 @@ import org.omg.CORBA.NO_PERMISSION;
 @AllArgsConstructor
 public enum CodeMsg {
     /***/
-    AUTHENTICATION_ERROR(1, "用户认证失败,请重新登录"),
+    AUTHENTICATION_ERROR(1, "认证信息过期,请重新登录"),
     ORDER_NOT_EXIST(2, "订单不存在"),
     PERMISSION_DENNY(3, "权限不足"),
     USER_NOT_EXIST(4,"用户不存在"),
@@ -44,7 +43,8 @@ public enum CodeMsg {
 
     DATABASE_ERROR(101,"数据库异常"),
     NO_PERMISSION(102,"您无权进行此项操作"),
-    FORM_PARAMETER_FORMAT_ERROR(103,"表单参数错误");
+    FORM_PARAMETER_FORMAT_ERROR(103,"表单参数错误"),
+    JSON_FORMAT_ERROR(104,"Json转化错误");
 
 
     private Integer code;

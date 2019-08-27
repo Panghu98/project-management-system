@@ -42,8 +42,6 @@ public class WebConfig implements WebMvcConfigurer {
                         "Content-disposition",
                         "Cache-Control",
                         "Expires",
-                        "Authorization",
-                        "Token",
                         //自定义header名称
                         "name");
     }

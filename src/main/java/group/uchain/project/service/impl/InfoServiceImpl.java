@@ -1,5 +1,7 @@
 package group.uchain.project.service.impl;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.entity.Allocation;
 import group.uchain.project.enums.CodeMsg;
@@ -110,7 +112,24 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     @Transactional(rollbackFor = SQLException.class)
-    public Result uploadAllocationInfo(Allocation allocation) {
+    public Result uploadAllocationInfo(JSONObject jsonObject) {
+        String allocationString = JSONObject.toJSONString(jsonObject);
+        //做JSON处理
+        System.err.println(allocationString);
+        String rightString = allocationString.replace(",\"", ":\"")
+                .replace(":\"map\":[", ",\"map\":{")
+                .replace("]]","}")
+                .replace("[","")
+                .replace("]", "");
+        System.err.println(rightString);
+        JSONObject jsonResult;
+        try {
+            jsonResult = JSONObject.parseObject(rightString);
+        }catch (JSONException exception){
+            throw new MyException(CodeMsg.JSON_FORMAT_ERROR);
+        }
+        Allocation allocation = JSONObject.toJavaObject(jsonResult, Allocation.class);
+        System.err.println(allocation);
         Map<Long, BigDecimal> map = allocation.getMap();
         String projectId = allocation.getProjectId();
         //如果项目编号不存在的话，抛出异常  项目编号应该是不会出错的，这样写只是为了确保

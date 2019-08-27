@@ -1,13 +1,11 @@
 package group.uchain.project.service;
 
+import com.alibaba.fastjson.JSONObject;
 import group.uchain.project.dto.ProjectInfo;
-import group.uchain.project.entity.Allocation;
 import group.uchain.project.result.Result;
 import group.uchain.project.vo.User;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author project
@@ -33,7 +31,7 @@ public interface InfoService {
      * 上传项目分配信息
      * @return
      */
-    Result uploadAllocationInfo(Allocation allocation);
+    Result uploadAllocationInfo(JSONObject jsonObject);
 
     /**
      * 获取项目分配的信息

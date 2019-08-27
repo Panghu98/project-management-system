@@ -64,8 +64,8 @@ public class PublicController {
 
     @ApiOperation(value = "更改密码")
     @PostMapping("/action/updatePassword")
-    public Result updatePassword(String password){
-        return userService.updatePassword(password);
+    public Result updatePassword(String password,HttpServletRequest request){
+        return userService.updatePassword(password,request);
     }
 
     @ApiOperation(value = "获取所有项目分数分配详情")

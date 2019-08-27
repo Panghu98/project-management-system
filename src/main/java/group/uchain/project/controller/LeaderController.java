@@ -1,7 +1,7 @@
 package group.uchain.project.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import group.uchain.project.dto.ProjectInfo;
-import group.uchain.project.entity.Allocation;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;
 import group.uchain.project.service.InfoService;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -38,8 +37,8 @@ public class LeaderController {
 
     @ApiOperation(value = "上传分数分配信息")
     @PostMapping("/uploadAllocationInfo")
-    public Result uploadAllocationInfo(@Valid @RequestBody Allocation allocation){
-        return infoService.uploadAllocationInfo(allocation);
+    public Result uploadAllocationInfo(@RequestBody JSONObject jsonObject){
+        return infoService.uploadAllocationInfo(jsonObject);
     }
 
     @ApiOperation(value = "负责人de个人所有项目信息")

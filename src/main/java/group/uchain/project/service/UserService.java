@@ -1,9 +1,11 @@
 package group.uchain.project.service;
 
 
-import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.dto.User;
+import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.result.Result;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author dgh
@@ -27,7 +29,7 @@ public interface UserService {
 
     Result resetPassword(Long userId);
 
-    Result updatePassword(String newPassword);
+    Result updatePassword(String newPassword, HttpServletRequest request);
 
     Result deleteUser(Long userId);
 }

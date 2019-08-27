@@ -1,7 +1,6 @@
 package group.uchain.project.mapper;
 
 import group.uchain.project.dto.User;
-import group.uchain.project.util.MD5Util;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -49,7 +48,7 @@ public interface UserFormMapper {
      * @param userId  用户ID
      * @param password 新的密码
      */
-    void updatePassword(long userId,String password);
+    int updatePassword(long userId,String password);
 
     /**
      * 获取所有的用户

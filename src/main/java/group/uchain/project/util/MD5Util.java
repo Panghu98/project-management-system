@@ -23,7 +23,6 @@ public class MD5Util {
         //避免在网络传输被截取然后反推出密码，所以在md5加密前先打乱密码
         //注意这里要和前端保持一致   加引号和不加引号是有区别的
         String str = ""+SALT.charAt(0)+SALT.charAt(2)+inputPass+SALT.charAt(5)+SALT.charAt(4);
-        System.err.println(str);
         return md5(str);
     }
 

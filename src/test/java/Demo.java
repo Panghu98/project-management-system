@@ -18,4 +18,16 @@ public class Demo {
         System.out.println(dateFormat);
     }
 
+    @Test
+    public void testJson(){
+        String str = "{\"projectId\":\"H12\",\"map\":[[\"123456789104\",10],[\"123456789107\",10]]}";
+        System.err.println(str);
+        str = str.replace(",\"", ":\"")
+                .replace(":\"map\":[", ",\"map\":{")
+                .replace("]]","}")
+                .replace("[","")
+                .replace("]", "");
+        System.out.println(str);
+    }
+
 }
