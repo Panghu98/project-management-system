@@ -1,9 +1,8 @@
 package group.uchain.project.service.impl;
 
 
-
-import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.dto.User;
+import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.mapper.UserFormMapper;
 import group.uchain.project.result.Result;
@@ -12,6 +11,7 @@ import group.uchain.project.util.MD5Util;
 import group.uchain.project.util.SaltUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,13 +26,16 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
+    private static final String USER_REDIS_PREFIX = "user-prefix";
 
+    private RedisTemplate redisTemplate;
 
     private UserFormMapper userMapper;
 
     @Autowired
-    public UserServiceImpl(UserFormMapper userMapper) {
+    public UserServiceImpl(UserFormMapper userMapper,RedisTemplate redisTemplate) {
         this.userMapper = userMapper;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class UserServiceImpl implements UserService {
         }
         user = new User(registerUser);
         userMapper.register(user);
+        redisTemplate.delete(USER_REDIS_PREFIX);
         return new Result();
     }
 

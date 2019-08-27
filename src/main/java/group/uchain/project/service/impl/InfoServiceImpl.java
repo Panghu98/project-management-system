@@ -88,17 +88,21 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     public Result<List<User>> getAllUser() {
-        HashOperations<String,Long,User> hashOperations = redisTemplate.opsForHash();
-        if (hashOperations.keys(USER_REDIS_PREFIX).size() == 0){
+        //用户需要根据中文名称进行排序,不能直接使用中文作为score
+        ListOperations<String,User> listOperations = redisTemplate.opsForList();
+        Long size = listOperations.size(USER_REDIS_PREFIX);
+        if (size == 0){
+            log.info("缓存为空,从数据库中获取用户并放入缓存");
             List<User> list = userFormMapper.getAllUser();
-            Map<Long,User> map = list.stream().collect(Collectors.toMap(User::getUserId,(p)->p));
-            hashOperations.putAll(USER_REDIS_PREFIX,map);
-            hashOperations.getOperations().expire(USER_REDIS_PREFIX,1,TimeUnit.DAYS);
+            listOperations.rightPushAll(USER_REDIS_PREFIX,list);
+            listOperations.getOperations().expire(USER_REDIS_PREFIX,1,TimeUnit.DAYS);
             return Result.successData(list);
         }else {
             log.info("缓存不为空,从缓存中获取用户");
-            Set<Long> set =hashOperations.keys(USER_REDIS_PREFIX);
-            return Result.successData(hashOperations.multiGet(USER_REDIS_PREFIX,set)) ;
+            Long end = listOperations.size(USER_REDIS_PREFIX);
+            //从左到右进行读取
+            List<User> userList =listOperations.range(USER_REDIS_PREFIX,0,end);
+            return Result.successData(userList) ;
         }
     }
 

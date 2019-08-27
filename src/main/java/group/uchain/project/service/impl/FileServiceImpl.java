@@ -1,8 +1,8 @@
 package group.uchain.project.service.impl;
 
-import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.dto.User;
+import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.mapper.AllocationInfoMapper;
@@ -17,10 +17,7 @@ import group.uchain.project.vo.AllocationInfo2;
 import group.uchain.project.vo.FileInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -342,6 +339,7 @@ public class FileServiceImpl implements FileService {
         Date end = new Date(endDate);
         //管理员获取到所有的项目分配信息
         List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo(start,end);
+        System.err.println(list);
         // 1.创建HSSFWorkbook，一个HSSFWorkbook对应一个Excel文件
         XSSFWorkbook wb = new XSSFWorkbook();
         // 2.在workbook中添加一个sheet,对应Excel文件中的sheet(工作栏)
@@ -376,7 +374,8 @@ public class FileServiceImpl implements FileService {
         XSSFCellStyle cellStyle = wb.createCellStyle();
         //自动换行
         cellStyle.setWrapText(true);
-        cellStyle.setAlignment(HorizontalAlignment.CENTER_SELECTION);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+
         // 4.设置表头，即每个列的列名
         String[] title = {"项目编号","项目类别","项目说明","级别","等级","项数","分数类型","分数（暂定）","项目负责人","划分信息","备注"};
         // 4.1创建第一行
