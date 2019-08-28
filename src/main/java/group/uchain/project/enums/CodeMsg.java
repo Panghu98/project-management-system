@@ -17,8 +17,9 @@ public enum CodeMsg {
     PERMISSION_DENNY(3, "权限不足"),
     USER_NOT_EXIST(4,"用户不存在"),
     PASSWORD_ERROR(5,"密码错误"),
-    PASSWORD_UPDATE_ERROR(6,"新密码和原密码不能一样"),
-    USER_ID_IS_NULL(7,"教师工号为空"),
+    PASSWORD_UPDATE_ERROR1(6,"新密码和原密码不能一样"),
+    PASSWORD_UPDATE_ERROR2(7,"原密码不正确"),
+    USER_ID_IS_NULL(8,"教师工号为空"),
 
     //文件出错
     FILE_UPLOAD_FAILED(10,"文件上传服务器失败"),
@@ -40,6 +41,7 @@ public enum CodeMsg {
     PROJECT_ID_NOI_EXIST(80,"项目编号不存在"),
     PROJECT_ID_NULL(81,"项目编号为空"),
     DATE_ERROR(82,"时间有误"),
+    PROJECT_HAS_BEEN_ALLOCATED(83,"项目已分配"),
 
     DATABASE_ERROR(101,"数据库异常"),
     NO_PERMISSION(102,"您无权进行此项操作"),

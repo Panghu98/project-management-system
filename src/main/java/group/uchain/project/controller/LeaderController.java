@@ -53,6 +53,4 @@ public class LeaderController {
         return fileService.uploadEvidentFile(file);
     }
 
-
-
 }

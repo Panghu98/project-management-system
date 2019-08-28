@@ -11,7 +11,7 @@ import java.util.Map;
  * @author panghu
  */
 @Data
-public class Allocation implements Serializable{
+public class AllocationForm implements Serializable{
 
     /**
      * 项目编号

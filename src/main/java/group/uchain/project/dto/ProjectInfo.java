@@ -99,7 +99,6 @@ public class ProjectInfo implements Serializable{
      */
     private Integer allocationStatus;
 
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     private Date deadline;
 
     @Override

@@ -2,6 +2,7 @@ package group.uchain.project.controller;
 
 import group.uchain.project.annotation.RoleRequired;
 import group.uchain.project.entity.LoginUser;
+import group.uchain.project.entity.PasswordUpdateForm;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.InfoService;
@@ -64,8 +65,8 @@ public class PublicController {
 
     @ApiOperation(value = "更改密码")
     @PostMapping("/action/updatePassword")
-    public Result updatePassword(String password,HttpServletRequest request){
-        return userService.updatePassword(password,request);
+    public Result updatePassword(@RequestBody PasswordUpdateForm passwordUpdateForm, HttpServletRequest request){
+        return userService.updatePassword(passwordUpdateForm,request);
     }
 
     @ApiOperation(value = "获取所有项目分数分配详情")

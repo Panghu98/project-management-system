@@ -2,6 +2,7 @@ package group.uchain.project.service.impl;
 
 
 import group.uchain.project.dto.User;
+import group.uchain.project.entity.PasswordUpdateForm;
 import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.mapper.UserFormMapper;
@@ -77,7 +78,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result updatePassword(String newPassword, HttpServletRequest request) {
+    public Result updatePassword(PasswordUpdateForm passwordUpdateForm, HttpServletRequest request) {
+        String oldPass = passwordUpdateForm.getOldPassword();
+        String newPassword = passwordUpdateForm.getNewPassword();
         //从Token中获取用户信息,注意这里直接调用上面的getCurrentUser方法,否则会出现Bean依赖循环的问题
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
@@ -88,17 +91,21 @@ public class UserServiceImpl implements UserService {
         String salt = user.getSalt();
         //判断更改的密码和用户原密码是否相同
         String oldPassword = user.getPassword();
+        String encryptNewPassword = MD5Util.formPassToDBPass(newPassword,salt);
+        //旧密码不正确
+        if (!MD5Util.formPassToDBPass(oldPass,salt).equals(oldPassword)){
+            log.info("原密码错误");
+            return Result.error(CodeMsg.PASSWORD_UPDATE_ERROR2);
+        }
 
-        String encryptNewPassword = MD5Util.inputPassToDBPass(newPassword,salt);
+        //新旧密码相同
         if (oldPassword.equals(encryptNewPassword)) {
             log.info("新密码和原密码相同");
-            return Result.error(CodeMsg.PASSWORD_UPDATE_ERROR);
+            return Result.error(CodeMsg.PASSWORD_UPDATE_ERROR1);
         }
         long userId = user.getUserId();
         int result = userMapper.updatePassword(userId,encryptNewPassword);
         if (result == 1){
-            System.err.println(request.getHeader("Authorization"));
-            jwtTokenUtil.refreshToken(request.getHeader("Authorization"));
             return new Result();
         }else {
             return Result.error(CodeMsg.DATABASE_ERROR);

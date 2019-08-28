@@ -2,6 +2,7 @@ package group.uchain.project.service;
 
 
 import group.uchain.project.dto.User;
+import group.uchain.project.entity.PasswordUpdateForm;
 import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.result.Result;
 
@@ -29,7 +30,7 @@ public interface UserService {
 
     Result resetPassword(Long userId);
 
-    Result updatePassword(String newPassword, HttpServletRequest request);
+    Result updatePassword(PasswordUpdateForm passwordUpdateForm, HttpServletRequest request);
 
     Result deleteUser(Long userId);
 }
