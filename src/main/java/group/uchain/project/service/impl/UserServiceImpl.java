@@ -7,12 +7,12 @@ import group.uchain.project.entity.RegisterUser;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.mapper.UserFormMapper;
 import group.uchain.project.result.Result;
-import group.uchain.project.security.JwtTokenUtil;
 import group.uchain.project.service.UserService;
 import group.uchain.project.util.MD5Util;
 import group.uchain.project.util.SaltUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,14 +36,11 @@ public class UserServiceImpl implements UserService {
 
     private UserFormMapper userMapper;
 
-    private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UserServiceImpl(UserFormMapper userMapper,RedisTemplate redisTemplate,
-                           JwtTokenUtil jwtTokenUtil) {
+    public UserServiceImpl(UserFormMapper userMapper,RedisTemplate redisTemplate) {
         this.userMapper = userMapper;
         this.redisTemplate = redisTemplate;
-        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
@@ -65,6 +62,7 @@ public class UserServiceImpl implements UserService {
         }
         user = new User(registerUser);
         userMapper.register(user);
+        //刷新缓存
         redisTemplate.delete(USER_REDIS_PREFIX);
         return new Result();
     }
@@ -124,7 +122,10 @@ public class UserServiceImpl implements UserService {
         if (user.getRole().equals("3")) {
             return Result.error(CodeMsg.NO_PERMISSION);
         }
+        ListOperations<String, group.uchain.project.vo.User> listOperations = redisTemplate.opsForList();
         userMapper.deleteUser(userId);
+        //刷新缓存
+        listOperations.getOperations().delete(USER_REDIS_PREFIX);
         return new Result();
     }
 

@@ -2,6 +2,7 @@ package group.uchain.project.service;
 
 import com.alibaba.fastjson.JSONObject;
 import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.entity.ApplyForm;
 import group.uchain.project.result.Result;
 import group.uchain.project.vo.User;
 
@@ -66,4 +67,6 @@ public interface InfoService {
     Result setDeadline(String id, Long date);
 
     Result getDeadlineProjectInfo();
+
+    Result apply(ApplyForm applyForm);
 }

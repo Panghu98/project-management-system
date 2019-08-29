@@ -24,7 +24,7 @@ import javax.validation.Valid;
  * @projectName project
  * @date 19-7-15 上午10:02
  */
-@CrossOrigin(origins = "192.168.8.106:8080")
+@CrossOrigin(origins = "192.168.8.103:8080")
 @RestController
 @RequestMapping(produces = { "application/json;charset=UTF-8" })
 @Api(tags = "公共接口")

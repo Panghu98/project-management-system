@@ -306,11 +306,10 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Result uploadEvidentFile(MultipartFile file) {
+    public Result uploadEvidentFile(MultipartFile file,String projectId) {
         if (file==null){
             throw new MyException(CodeMsg.FILE_EMPTY_ERROR);
         }
-
         String pathFile = evidentFilePath+file.getOriginalFilename();
 
         try{

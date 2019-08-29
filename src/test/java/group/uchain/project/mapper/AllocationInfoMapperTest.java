@@ -40,7 +40,7 @@ public class AllocationInfoMapperTest {
 
     @Test
     public void getUserAllocationInfo() {
-        String userId = "123456";
+        String userId = "123456789102";
         System.err.println(allocationInfoMapper.getUserAllocationInfo(userId));
     }
 

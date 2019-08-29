@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.entity.AllocationForm;
+import group.uchain.project.entity.ApplyForm;
 import group.uchain.project.enums.CodeMsg;
+import group.uchain.project.enums.ProjectStatus;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.mapper.AllocationInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
@@ -115,13 +117,11 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     public Result uploadAllocationInfo(JSONObject jsonObject) {
         String allocationString = JSONObject.toJSONString(jsonObject);
         //做JSON处理
-        System.err.println(allocationString);
         String rightString = allocationString.replace(",\"", ":\"")
                 .replace(":\"map\":[", ",\"map\":{")
                 .replace("]]","}")
                 .replace("[","")
                 .replace("]", "");
-        System.err.println(rightString);
         JSONObject jsonResult;
         try {
             jsonResult = JSONObject.parseObject(rightString);
@@ -129,17 +129,22 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             throw new MyException(CodeMsg.JSON_FORMAT_ERROR);
         }
         AllocationForm allocation = JSONObject.toJavaObject(jsonResult, AllocationForm.class);
+        //利用Map进行去重,去除对同一个用户重复分配
         Map<Long, BigDecimal> map = allocation.getMap();
         String projectId = allocation.getProjectId();
         //如果项目编号不存在的话，抛出异常
         if (!projectInfoMapper.isProjectExist(projectId)){
             throw new MyException(PROJECT_ID_NOI_EXIST);
         }
-        if (projectInfoMapper.getProjectInfoByProjectId(projectId).getAllocationStatus() == 1){
+        ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(projectId);
+        if (projectInfo.getAllocationStatus() == 1){
             return Result.error(CodeMsg.PROJECT_HAS_BEEN_ALLOCATED);
         }
+        if (System.currentTimeMillis() >= projectInfo.getDeadline().getTime() ){
+            return Result.error(CodeMsg.PROJECT_ALLOCATION_OVERDUE);
+        }
         allocationInfoMapper.uploadAllocationInfo(map,projectId);
-        projectInfoMapper.updateAllocationStatus(projectId);
+        projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
         return new Result();
     }
 
@@ -200,6 +205,11 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             List list = new ArrayList(set);
             return Result.successData(list);
         }
+    }
+
+    @Override
+    public Result apply(ApplyForm applyForm) {
+        return null;
     }
 
     @Override

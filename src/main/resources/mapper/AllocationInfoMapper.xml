@@ -33,7 +33,7 @@
         from allocation_info a
             inner join project_info p
         on a.project_id=p.id
-        where a.user_id = #{userId}
+        where a.user_id = #{userId} and a.status = 1
     </select>
 
 
@@ -71,7 +71,7 @@
                a.proportion as t_proportion
           from project_info p,allocation_info a
           inner join user u
-          on a.user_id = u.user_id
+          on a.user_id = u.user_id and a.status = 1
         <!--p.date &lt;= #{end}(小于截止时间)  p.date  &gt;= #{start}(大于开始时间)-->
         where p.id = a.project_id and p.date &lt;= #{end} and p.date  &gt;= #{start}
     </select>

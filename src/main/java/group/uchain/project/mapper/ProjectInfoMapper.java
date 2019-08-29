@@ -48,7 +48,7 @@ public interface ProjectInfoMapper {
     Boolean isProjectExist(@Param("id") String projectId);
 
     /**
-     * 管理员获取所有未分配的项目信息
+     * 管理员获取未设置截止日期的项目信息
      * @return
      */
     List<ProjectInfo> getAllProjectInfo();
@@ -65,5 +65,5 @@ public interface ProjectInfoMapper {
 
     int setDeadline(@Param("id") String id,@Param("date") Date date);
 
-    int updateAllocationStatus(@Param("id") String projectId);
+    int updateAllocationStatus(@Param("id") String projectId,@Param("status") Integer status);
 }

@@ -101,22 +101,11 @@ public class ProjectInfo implements Serializable{
 
     private Date deadline;
 
-    @Override
-    public String toString() {
-        return "ProjectInfo{" +
-                "id='" + id + '\'' +
-                ", category='" + category + '\'' +
-                ", instruction='" + instruction + '\'' +
-                ", level='" + level + '\'' +
-                ", grade='" + grade + '\'' +
-                ", number='" + number + '\'' +
-                ", variety='" + variety + '\'' +
-                ", score=" + score +
-                ", leader='" + leader + '\'' +
-                ", division=" + division +
-                ", date=" + date +
-                ", allocationStatus=" + allocationStatus +
-                ", deadline=" + deadline +
-                '}';
-    }
+    /**
+     * 文件上传状态
+     * 0:未上传
+     * 1:已上传
+     */
+    private Integer fileUploadStatus;
+
 }
