@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="group.uchain.project.mapper.ProjectInfoMapper">
+<mapper namespace="group.uchain.project.mapper.ProjectInfoMapper"
+>
 
     <insert id="excelToDatabase" parameterType="list">
         insert into project.project_info (`id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`,`date`,deadline)
@@ -26,6 +27,7 @@
     <update id="updateProjectInfo">
 #         update project_info set id,
     </update>
+
     <update id="setDeadline">
             update project_info
         <set>
@@ -35,6 +37,7 @@
         </set>
             where id = #{id}
     </update>
+
     <update id="updateAllocationStatus">
         update project_info
             set allocation_status = #{status}
@@ -107,10 +110,12 @@
         group by p.id
         order by allocation_status, date
     </select>
+
     <select id="getProjectInfoByProjectId" resultType="group.uchain.project.dto.ProjectInfo">
         select `id`,`category`, `instruction`, `level`, `grade`, `number`,
                `variety`, `score`, `leader`, `division`,`date`,`allocation_status` as allocationStatus,deadline
         from project_info
         where id = #{id}
     </select>
+
 </mapper>

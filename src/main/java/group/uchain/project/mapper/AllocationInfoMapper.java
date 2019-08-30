@@ -21,8 +21,9 @@ public interface AllocationInfoMapper {
      * 上传项目分配信息
      * @param map  用户ID以及对应的分配比例
      * @param projectId  项目的ID
+     * @param score 项目总分数
      */
-    void uploadAllocationInfo(@Param("map") Map<Long, BigDecimal> map, String projectId);
+    void uploadAllocationInfo(@Param("map") Map<Long, BigDecimal> map,@Param("projectId") String projectId,@Param("score") Double score);
 
     /**
      * 上传项目分配的时间

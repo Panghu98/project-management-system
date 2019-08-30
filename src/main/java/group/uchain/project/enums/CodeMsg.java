@@ -43,6 +43,7 @@ public enum CodeMsg {
     DATE_ERROR(82,"时间有误"),
     PROJECT_HAS_BEEN_ALLOCATED(83,"项目已分配"),
     PROJECT_ALLOCATION_OVERDUE(84,"分配时间过期"),
+    APPLY_ERROR(85,"申请失败,请重试"),
 
     DATABASE_ERROR(101,"数据库异常"),
     NO_PERMISSION(102,"您无权进行此项操作"),

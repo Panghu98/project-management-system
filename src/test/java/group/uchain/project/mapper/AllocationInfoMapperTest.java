@@ -33,9 +33,9 @@ public class AllocationInfoMapperTest {
         map.put(201731062631L, BigDecimal.valueOf(12));
         map.put(201731062630L, BigDecimal.valueOf(12));
         map.put(201731062629L, BigDecimal.valueOf(12));
-        String projectId = "H27";
+        String projectId = "B12";
 
-        allocationInfoMapper.uploadAllocationInfo(map,projectId);
+        allocationInfoMapper.uploadAllocationInfo(map,projectId,1.0);
     }
 
     @Test

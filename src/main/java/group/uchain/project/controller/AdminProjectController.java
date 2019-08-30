@@ -1,8 +1,8 @@
 package group.uchain.project.controller;
 
 import group.uchain.project.annotation.RoleRequired;
-import group.uchain.project.entity.DeadLineForm;
 import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.entity.DeadLineForm;
 import group.uchain.project.entity.TimeLimit;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
@@ -13,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -127,7 +126,7 @@ public class AdminProjectController {
     @RoleRequired(RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "设置项目分配信息提交的截止日期")
     @PostMapping("/action/setDeadline")
-    public Result setDeadline(@Valid @RequestBody DeadLineForm form){
+    public Result setDeadline(@Valid @RequestBody DeadLineForm form) throws InterruptedException {
         return infoService.setDeadline(form.getId(), form.getDate());
     }
 

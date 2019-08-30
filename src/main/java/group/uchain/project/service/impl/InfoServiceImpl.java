@@ -9,6 +9,7 @@ import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.enums.ProjectStatus;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.mapper.AllocationInfoMapper;
+import group.uchain.project.mapper.ApplyInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
 import group.uchain.project.mapper.UserFormMapper;
 import group.uchain.project.result.Result;
@@ -52,6 +53,8 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     private RedisTemplate redisTemplate;
 
+    private ApplyInfoMapper applyInfoMapper;
+
     /**
      * 未设置截止时间的项目
      */
@@ -75,12 +78,13 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     @Autowired
     public InfoServiceImpl(UserFormMapper userFormMapper, ProjectInfoMapper projectInfoMapper,
                            UserService userService, AllocationInfoMapper allocationInfoMapper,
-                           RedisTemplate redisTemplate) {
+                           RedisTemplate redisTemplate,ApplyInfoMapper applyInfoMapper) {
         this.userFormMapper = userFormMapper;
         this.projectInfoMapper =projectInfoMapper;
         this.userService = userService;
         this.allocationInfoMapper = allocationInfoMapper;
         this.redisTemplate = redisTemplate;
+        this.applyInfoMapper = applyInfoMapper;
     }
 
     @Override
@@ -143,8 +147,9 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         if (System.currentTimeMillis() >= projectInfo.getDeadline().getTime() ){
             return Result.error(CodeMsg.PROJECT_ALLOCATION_OVERDUE);
         }
-        allocationInfoMapper.uploadAllocationInfo(map,projectId);
-        projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
+        allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore());
+        //写入数据库  前端传入的是成绩整数百分比,所以要除以100
+        projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus()/100);
         return new Result();
     }
 
@@ -209,7 +214,11 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     public Result apply(ApplyForm applyForm) {
-        return null;
+        int result = applyInfoMapper.addOne(applyForm);
+        if (result == 0){
+            throw new MyException(CodeMsg.APPLY_ERROR);
+        }
+        return new Result();
     }
 
     @Override

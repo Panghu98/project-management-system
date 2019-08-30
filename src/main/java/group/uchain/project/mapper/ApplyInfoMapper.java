@@ -1,7 +1,9 @@
 package group.uchain.project.mapper;
 
+import group.uchain.project.entity.ApplyForm;
+
 public interface ApplyInfoMapper {
 
-    int apply();
+    int addOne(ApplyForm applyForm);
 
 }

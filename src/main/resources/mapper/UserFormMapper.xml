@@ -11,6 +11,7 @@
     <insert id="register">
         insert into user values (#{userId},#{username},#{password},#{role},#{salt},#{position},#{office})
     </insert>
+
     <insert id="registerMultiUser">
         insert into
             user
@@ -27,9 +28,11 @@
                 )
             </foreach>
     </insert>
+
     <update id="updatePassword">
         update user set password=#{param2} where user_id=#{param1}
     </update>
+
     <update id="resetPassword">
         update user
         <set>
@@ -40,24 +43,27 @@
         </set>
             where user_id = #{id}
     </update>
-    <update id="updateUserToLeader">
 
-    </update>
+
     <delete id="deleteUser">
         delete from user where user_id = #{id}
     </delete>
+
     <select id="selectUserByUserId" resultType="group.uchain.project.dto.User">
         select user_id as userId,username,salt,`role`,`password` from `user` where user_id = #{id}
     </select>
+
     <select id="getAllUser" resultType="group.uchain.project.vo.User">
         select user_id as userId,username,position,office
           from`user`
         <!--使用中文排序需要转码-->
         order by convert(username using gbk) asc;
     </select>
+
     <select id="selectUserByHalfUserId" resultType="group.uchain.project.dto.User">
         select user_id as userId,username,position,office,salt,`role`,`password` from `user` where user_id like (concat('%',#{id},'%'))
     </select>
+
     <select id="getRepeatUserId" resultType="java.lang.Long">
         select user_id as number
         from user
@@ -66,4 +72,5 @@
             #{id}
         </foreach>
     </select>
+
 </mapper>

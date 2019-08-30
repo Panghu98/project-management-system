@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="group.uchain.project.mapper.ApplyInfoMapper">
 
-    <insert id="apply">
-
+    <insert id="addOne">
+        insert apply_info (user_id, project_id) values (#{id},#{applyUser})
     </insert>
+
 </mapper>

@@ -64,9 +64,10 @@ public interface InfoService {
      * @param date 截止日期
      * @return
      */
-    Result setDeadline(String id, Long date);
+    Result setDeadline(String id, Long date) throws InterruptedException;
 
     Result getDeadlineProjectInfo();
 
     Result apply(ApplyForm applyForm);
+
 }

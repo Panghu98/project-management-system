@@ -3,40 +3,6 @@
 <mapper namespace="group.uchain.project.mapper.AllocationInfoMapper">
 
 
-
-    <insert id="uploadAllocationInfo" parameterType="hashmap">
-        insert into allocation_info
-            (user_id, proportion, project_id)
-            values
-        <foreach collection="map" index="key" item="value" separator=",">
-            (
-                #{key},
-                #{value},
-                #{param2}
-            )
-        </foreach>
-    </insert>
-
-    <update id="updateAllocationTime">
-        update project_info
-            <set>
-                <if test="param1 != null" >`date` = #{param1}</if>
-            </set>
-        where `id` = #{param2}
-    </update>
-    <select id="getUserAllocationInfo" resultType="group.uchain.project.vo.AllocationInfo">
-        select a.project_id as projectId,
-               a.user_score as userScore,
-               p.category,
-               p.leader,
-               p.instruction
-        from allocation_info a
-            inner join project_info p
-        on a.project_id=p.id
-        where a.user_id = #{userId} and a.status = 1
-    </select>
-
-
     <resultMap id="Allocation" type="group.uchain.project.vo.AllocationInfo2">
         <id column="id" property="projectId"/>
         <result column="category" property="category"/>
@@ -48,13 +14,47 @@
         <result column="variety" property="variety"/>
         <result column="score" property="score"/>
         <collection property="teacherInfos" ofType="group.uchain.project.vo.TeacherInfo"
-        javaType="java.util.ArrayList" columnPrefix="t_">
+                    javaType="java.util.ArrayList" columnPrefix="t_">
             <!--column指的是查询结果中的列名-->
             <id column="username" property="username" jdbcType="VARCHAR"/>
             <id column="user_score" property="score"/>
             <id column="proportion" property="proportion"/>
         </collection>
     </resultMap>
+
+    <insert id="uploadAllocationInfo" parameterType="hashmap">
+        insert into allocation_info
+            (user_id, proportion,user_score, project_id)
+            values
+        <foreach collection="map" index="key" item="value" separator=",">
+            (
+                #{key},
+                #{value},
+                #{value} * #{score},
+                #{projectId}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateAllocationTime">
+        update project_info
+            <set>
+                <if test="param1 != null" >`date` = #{param1}</if>
+            </set>
+        where `id` = #{param2}
+    </update>
+
+    <select id="getUserAllocationInfo" resultType="group.uchain.project.vo.AllocationInfo">
+        select a.project_id as projectId,
+               a.user_score as userScore,
+               p.category,
+               p.leader,
+               p.instruction
+        from allocation_info a
+            inner join project_info p
+        on a.project_id=p.id
+        where a.user_id = #{userId} and a.status = 1
+    </select>
 
     <select id="getAllAllocationInfo" resultMap="Allocation" resultType="group.uchain.project.vo.AllocationInfo2">
         select p.id,
@@ -75,4 +75,5 @@
         <!--p.date &lt;= #{end}(小于截止时间)  p.date  &gt;= #{start}(大于开始时间)-->
         where p.id = a.project_id and p.date &lt;= #{end} and p.date  &gt;= #{start}
     </select>
+
 </mapper>

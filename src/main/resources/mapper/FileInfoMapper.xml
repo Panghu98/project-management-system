@@ -5,6 +5,7 @@
     <select id="getCompleteFileNameByProjectId" resultType="java.lang.String">
         select file_complate_name from file_info where project_id = #{id}
     </select>
+
     <select id="getCompleteFileNameListByProjectId" resultType="java.lang.String">
         select file_complate_name
             from file_info
@@ -13,4 +14,5 @@
             #{id,jdbcType=VARCHAR}
         </foreach>
     </select>
+
 </mapper>
