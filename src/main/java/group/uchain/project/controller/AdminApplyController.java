@@ -4,7 +4,7 @@ import group.uchain.project.annotation.RoleRequired;
 import group.uchain.project.entity.ApplyConfirmForm;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
-import group.uchain.project.service.InfoService;
+import group.uchain.project.service.ApplyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,25 +23,25 @@ import javax.validation.Valid;
 public class AdminApplyController {
 
 
-    private InfoService infoService;
+    private ApplyService applyService;
 
     @Autowired
-    public AdminApplyController(InfoService infoService) {
-        this.infoService = infoService;
+    public AdminApplyController(ApplyService applyService) {
+        this.applyService = applyService;
     }
 
     @RoleRequired(value = RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "获取所有申请信息")
     @GetMapping("/info/getAllApplyInfo")
     public Result getAllApplyInfo(){
-        return infoService.getAllApplyInfo();
+        return applyService.getAllApplyInfo();
     }
 
     @RoleRequired(value = RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "审核申请信息")
     @PostMapping("/action/setApplyStatus")
     public Result setApplyStatus(@Valid @RequestBody ApplyConfirmForm applyConfirmForm){
-        return infoService.setApplyStatus(applyConfirmForm);
+        return applyService.setApplyStatus(applyConfirmForm);
     }
 
 

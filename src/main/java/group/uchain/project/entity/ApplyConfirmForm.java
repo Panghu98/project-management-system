@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * @author panghu
+ * 申请审核表单
  */
 @Data
 public class ApplyConfirmForm {

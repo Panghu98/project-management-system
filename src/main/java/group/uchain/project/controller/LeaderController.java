@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.entity.ApplyForm;
 import group.uchain.project.result.Result;
+import group.uchain.project.service.ApplyService;
 import group.uchain.project.service.FileService;
 import group.uchain.project.service.InfoService;
 import io.swagger.annotations.Api;
@@ -31,11 +32,16 @@ public class LeaderController {
 
     private FileService fileService;
 
+    private ApplyService applyService;
+
     @Autowired
-    public LeaderController(InfoService infoService,FileService fileService) {
+    public LeaderController(InfoService infoService, FileService fileService, ApplyService applyService) {
         this.infoService = infoService;
         this.fileService = fileService;
+        this.applyService = applyService;
     }
+
+
 
     @ApiOperation(value = "上传分数分配信息")
     @PostMapping("/uploadAllocationInfo")
@@ -58,13 +64,13 @@ public class LeaderController {
     @ApiOperation(value = "负责人发起项目修改申请")
     @PostMapping("/action/apply")
     public Result apply(@Valid @RequestBody ApplyForm applyForm){
-        return infoService.apply(applyForm);
+        return applyService.apply(applyForm);
     }
 
     @ApiOperation(value = "负责人获取申请消息")
     @GetMapping("/info/getApplyMessage")
     public Result getApplyMessage(){
-        return null;
+        return applyService.getApplyMessage();
     }
 
 }

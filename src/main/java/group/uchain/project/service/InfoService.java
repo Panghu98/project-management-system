@@ -2,8 +2,6 @@ package group.uchain.project.service;
 
 import com.alibaba.fastjson.JSONObject;
 import group.uchain.project.dto.ProjectInfo;
-import group.uchain.project.entity.ApplyConfirmForm;
-import group.uchain.project.entity.ApplyForm;
 import group.uchain.project.result.Result;
 import group.uchain.project.vo.User;
 
@@ -73,20 +71,5 @@ public interface InfoService {
      */
     Result getDeadlineProjectInfo();
 
-    /**
-     * 发起申请
-     * @param applyForm 申请表单
-     * @return
-     */
-    Result apply(ApplyForm applyForm);
-
-
-    /**
-     * 获取所有的申请信息
-     * @return
-     */
-    Result getAllApplyInfo();
-
-    Result setApplyStatus(ApplyConfirmForm applyConfirmForm);
 
 }

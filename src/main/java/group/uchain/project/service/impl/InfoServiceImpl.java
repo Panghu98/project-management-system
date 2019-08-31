@@ -2,11 +2,8 @@ package group.uchain.project.service.impl;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import group.uchain.project.dto.AllocationTempInfo;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.entity.AllocationForm;
-import group.uchain.project.entity.ApplyConfirmForm;
-import group.uchain.project.entity.ApplyForm;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.enums.ProjectStatus;
 import group.uchain.project.exception.MyException;
@@ -19,7 +16,6 @@ import group.uchain.project.service.FileService;
 import group.uchain.project.service.InfoService;
 import group.uchain.project.service.UserService;
 import group.uchain.project.vo.AllocationInfo;
-import group.uchain.project.vo.ApplyInfo;
 import group.uchain.project.vo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -219,48 +215,6 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             return Result.successData(list);
         }
     }
-
-    @Override
-    public Result apply(ApplyForm applyForm) {
-        int result = applyInfoMapper.addOne(applyForm);
-        if (result == 0){
-            throw new MyException(CodeMsg.APPLY_ERROR);
-        }
-        projectInfoMapper.updateAllocationStatus(applyForm.getProjectId(),ProjectStatus.APPLY_FOR_MODIFYING.getStatus());
-        return new Result();
-    }
-
-    @Override
-    public Result getAllApplyInfo() {
-        List<ApplyInfo> list = applyInfoMapper.getAllApplyInfoNotApproval();
-        return Result.successData(list);
-    }
-
-    @Override
-    public Result setApplyStatus(ApplyConfirmForm applyConfirmForm) {
-        int result = applyInfoMapper.updateApplyInfoStatus(applyConfirmForm);
-        if (result == 0){
-            throw new MyException(CodeMsg.APPLY_APPROVAL_ERROR);
-        }
-        if (applyConfirmForm.getApprovalStatus() == 2 && applyConfirmForm.getApplyType() == 2){
-            String projectId = applyConfirmForm.getProjectId();
-            List<AllocationTempInfo> list = allocationInfoMapper.getAllocationTempInfoByProjectId(projectId);
-            Map<Long,BigDecimal> map =new HashMap<>(32);
-            for (AllocationTempInfo info:list
-                 ) {
-                map.put(info.getUserId(),info.getProportion());
-            }
-            //将原数据设置为无效
-            allocationInfoMapper.updateAllocationInfoStatusByProjectId(projectId);
-            //进行数据的转移
-            ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(projectId);
-            allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore()/100);
-            //删除临时表中的数据
-            allocationInfoMapper.deleteAllocationTempInfoByProjectId(projectId);
-        }
-        return new Result();
-    }
-
 
     @Override
     public Result updateProjectInfo(ProjectInfo projectInfo) {

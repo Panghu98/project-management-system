@@ -4,7 +4,6 @@ package group.uchain.project.service.impl;
 import group.uchain.project.dto.User;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.mapper.UserFormMapper;
-import group.uchain.project.rabbitmq.MQSender;
 import group.uchain.project.result.Result;
 import group.uchain.project.security.JwtTokenUtil;
 import group.uchain.project.service.LoginService;
@@ -39,17 +38,14 @@ public class LoginServiceImpl implements LoginService {
 
     private UserFormMapper userFormMapper;
 
-    private MQSender mqSender;
 
     @Autowired
     public LoginServiceImpl(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil,
-                            UserDetailsService userDetailsService, UserFormMapper userFormMapper,
-                            MQSender mqSender) {
+                            UserDetailsService userDetailsService, UserFormMapper userFormMapper) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userFormMapper = userFormMapper;
-        this.mqSender = mqSender;
     }
 
     @Override

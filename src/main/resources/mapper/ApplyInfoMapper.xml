@@ -24,5 +24,10 @@
         from apply_info a inner join user u on a.user_id = u.user_id
         where approval_status = 0;
     </select>
+    <select id="getApplyMessageById" resultType="group.uchain.project.vo.ApplyMessage">
+        select project_id,approval_status
+        from apply_info
+        where user_id = #{userId}
+    </select>
 
 </mapper>
