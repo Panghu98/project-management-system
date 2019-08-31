@@ -21,10 +21,6 @@ public class ProjectInfoMapperTest {
     @Autowired
     private ProjectInfoMapper projectInfoMapper;
 
-    @Test
-    public void isProjectExist() {
-        System.err.println(projectInfoMapper.isProjectExist("V27"));
-    }
 
     @Test
     public void getAllProjectInfo(){

@@ -1,11 +1,12 @@
 package group.uchain.project.enums;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 
 /**
  * @author panghu
  */
-
+@Getter
 @AllArgsConstructor
 public enum ProjectStatus {
 
@@ -20,10 +21,9 @@ public enum ProjectStatus {
 
     private String tips;
 
+
     public Integer getStatus() {
         return status;
     }
-
-
 
 }

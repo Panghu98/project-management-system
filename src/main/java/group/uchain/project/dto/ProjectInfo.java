@@ -95,7 +95,7 @@ public class ProjectInfo implements Serializable{
     private Date date;
 
     /**
-     * 项目时候分配  1,已经分配 0,未分配
+     * 项目时候分配  2.已分配 1,申请中 0,未分配
      */
     private Integer allocationStatus;
 

@@ -35,6 +35,18 @@
             )
         </foreach>
     </insert>
+    <insert id="uploadAllocationInfoToTempTable">
+        insert into allocation_info_temp
+        (user_id, proportion,project_id)
+        values
+        <foreach collection="map" index="key" item="value" separator=",">
+            (
+            #{key},
+            #{value},
+            #{projectId}
+            )
+        </foreach>
+    </insert>
 
     <update id="updateAllocationTime">
         update project_info
@@ -43,6 +55,15 @@
             </set>
         where `id` = #{param2}
     </update>
+    <delete id="deleteAllocationTempInfoByProjectId">
+        delete from allocation_info_temp
+        where project_id = #{projectId}
+    </delete>
+    <delete id="updateAllocationInfoStatusByProjectId">
+        update allocation_info
+        set status = 0
+        where project_id = #{projectId}
+    </delete>
 
     <select id="getUserAllocationInfo" resultType="group.uchain.project.vo.AllocationInfo">
         select a.project_id as projectId,
@@ -74,6 +95,13 @@
           on a.user_id = u.user_id and a.status = 1
         <!--p.date &lt;= #{end}(小于截止时间)  p.date  &gt;= #{start}(大于开始时间)-->
         where p.id = a.project_id and p.date &lt;= #{end} and p.date  &gt;= #{start}
+    </select>
+    <select id="getAllocationTempInfoByProjectId" resultType="group.uchain.project.dto.AllocationTempInfo">
+        select project_id,
+               user_id,
+               proportion
+        from allocation_info_temp
+        where project_id = #{projectId} and status = 1;
     </select>
 
 </mapper>

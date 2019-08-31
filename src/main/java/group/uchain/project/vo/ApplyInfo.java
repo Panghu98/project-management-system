@@ -1,15 +1,13 @@
-package group.uchain.project.entity;
-
+package group.uchain.project.vo;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
 /**
  * @author panghu
- * 负责人申请修改项目分数分配
  */
 @Data
-public class ApplyForm {
+public class ApplyInfo {
 
     /**
      *项目ID
@@ -18,10 +16,10 @@ public class ApplyForm {
     private String projectId;
 
     /**
-     * 申请发起人ID
+     * 申请发起人名字
      */
     @NotNull(message = "申请人不为空")
-    private Long applyUser;
+    private String applyUser;
 
     /**
      *申请类型 1.延时,2,重新分配

@@ -3,7 +3,26 @@
 <mapper namespace="group.uchain.project.mapper.ApplyInfoMapper">
 
     <insert id="addOne">
-        insert apply_info (user_id, project_id) values (#{id},#{applyUser})
+        insert apply_info (project_id,user_id,apply_type) values (#{projectId},#{applyUser},#{applyType})
     </insert>
+    <update id="updateApplyInfoStatus">
+        update apply_info
+        set approval_status = #{approvalStatus}
+        where project_id = #{projectId}
+    </update>
+    <select id="getApplyFormByProjectId" resultType="group.uchain.project.entity.ApplyForm">
+        select apply_type as applyType,
+               user_id applyUser,
+               project_id projectId
+        from apply_info
+        where project_id = #{productId};
+    </select>
+    <select id="getAllApplyInfoNotApproval" resultType="group.uchain.project.vo.ApplyInfo">
+        select apply_type as applyType,
+               u.username applyUser,
+               project_id projectId
+        from apply_info a inner join user u on a.user_id = u.user_id
+        where approval_status = 0;
+    </select>
 
 </mapper>

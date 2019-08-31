@@ -2,8 +2,10 @@ package group.uchain.project.service.impl;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import group.uchain.project.dto.AllocationTempInfo;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.entity.AllocationForm;
+import group.uchain.project.entity.ApplyConfirmForm;
 import group.uchain.project.entity.ApplyForm;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.enums.ProjectStatus;
@@ -17,6 +19,7 @@ import group.uchain.project.service.FileService;
 import group.uchain.project.service.InfoService;
 import group.uchain.project.service.UserService;
 import group.uchain.project.vo.AllocationInfo;
+import group.uchain.project.vo.ApplyInfo;
 import group.uchain.project.vo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -137,19 +140,24 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         Map<Long, BigDecimal> map = allocation.getMap();
         String projectId = allocation.getProjectId();
         //如果项目编号不存在的话，抛出异常
-        if (!projectInfoMapper.isProjectExist(projectId)){
+        if (projectInfoMapper.getProjectInfoByProjectId(projectId) == null){
             throw new MyException(PROJECT_ID_NOI_EXIST);
         }
         ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(projectId);
-        if (projectInfo.getAllocationStatus() == 1){
+        if (projectInfo.getAllocationStatus() == 2){
             return Result.error(CodeMsg.PROJECT_HAS_BEEN_ALLOCATED);
         }
         if (System.currentTimeMillis() >= projectInfo.getDeadline().getTime() ){
             return Result.error(CodeMsg.PROJECT_ALLOCATION_OVERDUE);
         }
-        allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore());
+
+        //如果是申请里面的,就放入临时表中
+        if (applyInfoMapper.getApplyFormByProjectId(projectId) != null){
+            allocationInfoMapper.uploadAllocationInfoToTempTable(map,projectId);
+        }
+        allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore()/100);
         //写入数据库  前端传入的是成绩整数百分比,所以要除以100
-        projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus()/100);
+        projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
         return new Result();
     }
 
@@ -218,8 +226,41 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         if (result == 0){
             throw new MyException(CodeMsg.APPLY_ERROR);
         }
+        projectInfoMapper.updateAllocationStatus(applyForm.getProjectId(),ProjectStatus.APPLY_FOR_MODIFYING.getStatus());
         return new Result();
     }
+
+    @Override
+    public Result getAllApplyInfo() {
+        List<ApplyInfo> list = applyInfoMapper.getAllApplyInfoNotApproval();
+        return Result.successData(list);
+    }
+
+    @Override
+    public Result setApplyStatus(ApplyConfirmForm applyConfirmForm) {
+        int result = applyInfoMapper.updateApplyInfoStatus(applyConfirmForm);
+        if (result == 0){
+            throw new MyException(CodeMsg.APPLY_APPROVAL_ERROR);
+        }
+        if (applyConfirmForm.getApprovalStatus() == 2 && applyConfirmForm.getApplyType() == 2){
+            String projectId = applyConfirmForm.getProjectId();
+            List<AllocationTempInfo> list = allocationInfoMapper.getAllocationTempInfoByProjectId(projectId);
+            Map<Long,BigDecimal> map =new HashMap<>(32);
+            for (AllocationTempInfo info:list
+                 ) {
+                map.put(info.getUserId(),info.getProportion());
+            }
+            //将原数据设置为无效
+            allocationInfoMapper.updateAllocationInfoStatusByProjectId(projectId);
+            //进行数据的转移
+            ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(projectId);
+            allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore()/100);
+            //删除临时表中的数据
+            allocationInfoMapper.deleteAllocationTempInfoByProjectId(projectId);
+        }
+        return new Result();
+    }
+
 
     @Override
     public Result updateProjectInfo(ProjectInfo projectInfo) {
@@ -259,8 +300,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             return Result.error(CodeMsg.DATE_ERROR);
         }
         //如果项目编号不存在
-        Boolean flag = projectInfoMapper.isProjectExist(id);
-        if (!flag){
+        if (projectInfoMapper.getProjectInfoByProjectId(id) == null){
             return Result.error(PROJECT_ID_NOI_EXIST);
         }
 

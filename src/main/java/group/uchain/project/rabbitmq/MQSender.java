@@ -1,6 +1,5 @@
 package group.uchain.project.rabbitmq;
 
-import group.uchain.project.dto.LoginInfo;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.util.TypeConvertUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +24,6 @@ public class MQSender {
     @Autowired
     public MQSender(AmqpTemplate amqpTemplate) {
         this.amqpTemplate = amqpTemplate;
-    }
-
-    public void sendLoginInfo(LoginInfo loginInfo){
-        String msg = TypeConvertUtil.beanToString(loginInfo);
-        amqpTemplate.convertAndSend(MQConfig.DIRECT_EXCHANGE,"direct.login",msg);
     }
 
     public void sendProjectInfo(List<ProjectInfo> list){

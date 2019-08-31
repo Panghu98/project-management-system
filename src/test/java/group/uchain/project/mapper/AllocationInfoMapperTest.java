@@ -58,4 +58,9 @@ public class AllocationInfoMapperTest {
         List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo(start,end);
         System.out.println(list);
     }
+
+    @Test
+    public void getAllocationTempInfoByProjectId(){
+        System.out.println(allocationInfoMapper.getAllocationTempInfoByProjectId("V27"));
+    }
 }

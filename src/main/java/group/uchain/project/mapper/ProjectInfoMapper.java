@@ -31,7 +31,7 @@ public interface ProjectInfoMapper {
     /**
      *
      */
-    ProjectInfo getProjectInfoByProjectId(@Param("id") String id);
+    ProjectInfo getProjectInfoByProjectId(@Param("id") String productId );
     /**
      * 负责人获取个人所拥有的项目信息
      *  已经设置了截止日期的
@@ -40,12 +40,6 @@ public interface ProjectInfoMapper {
      */
     List<ProjectInfo> getAllProjectInfoByUserId(String userId);
 
-    /**
-     * 传入项目编号判断项目是否存在
-     * @param projectId 项目编号
-     * @return  时候存在
-     */
-    Boolean isProjectExist(@Param("id") String projectId);
 
     /**
      * 管理员获取未设置截止日期的项目信息

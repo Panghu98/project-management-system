@@ -21,7 +21,7 @@ import java.util.List;
  * @projectName project
  * @date 19-7-21 上午10:26
  */
-@CrossOrigin(origins = "192.168.8.103:8080")
+@CrossOrigin(origins = "192.168.8.101:8080")
 @Api(tags = "负责人接口")
 @RequestMapping(produces = { "application/json;charset=UTF-8" })
 @RestController
@@ -50,7 +50,7 @@ public class LeaderController {
     }
 
     @ApiOperation(value = "上传项目的相关证明材料")
-    @GetMapping("/file/uploadEvidentFile")
+    @PostMapping("/file/uploadEvidentFile")
     public Result uploadEvidentFile(MultipartFile file,String projectId){
         return fileService.uploadEvidentFile(file,projectId);
     }
@@ -59,6 +59,12 @@ public class LeaderController {
     @PostMapping("/action/apply")
     public Result apply(@Valid @RequestBody ApplyForm applyForm){
         return infoService.apply(applyForm);
+    }
+
+    @ApiOperation(value = "负责人获取申请消息")
+    @GetMapping("/info/getApplyMessage")
+    public Result getApplyMessage(){
+        return null;
     }
 
 }

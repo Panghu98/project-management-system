@@ -20,4 +20,14 @@ public interface FileInfoMapper {
      */
     List<String> getCompleteFileNameListByProjectId(@Param("list") List<String> idList);
 
+
+    /**
+     * 将项目ID和文件名称 写入
+     * 不存在则插入 存在则更新
+     * @param id 项目ID
+     * @param name 文件名称
+     * @return
+     */
+    int add(@Param("id") String id,@Param("name") String name);
+
 }

@@ -1,7 +1,6 @@
 package group.uchain.project.service.impl;
 
 
-import group.uchain.project.dto.LoginInfo;
 import group.uchain.project.dto.User;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.mapper.UserFormMapper;
@@ -9,8 +8,6 @@ import group.uchain.project.rabbitmq.MQSender;
 import group.uchain.project.result.Result;
 import group.uchain.project.security.JwtTokenUtil;
 import group.uchain.project.service.LoginService;
-import group.uchain.project.service.UserService;
-import group.uchain.project.util.IpUtil;
 import group.uchain.project.util.MD5Util;
 import group.uchain.project.util.RoleConvertUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +21,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -80,13 +76,6 @@ public class LoginServiceImpl implements LoginService {
         //返回的对象中是带有权限信息的
         final UserDetails userDetails = userDetailsService.loadUserByUsername(String.valueOf(userId));
         log.info("加载userDetails:" + userDetails.getUsername());
-
-        //异步记录登录信息入库
-        LoginInfo info = new LoginInfo();
-        info.setDate(new Date());
-        info.setUserId(userId);
-        info.setIp(IpUtil.getIpAddress(request));
-        mqSender.sendLoginInfo(info);
 
         //将UserDetails放入Token的 payload中
         final String token = jwtTokenUtil.generateToken(userDetails);

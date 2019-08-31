@@ -1,5 +1,6 @@
 package group.uchain.project;
 
+import group.uchain.project.mapper.ApplyInfoMapper;
 import group.uchain.project.service.InfoService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,9 @@ import java.util.Set;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class InfoServiceTest {
+
+    @Autowired
+    private ApplyInfoMapper applyInfoMapper;
 
     @Autowired
     private InfoService infoService;
@@ -55,5 +59,9 @@ public class InfoServiceTest {
         Path path = Paths.get("/home/project/IdeaProjects/Project_Management_System/src/main/resources/evident/2019-07-20 15-35-44屏幕截图.png");
         Files.delete(path);
     }
+
+    @Test
+    public void apply(){}
+
 
 }

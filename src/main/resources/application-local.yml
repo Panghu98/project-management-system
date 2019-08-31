@@ -1,4 +1,6 @@
 spring:
+  http:
+
   mvc:
     view:
       prefix: /
@@ -20,6 +22,7 @@ spring:
         min-idle: 0
         max-idle: 8
 
+
   # RabbitMQ
   rabbitmq:
     host: 127.0.0.1
@@ -35,6 +38,9 @@ spring:
       direct:
         retry:
           enabled: true
+  servlet:
+    multipart:
+      max-file-size: 30MB
 #  #热部署
 #  devtools:
 #    restart:
