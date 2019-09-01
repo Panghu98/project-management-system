@@ -22,7 +22,6 @@ public class ApplyConfirmForm {
      */
     @Min(1)
     @Max(2)
-    @NotNull(message = "审核状态不为空")
     private Integer approvalStatus;
 
     /**
@@ -31,7 +30,8 @@ public class ApplyConfirmForm {
      */
     @Min(1)
     @Max(2)
-    @NotNull(message = "申请状态不为空")
     private Integer applyType;
+
+
 
 }

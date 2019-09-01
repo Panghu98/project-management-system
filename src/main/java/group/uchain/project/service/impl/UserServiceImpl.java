@@ -71,6 +71,11 @@ public class UserServiceImpl implements UserService {
     public Result resetPassword(Long userId) {
         String salt = SaltUtil.getSalt();
         String password = MD5Util.inputPassToDBPass(UserService.DEFAULT_PASSWORD,salt);
+        Integer userRole = userMapper.selectUserByUserId(userId).getRole();
+        //用户为管理员则无权进行该操作
+        if (userRole == 3){
+            return Result.error(CodeMsg.NO_PERMISSION);
+        }
         userMapper.resetPassword(userId,salt,password);
         return new Result();
     }

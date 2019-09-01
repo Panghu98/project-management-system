@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
@@ -21,10 +22,15 @@ public class ProjectInfoMapperTest {
     @Autowired
     private ProjectInfoMapper projectInfoMapper;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
 
     @Test
     public void getAllProjectInfo(){
-        System.err.println(projectInfoMapper.getDeadlineProjectInfo());
+        System.err.println(projectInfoMapper.getAllProjectInfo());
+        boolean b = redisTemplate.delete("project-info:");
+        System.err.println(b);
     }
 
 

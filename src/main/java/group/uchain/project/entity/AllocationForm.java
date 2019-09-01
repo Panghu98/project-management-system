@@ -16,7 +16,7 @@ public class AllocationForm implements Serializable{
     /**
      * 项目编号
      */
-    @NotNull
+    @NotNull(message = "项目ID不为空")
     private String projectId;
 
     /**

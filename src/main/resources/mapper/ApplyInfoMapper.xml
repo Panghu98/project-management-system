@@ -15,7 +15,7 @@
                user_id applyUser,
                project_id projectId
         from apply_info
-        where project_id = #{productId};
+        where project_id = #{projectId} limit 1;
     </select>
     <select id="getAllApplyInfoNotApproval" resultType="group.uchain.project.vo.ApplyInfo">
         select apply_type as applyType,

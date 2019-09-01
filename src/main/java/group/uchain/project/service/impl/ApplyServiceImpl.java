@@ -49,10 +49,12 @@ public class ApplyServiceImpl implements ApplyService {
 
     @Override
     public Result apply(ApplyForm applyForm) {
+        System.err.println(applyForm.toString());
         int result = applyInfoMapper.addOne(applyForm);
         if (result == 0){
             throw new MyException(CodeMsg.APPLY_ERROR);
         }
+        //更改订单状态
         projectInfoMapper.updateAllocationStatus(applyForm.getProjectId(), ProjectStatus.APPLY_FOR_MODIFYING.getStatus());
         return new Result();
     }

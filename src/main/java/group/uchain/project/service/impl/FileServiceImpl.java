@@ -310,7 +310,7 @@ public class FileServiceImpl implements FileService {
         if (file==null){
             throw new MyException(CodeMsg.FILE_EMPTY_ERROR);
         }
-        String pathFile = evidentFilePath+file.getOriginalFilename();
+        String pathFile = evidentFilePath+file.getName();
         try{
             byte[] bytes = file.getBytes();
             Path path = Paths.get(pathFile);
@@ -322,6 +322,7 @@ public class FileServiceImpl implements FileService {
             log.error("证明材料上传失败");
             throw new MyException(CodeMsg.FILE_UPLOAD_FAILED);
         }
+        //谷歌浏览器  和IE 浏览器上传的效果不同
         String fileName = file.getOriginalFilename();
         //将文件信息存入数据库
         int result = fileInfoMapper.add(projectId,fileName);

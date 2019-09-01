@@ -18,7 +18,7 @@ public class AllocationTempInfo {
     /**
      * 项目ID
      */
-    private Integer projectId;
+    private String projectId;
 
     /**
      * 成绩占比

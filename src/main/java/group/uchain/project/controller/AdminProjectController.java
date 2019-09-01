@@ -88,14 +88,14 @@ public class AdminProjectController {
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "获取所有已经设置截止日期的项目信息")
+    @ApiOperation(value = "获取所有wei设置截止日期的项目信息")
     @GetMapping("/info/getAllProjectInfo")
     public Result getAllProjectInfo(){
         return infoService.getAllProjectInfo();
     }
 
     @RoleRequired(RoleEnum.SUPER_ADMIN)
-    @ApiOperation(value = "获取所有未为设置截止日期的项目信息")
+    @ApiOperation(value = "获取所有yi设置截止日期的项目信息")
     @GetMapping("/info/getDeadlineProjectInfo")
     public Result getDeadlineProjectInfo(){
         return infoService.getDeadlineProjectInfo();

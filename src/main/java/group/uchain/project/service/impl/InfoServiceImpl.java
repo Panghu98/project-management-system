@@ -286,12 +286,15 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     private void preheatingRedis(){
         HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
         ZSetOperations<String,ProjectInfo> zSetOperations = redisTemplate.opsForZSet();
+        ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         //未设置截止时间的项目缓存预热操作
         List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
+        System.err.println(projectInfoList);
         //将最新的数据放入缓存
         Map<String, ProjectInfo> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
-
-        ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
+        //清理缓存,以免出现脏数据
+        hashOperations.getOperations().delete(hashKey);
+        log.info("将数据库中的数据放入缓存当中");
         //更新缓存 并设置过期时间为一天
         hashOperations.putAll(hashKey,map);
         redisTemplate.expire(hashKey,1,TimeUnit.DAYS);

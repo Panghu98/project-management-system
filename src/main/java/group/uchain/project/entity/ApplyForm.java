@@ -2,6 +2,8 @@ package group.uchain.project.entity;
 
 import lombok.Data;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -21,12 +23,22 @@ public class ApplyForm {
      * 申请发起人ID
      */
     @NotNull(message = "申请人不为空")
-    private Long applyUser;
+    private long applyUser;
 
     /**
      *申请类型 1.延时,2,重新分配
      */
+    @Min(0)
+    @Max(3)
     @NotNull(message = "申请类型不为空")
-    private Integer applyType;
+    private int applyType;
 
+    @Override
+    public String toString() {
+        return "ApplyForm{" +
+                "projectId='" + projectId + '\'' +
+                ", applyUser=" + applyUser +
+                ", applyType=" + applyType +
+                '}';
+    }
 }

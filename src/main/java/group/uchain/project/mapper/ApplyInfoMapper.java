@@ -12,7 +12,7 @@ public interface ApplyInfoMapper {
 
     int addOne(ApplyForm applyForm);
 
-    ApplyForm getApplyFormByProjectId(@Param("projectId") String productId);
+    ApplyForm getApplyFormByProjectId(@Param("projectId") String projectId);
 
     List<ApplyInfo> getAllApplyInfoNotApproval();
 

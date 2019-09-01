@@ -99,13 +99,14 @@
                `allocation_status` as allocationStatus,
                count(f.project_id) as fileUploadStatus
           from project_info p left join file_info f
-        on deadline = '1970-01-01' and p.id = f.project_id
+        on p.id = f.project_id
+        where  deadline = '1970-01-01'
         group by p.id
         order by allocation_status,date
     </select>
     <!--获取所有已设置截止日期的项目-->
     <select id="getDeadlineProjectInfo" resultType="group.uchain.project.dto.ProjectInfo">
-        select p.id                as id,
+        select p.id  as id,
                `category`,
                `instruction`,
                `level`,
@@ -120,8 +121,8 @@
                count(f.project_id) as fileUploadStatus
         from project_info p
                  left join file_info f
-        on deadline != '1970-01-01'
-          and p.id = f.project_id
+        on p.id = f.project_id
+        where  deadline != '1970-01-01'
         group by p.id
         order by allocation_status, date
     </select>

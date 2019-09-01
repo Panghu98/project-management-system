@@ -47,7 +47,7 @@ public enum CodeMsg {
     APPLY_APPROVAL_ERROR(86,"审核失败"),
 
     DATABASE_ERROR(101,"数据库异常"),
-    NO_PERMISSION(102,"您无权进行此项操作"),
+    NO_PERMISSION(102,"操作对象为管理员,您无权进行此项操作"),
     FORM_PARAMETER_FORMAT_ERROR(103,"表单参数错误"),
     JSON_FORMAT_ERROR(104,"Json转化错误");
 

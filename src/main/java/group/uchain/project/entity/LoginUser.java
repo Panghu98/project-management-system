@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class LoginUser{
 
-    @NotNull(message = "用户ID不能为空")
     private Long userId;
 
     @NotNull(message = "密码不能为空")
