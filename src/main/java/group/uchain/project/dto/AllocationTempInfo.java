@@ -2,8 +2,6 @@ package group.uchain.project.dto;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 /**
  * @author panghu
  */
@@ -23,7 +21,7 @@ public class AllocationTempInfo {
     /**
      * 成绩占比
      */
-    private BigDecimal proportion;
+    private Double proportion;
 
 
 }

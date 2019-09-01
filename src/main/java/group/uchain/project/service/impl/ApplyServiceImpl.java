@@ -18,7 +18,6 @@ import group.uchain.project.vo.ApplyMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +73,7 @@ public class ApplyServiceImpl implements ApplyService {
         if (applyConfirmForm.getApprovalStatus() == 2 && applyConfirmForm.getApplyType() == 2){
             String projectId = applyConfirmForm.getProjectId();
             List<AllocationTempInfo> list = allocationInfoMapper.getAllocationTempInfoByProjectId(projectId);
-            Map<Long, BigDecimal> map =new HashMap<>(32);
+            Map<Long, Double> map =new HashMap<>(32);
             for (AllocationTempInfo info:list
             ) {
                 map.put(info.getUserId(),info.getProportion());

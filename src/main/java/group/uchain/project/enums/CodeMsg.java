@@ -45,6 +45,8 @@ public enum CodeMsg {
     PROJECT_ALLOCATION_OVERDUE(84,"分配时间过期"),
     APPLY_ERROR(85,"申请失败,请重试"),
     APPLY_APPROVAL_ERROR(86,"审核失败"),
+    PROPORTION_MIN_ERROR(87,"负责人未达到最小分配数"),
+    PROPORTION_SUM_ERROR(88,"分配总和"),
 
     DATABASE_ERROR(101,"数据库异常"),
     NO_PERMISSION(102,"操作对象为管理员,您无权进行此项操作"),

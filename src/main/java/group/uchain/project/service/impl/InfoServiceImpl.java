@@ -24,7 +24,6 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -119,6 +118,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     @Transactional(rollbackFor = SQLException.class)
     public Result uploadAllocationInfo(JSONObject jsonObject) {
         String allocationString = JSONObject.toJSONString(jsonObject);
+        System.err.println(allocationString);
         //做JSON处理
         String rightString = allocationString.replace(",\"", ":\"")
                 .replace(":\"map\":[", ",\"map\":{")
@@ -131,15 +131,33 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         }catch (JSONException exception){
             throw new MyException(CodeMsg.JSON_FORMAT_ERROR);
         }
+        System.err.println(jsonResult);
         AllocationForm allocation = JSONObject.toJavaObject(jsonResult, AllocationForm.class);
         //利用Map进行去重,去除对同一个用户重复分配
-        Map<Long, BigDecimal> map = allocation.getMap();
+        Map<Long, Double> map = allocation.getMap();
+        //获取项目信息
         String projectId = allocation.getProjectId();
-        //如果项目编号不存在的话，抛出异常
-        if (projectInfoMapper.getProjectInfoByProjectId(projectId) == null){
-            throw new MyException(PROJECT_ID_NOI_EXIST);
-        }
         ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(projectId);
+        //检测用户百分比
+        Long user = userService.getCurrentUser().getUserId();
+        Double proportion = map.get(user);
+        Integer minProportion = projectInfo.getDivision();
+        //如果最小分配不满足
+        if (minProportion > proportion.longValue()){
+            return Result.error(CodeMsg.PROPORTION_MIN_ERROR);
+        }
+
+        //总和不满足总和比例
+        double sum = 0;
+        for (Double value:map.values()){
+            sum += value.longValue();
+        }
+        //前端传入的是数字,不是百分比,所以总和是在10000左右
+        if (sum > 10001 && sum < 9999){
+            return Result.error(CodeMsg.PROPORTION_SUM_ERROR);
+        }
+
+        //检测项目是否已经分配
         if (projectInfo.getAllocationStatus() == 2){
             return Result.error(CodeMsg.PROJECT_HAS_BEEN_ALLOCATED);
         }
