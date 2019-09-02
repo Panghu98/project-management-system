@@ -14,6 +14,16 @@ import java.util.List;
  */
 public interface ProjectInfoMapper {
 
+
+    /**
+     * 获取剩余申请次数
+     * @param projectId 项目编号
+     * @return 剩余申请次数
+     */
+    Integer getRemainingTime(@Param("id") String projectId);
+
+
+    void minusRemainingTime(@Param("id") String projectId);
     /**
      * 通过读取Excel注册
      * @param list

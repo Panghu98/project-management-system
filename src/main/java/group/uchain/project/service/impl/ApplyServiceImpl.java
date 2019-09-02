@@ -17,6 +17,7 @@ import group.uchain.project.vo.ApplyInfo;
 import group.uchain.project.vo.ApplyMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,14 +48,23 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     @Override
+    @Transactional
     public Result apply(ApplyForm applyForm) {
         System.err.println(applyForm.toString());
         int result = applyInfoMapper.addOne(applyForm);
         if (result == 0){
-            throw new MyException(CodeMsg.APPLY_ERROR);
+            //利用组合键去重
+            throw new MyException(CodeMsg.APPLY_REPEAT__ERROR);
+        }
+        //剩余申请次数
+        Integer remainingTime = projectInfoMapper.getRemainingTime(applyForm.getProjectId());
+        if (remainingTime == 0 ){
+            return Result.error(CodeMsg.APPLY_TIMES_RUN_OUT);
         }
         //更改订单状态
         projectInfoMapper.updateAllocationStatus(applyForm.getProjectId(), ProjectStatus.APPLY_FOR_MODIFYING.getStatus());
+        //申请成功之后减少
+        projectInfoMapper.minusRemainingTime(applyForm.getProjectId());
         return new Result();
     }
 

@@ -25,6 +25,10 @@ public class ProjectInfoMapperTest {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Test
+    public void minusRemainingTime(){
+        projectInfoMapper.minusRemainingTime(null);
+    }
 
     @Test
     public void getAllProjectInfo(){

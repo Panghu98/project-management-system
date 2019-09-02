@@ -24,10 +24,6 @@
         </foreach>
     </insert>
 
-    <update id="updateProjectInfo">
-#         update project_info set id,
-    </update>
-
     <update id="setDeadline">
             update project_info
         <set>
@@ -42,6 +38,13 @@
         update project_info
             set allocation_status = #{status}
             where id = #{id}
+    </update>
+    <update id="minusRemainingTime">
+        update project_info
+        set remaining_time = remaining_time -1
+        <where>
+            id = <if test="id!=null">#{id}</if>
+        </where>
     </update>
 
     <delete id="deleteProjectInfo" parameterType="string">
@@ -132,6 +135,9 @@
                `variety`, `score`, `leader`, `division`,`date`,`allocation_status` as allocationStatus,deadline
         from project_info
         where id = #{id}
+    </select>
+    <select id="getRemainingTime" resultType="java.lang.Integer">
+        select remaining_time as remainingTime from project_info where id = #{id}
     </select>
 
 </mapper>
