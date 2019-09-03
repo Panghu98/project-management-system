@@ -141,6 +141,9 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         //检测用户百分比
         Long user = userService.getCurrentUser().getUserId();
         Double proportion = map.get(user);
+        if(proportion == null){
+            throw new MyException(CodeMsg.PROPORTION_ERROR);
+        }
         Integer minProportion = projectInfo.getDivision();
         //如果最小分配不满足
         if (minProportion > proportion.longValue()){
