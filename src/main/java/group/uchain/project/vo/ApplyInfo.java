@@ -22,7 +22,7 @@ public class ApplyInfo {
     private String applyUser;
 
     /**
-     *申请类型 1.延时,2,重新分配
+     *申请类型 1.延时,2,重新分配 ,0未分配
      */
     @NotNull(message = "申请类型不为空")
     private Integer applyType;

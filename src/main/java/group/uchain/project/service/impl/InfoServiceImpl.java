@@ -22,9 +22,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -115,11 +113,10 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
 
     @Override
-    @Transactional(rollbackFor = SQLException.class)
     public Result uploadAllocationInfo(JSONObject jsonObject) {
         String allocationString = JSONObject.toJSONString(jsonObject);
-        System.err.println(allocationString);
         //做JSON处理
+        log.error(allocationString);
         String rightString = allocationString.replace(",\"", ":\"")
                 .replace(":\"map\":[", ",\"map\":{")
                 .replace("]]","}")
@@ -138,6 +135,12 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         //获取项目信息
         String projectId = allocation.getProjectId();
         ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(projectId);
+
+        //检测项目是否已经分配
+        if (projectInfo.getAllocationStatus() == 2){
+            return Result.error(CodeMsg.PROJECT_HAS_BEEN_ALLOCATED);
+        }
+
         //检测用户百分比
         Long user = userService.getCurrentUser().getUserId();
         Double proportion = map.get(user);
@@ -151,30 +154,34 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         }
 
         //总和不满足总和比例
-        double sum = 0;
+        double sum = (double) 0;
         for (Double value:map.values()){
             sum += value.longValue();
         }
         //前端传入的是数字,不是百分比,所以总和是在10000左右
-        if (sum > 10001 && sum < 9999){
+        if (sum >= 100.1 || sum <= 99.9){
+            log.error("分配的总和为{}",sum);
             return Result.error(CodeMsg.PROPORTION_SUM_ERROR);
         }
 
-        //检测项目是否已经分配
-        if (projectInfo.getAllocationStatus() == 2){
-            return Result.error(CodeMsg.PROJECT_HAS_BEEN_ALLOCATED);
-        }
         if (System.currentTimeMillis() >= projectInfo.getDeadline().getTime() ){
             return Result.error(CodeMsg.PROJECT_ALLOCATION_OVERDUE);
         }
 
+        //标记项目状态已经更新
+        redisTemplate.opsForValue().set(DEADLINE_FLAG,"Y");
         //如果是申请里面的,就放入临时表中
         if (applyInfoMapper.getApplyFormByProjectId(projectId) != null){
+            log.info("放入临时表");
+            //修改订单状态
+            projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.APPLY_FOR_MODIFYING.getStatus());
             allocationInfoMapper.uploadAllocationInfoToTempTable(map,projectId);
+            return new Result();
         }
         allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore()/100);
         //写入数据库  前端传入的是成绩整数百分比,所以要除以100
         projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
+
         return new Result();
     }
 
@@ -185,6 +192,10 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         return Result.successData(list);
     }
 
+    /**
+     * 获取所有未设置截止日期的项目
+     * @return
+     */
     @Override
     public Result getAllProjectInfo() {
         HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
@@ -215,6 +226,10 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     }
 
 
+    /**
+     * 获取所有已经设置截止日期的项目
+     * @return
+     */
     @Override
     public Result getDeadlineProjectInfo() {
         ZSetOperations<String,ProjectInfo> zSetOperations = redisTemplate.opsForZSet();

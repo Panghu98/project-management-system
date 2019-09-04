@@ -310,7 +310,7 @@ public class FileServiceImpl implements FileService {
         if (file==null){
             throw new MyException(CodeMsg.FILE_EMPTY_ERROR);
         }
-        String pathFile = evidentFilePath+file.getName();
+        String pathFile = evidentFilePath+file.getOriginalFilename();
         try{
             byte[] bytes = file.getBytes();
             Path path = Paths.get(pathFile);

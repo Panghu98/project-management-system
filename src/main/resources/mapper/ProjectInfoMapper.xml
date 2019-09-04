@@ -46,6 +46,7 @@
             id = <if test="id!=null">#{id}</if>
         </where>
     </update>
+    <update id="updateProjectInfo"></update>
 
     <delete id="deleteProjectInfo" parameterType="string">
         delete from project_info where id = #{id}
