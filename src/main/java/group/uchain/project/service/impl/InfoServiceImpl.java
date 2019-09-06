@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static group.uchain.project.enums.CodeMsg.PROJECT_ID_NOI_EXIST;
+import static group.uchain.project.enums.CodeMsg.*;
 
 /**
  * @author project
@@ -116,7 +116,6 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     public Result uploadAllocationInfo(JSONObject jsonObject) {
         String allocationString = JSONObject.toJSONString(jsonObject);
         //做JSON处理
-        log.error(allocationString);
         String rightString = allocationString.replace(",\"", ":\"")
                 .replace(":\"map\":[", ",\"map\":{")
                 .replace("]]","}")
@@ -126,6 +125,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         try {
             jsonResult = JSONObject.parseObject(rightString);
         }catch (JSONException exception){
+            log.error(JSON_FORMAT_ERROR.getMsg());
             throw new MyException(CodeMsg.JSON_FORMAT_ERROR);
         }
         System.err.println(jsonResult);
@@ -136,15 +136,11 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         String projectId = allocation.getProjectId();
         ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(projectId);
 
-        //检测项目是否已经分配
-        if (projectInfo.getAllocationStatus() == 2){
-            return Result.error(CodeMsg.PROJECT_HAS_BEEN_ALLOCATED);
-        }
-
         //检测用户百分比
         Long user = userService.getCurrentUser().getUserId();
         Double proportion = map.get(user);
         if(proportion == null){
+            log.error(PROPORTION_ERROR.getMsg());
             throw new MyException(CodeMsg.PROPORTION_ERROR);
         }
         Integer minProportion = projectInfo.getDivision();
@@ -163,6 +159,12 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             log.error("分配的总和为{}",sum);
             return Result.error(CodeMsg.PROPORTION_SUM_ERROR);
         }
+
+        //检测项目是否已经分配
+        if (projectInfo.getAllocationStatus() != 0 ){
+            return Result.error(CodeMsg.PROJECT_HAS_BEEN_ALLOCATED);
+        }
+
 
         if (System.currentTimeMillis() >= projectInfo.getDeadline().getTime() ){
             return Result.error(CodeMsg.PROJECT_ALLOCATION_OVERDUE);

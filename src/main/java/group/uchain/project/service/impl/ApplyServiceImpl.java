@@ -50,7 +50,6 @@ public class ApplyServiceImpl implements ApplyService {
     @Override
     @Transactional
     public Result apply(ApplyForm applyForm) {
-        System.err.println(applyForm.toString());
         int result = applyInfoMapper.addOne(applyForm);
         if (result == 0){
             //利用组合键去重
@@ -76,6 +75,7 @@ public class ApplyServiceImpl implements ApplyService {
 
     @Override
     public Result setApplyStatus(ApplyConfirmForm applyConfirmForm) {
+        System.err.println(applyConfirmForm.toString());// TODO 1是不通过啊
         int result = applyInfoMapper.updateApplyInfoStatus(applyConfirmForm);
         if (result == 0){
             throw new MyException(CodeMsg.APPLY_APPROVAL_ERROR);
@@ -95,6 +95,11 @@ public class ApplyServiceImpl implements ApplyService {
             allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore()/100);
             //删除临时表中的数据
             allocationInfoMapper.deleteAllocationTempInfoByProjectId(projectId);
+            projectInfoMapper.updateAllocationStatus(applyConfirmForm.getProjectId(), ProjectStatus.ALLOCATED.getStatus());
+        }
+        if (applyConfirmForm.getApprovalStatus() == 2 && applyConfirmForm.getApplyType() == 1){
+            //修改项目分配状态
+            projectInfoMapper.updateAllocationStatus(applyConfirmForm.getProjectId(), ProjectStatus.UNDISTRIBUTED.getStatus());
         }
         return new Result();
     }
