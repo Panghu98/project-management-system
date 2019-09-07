@@ -5,13 +5,14 @@ import lombok.Data;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * @author panghu
  * 负责人申请修改项目分数分配
  */
 @Data
-public class ApplyForm {
+public class ApplyForm implements Serializable {
 
     /**
      *项目ID

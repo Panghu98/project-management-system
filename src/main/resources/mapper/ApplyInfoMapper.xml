@@ -10,6 +10,9 @@
         set approval_status = #{approvalStatus}
         where project_id = #{projectId}
     </update>
+    <delete id="deleteApplyInfoByProjectId">
+        delete from apply_info where project_id = #{projectId}
+    </delete>
     <select id="getApplyFormByProjectId" resultType="group.uchain.project.entity.ApplyForm">
         select apply_type as applyType,
                user_id applyUser,
@@ -28,6 +31,9 @@
         select project_id,approval_status
         from apply_info
         where user_id = #{userId}
+    </select>
+    <select id="getApplyMount" resultType="java.lang.Integer">
+        select count(id) from apply_info where project_id = #{projectId} and approval_status = 0;
     </select>
 
 </mapper>

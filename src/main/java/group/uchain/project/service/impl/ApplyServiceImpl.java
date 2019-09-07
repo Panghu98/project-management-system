@@ -4,6 +4,8 @@ import group.uchain.project.dto.AllocationTempInfo;
 import group.uchain.project.dto.ProjectInfo;
 import group.uchain.project.entity.ApplyConfirmForm;
 import group.uchain.project.entity.ApplyForm;
+import group.uchain.project.enums.ApplyType;
+import group.uchain.project.enums.ApprovalStatus;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.enums.ProjectStatus;
 import group.uchain.project.exception.MyException;
@@ -50,20 +52,21 @@ public class ApplyServiceImpl implements ApplyService {
     @Override
     @Transactional
     public Result apply(ApplyForm applyForm) {
-        int result = applyInfoMapper.addOne(applyForm);
-        if (result == 0){
-            //利用组合键去重
-            throw new MyException(CodeMsg.APPLY_REPEAT__ERROR);
+        System.err.println(applyForm.toString());
+        String projectId= applyForm.getProjectId();
+
+        if (applyInfoMapper.getApplyMount(projectId) > 0) {
+            return Result.error(CodeMsg.APPLY_REPEAT__ERROR);
         }
         //剩余申请次数
-        Integer remainingTime = projectInfoMapper.getRemainingTime(applyForm.getProjectId());
+        Integer remainingTime = projectInfoMapper.getRemainingTime(projectId);
         if (remainingTime == 0 ){
             return Result.error(CodeMsg.APPLY_TIMES_RUN_OUT);
         }
         //更改订单状态
-        projectInfoMapper.updateAllocationStatus(applyForm.getProjectId(), ProjectStatus.APPLY_FOR_MODIFYING.getStatus());
+        projectInfoMapper.updateAllocationStatus(projectId,ProjectStatus.APPLY_FOR_MODIFYING.getStatus());
         //申请成功之后减少
-        projectInfoMapper.minusRemainingTime(applyForm.getProjectId());
+        projectInfoMapper.minusRemainingTime(projectId);
         return new Result();
     }
 
@@ -75,32 +78,54 @@ public class ApplyServiceImpl implements ApplyService {
 
     @Override
     public Result setApplyStatus(ApplyConfirmForm applyConfirmForm) {
-        System.err.println(applyConfirmForm.toString());// TODO 1是不通过啊
+        String projectId = applyConfirmForm.getProjectId();
         int result = applyInfoMapper.updateApplyInfoStatus(applyConfirmForm);
         if (result == 0){
             throw new MyException(CodeMsg.APPLY_APPROVAL_ERROR);
         }
-        if (applyConfirmForm.getApprovalStatus() == 2 && applyConfirmForm.getApplyType() == 2){
-            String projectId = applyConfirmForm.getProjectId();
-            List<AllocationTempInfo> list = allocationInfoMapper.getAllocationTempInfoByProjectId(projectId);
-            Map<Long, Double> map =new HashMap<>(32);
-            for (AllocationTempInfo info:list
-            ) {
-                map.put(info.getUserId(),info.getProportion());
+        Integer approvalStatus = applyConfirmForm.getApprovalStatus();
+        Integer applyType = applyConfirmForm.getApplyType();
+
+
+        //审核不通过,还原状态
+        if (approvalStatus.equals(ApprovalStatus.NOT_APPROVAL.getApprovalStatus())){
+            //如果申请的类型为延长截止时间
+            if (applyType.equals(ApplyType.TIME_DELAY.getApplyType())){
+                //更改项目状态
+                projectInfoMapper.updateAllocationStatus(projectId,ProjectStatus.UNDISTRIBUTED.getStatus());
+
+            //如果申请类型为申请修改项目信息
+            }else {
+                //更改项目状态
+                projectInfoMapper.updateAllocationStatus(projectId,ProjectStatus.ALLOCATED.getStatus());
             }
-            //将原数据设置为无效
-            allocationInfoMapper.updateAllocationInfoStatusByProjectId(projectId);
-            //进行数据的转移
-            ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(projectId);
-            allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore()/100);
-            //删除临时表中的数据
-            allocationInfoMapper.deleteAllocationTempInfoByProjectId(projectId);
-            projectInfoMapper.updateAllocationStatus(applyConfirmForm.getProjectId(), ProjectStatus.ALLOCATED.getStatus());
+
+        //审核通过
+        }else {
+            if (applyType.equals(ApplyType.UPDATE_ALLOCATION_INFO.getApplyType())){
+                List<AllocationTempInfo> list = allocationInfoMapper.getAllocationTempInfoByProjectId(projectId);
+                Map<Long, Double> map =new HashMap<>(32);
+                for (AllocationTempInfo info:list
+                ) {
+                    map.put(info.getUserId(),info.getProportion());
+                }
+                //将原数据设置为无效
+                allocationInfoMapper.updateAllocationInfoStatusByProjectId(projectId);
+                //进行数据的转移
+                ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(projectId);
+                allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore()/100);
+                //删除临时表中的数据
+                allocationInfoMapper.deleteAllocationTempInfoByProjectId(projectId);
+                projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
+
+            //申请类型为重新分配
+            }else{
+                //设置项目状态为未分配
+                projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
+            }
         }
-        if (applyConfirmForm.getApprovalStatus() == 2 && applyConfirmForm.getApplyType() == 1){
-            //修改项目分配状态
-            projectInfoMapper.updateAllocationStatus(applyConfirmForm.getProjectId(), ProjectStatus.UNDISTRIBUTED.getStatus());
-        }
+        //删除申请信息  (这里可以通过设置状态来达到有有效性)
+        applyInfoMapper.deleteApplyInfoByProjectId(projectId);
         return new Result();
     }
 

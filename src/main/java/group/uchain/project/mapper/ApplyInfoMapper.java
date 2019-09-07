@@ -10,6 +10,15 @@ import java.util.List;
 
 public interface ApplyInfoMapper {
 
+    int deleteApplyInfoByProjectId(String projectId);
+
+    /**
+     * 获取项目申请记录次数
+     * @param projectId 项目编号
+     * @return
+     */
+    int getApplyMount(String projectId);
+
     int addOne(ApplyForm applyForm);
 
     ApplyForm getApplyFormByProjectId(@Param("projectId") String projectId);

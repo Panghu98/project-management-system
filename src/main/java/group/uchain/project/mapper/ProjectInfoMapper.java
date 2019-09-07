@@ -58,7 +58,7 @@ public interface ProjectInfoMapper {
     List<ProjectInfo> getAllProjectInfo();
 
     /**
-     *获取已经设置截止日期的项目信息.
+     *获取已经设置截止日期的项目信息.并且分配状态不为修改
      * @return
      */
     List<ProjectInfo> getDeadlineProjectInfo();
