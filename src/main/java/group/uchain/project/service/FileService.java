@@ -3,6 +3,7 @@ package group.uchain.project.service;
 import group.uchain.project.result.Result;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public interface FileService {
      * 根据项目ID进行单文件下载
      * @param id 项目ID
      */
-    void  downloadSingleFile(String id,HttpServletResponse response);
+    void  downloadSingleFile(String id, HttpServletResponse response, HttpServletRequest request);
 
     /**
      * 获取证明材料的所有文件名
@@ -45,7 +46,7 @@ public interface FileService {
      * 上传证明材料接口
      * @return
      */
-    Result uploadEvidentFile(MultipartFile multipartFile,String projectId);
+    Result uploadEvidentFile(MultipartFile multipartFile, String projectId);
 
     /**
      * 根据文件导入时间导出分配信息的excel

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
@@ -26,7 +27,6 @@ import java.util.List;
  */
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping(produces = { "application/json;charset=UTF-8" })
 @Api(tags = "超级管理员项目接口")
 public class AdminProjectController {
 
@@ -72,10 +72,8 @@ public class AdminProjectController {
     @RoleRequired(RoleEnum.SUPER_ADMIN)
     @ApiOperation(value = "单文件下载--指定项目ID")
     @PostMapping("/file/downloadSingleFile")
-    public void downloadSingleFile(@RequestBody String id,HttpServletResponse response){
-        fileService.downloadSingleFile(id,response);
-        System.err.println(response.getHeaderNames());
-        System.err.println(response.getHeader("name"));
+    public void downloadSingleFile(@RequestBody String id, HttpServletResponse response, HttpServletRequest request){
+        fileService.downloadSingleFile(id,response,request);
     }
 
 

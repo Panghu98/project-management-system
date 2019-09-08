@@ -22,6 +22,7 @@ public enum CodeMsg {
     USER_ID_IS_NULL(8,"教师工号为空"),
 
     //文件出错
+    FILE_NAME_IS_TOO_LONG(9,"文件名过长"),
     FILE_UPLOAD_FAILED(10,"文件上传服务器失败"),
     FILE_EMPTY_ERROR(11,"文件为空"),
     XLS_FILE_READ_ERROR(12,"XLS文件读取异常"),
@@ -33,6 +34,7 @@ public enum CodeMsg {
     FILE_DOWNLOAD_ERROR(18,"文件传输错误"),
     FILE_TYPE_ERROR(19,"文件格式有误,请上传xlsx文件"),
     ID_HAS_NO_FILE(20,"项目不存在证明材料"),
+    FILE_NAME_EMPTY_ERROR(21,"文件名称为空"),
 
     //文件格式要求出错
     USER_HAS_EXISTED(50,"用户已经存在"),

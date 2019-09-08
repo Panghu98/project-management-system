@@ -222,7 +222,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             //获取所有的Key
             Set<String> projectIdSet = hashOperations.keys(hashKey);
             //获取所有的结果
-            List list = hashOperations.multiGet(hashKey,projectIdSet);
+            List<ProjectInfo> list = hashOperations.multiGet(hashKey,projectIdSet);
             return Result.successData(list);
         }
     }
@@ -248,8 +248,8 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             return Result.successData(projectInfoList);
         }else {
             log.info("缓存中中为最新的键值,直接从缓存中取值");
-            Set set = zSetOperations.rangeByScore(setKey,0,1);
-            List list = new ArrayList(set);
+            Set<ProjectInfo> set = zSetOperations.rangeByScore(setKey,0,1);
+            List<ProjectInfo> list = new ArrayList<>(set);
             return Result.successData(list);
         }
     }

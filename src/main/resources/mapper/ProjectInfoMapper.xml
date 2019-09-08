@@ -127,6 +127,7 @@
         from project_info p
                  left join file_info f
         on p.id = f.project_id
+        <!--获取已经设置截止时间的并且状态不为修改申请中的-->
         where  deadline != '1970-01-01' and allocation_status != 1
         group by p.id
         order by allocation_status, date

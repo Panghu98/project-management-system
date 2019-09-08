@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = SQLException.class)
     public Result apply(ApplyForm applyForm) {
         System.err.println(applyForm.toString());
         String projectId= applyForm.getProjectId();
@@ -77,6 +78,7 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     @Override
+    @Transactional(rollbackFor = SQLException.class)
     public Result setApplyStatus(ApplyConfirmForm applyConfirmForm) {
         String projectId = applyConfirmForm.getProjectId();
         int result = applyInfoMapper.updateApplyInfoStatus(applyConfirmForm);

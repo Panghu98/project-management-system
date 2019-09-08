@@ -17,15 +17,20 @@ import group.uchain.project.vo.AllocationInfo2;
 import group.uchain.project.vo.FileInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -234,7 +239,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void downloadSingleFile(String id,HttpServletResponse response) {
+    public void downloadSingleFile(String id, HttpServletResponse response, HttpServletRequest request) {
 
         String fileName = fileInfoMapper.getCompleteFileNameByProjectId(id);
         if (fileName == null){
@@ -243,9 +248,13 @@ public class FileServiceImpl implements FileService {
         File file = new File(evidentFilePath+fileName);
         if(file.exists()){
             response.setContentType("application/force-download");
-            response.setHeader("name",fileName);
-            response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
-
+            try {
+                response.setHeader("name",java.net.URLEncoder.encode(fileName, "UTF-8"));
+                System.err.println(URLDecoder.decode(response.getHeader("name"),"UTF-8"));
+                response.setHeader("Content-disposition", "attachment;filename=" + java.net.URLEncoder.encode(fileName, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                log.error(e.getMessage());
+            }
             byte[] buffer = new byte[1024];
             //文件输入流
             FileInputStream fis = null;
@@ -306,11 +315,17 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Result uploadEvidentFile(MultipartFile file,String projectId) {
+    public Result uploadEvidentFile(MultipartFile file, String projectId) {
         if (file==null){
             throw new MyException(CodeMsg.FILE_EMPTY_ERROR);
         }
-        String pathFile = evidentFilePath+file.getOriginalFilename();
+        String fileName = file.getOriginalFilename();
+        //解决文件名待路径问题
+        String realFileName = getRealFilename(fileName);
+        String pathFile = evidentFilePath+realFileName;
+        if (realFileName.length() > 15){
+            throw new MyException(CodeMsg.FILE_NAME_IS_TOO_LONG);
+        }
         try{
             byte[] bytes = file.getBytes();
             Path path = Paths.get(pathFile);
@@ -322,10 +337,8 @@ public class FileServiceImpl implements FileService {
             log.error("证明材料上传失败");
             throw new MyException(CodeMsg.FILE_UPLOAD_FAILED);
         }
-        //谷歌浏览器  和IE 浏览器上传的效果不同
-        String fileName = file.getOriginalFilename();
         //将文件信息存入数据库
-        int result = fileInfoMapper.add(projectId,fileName);
+        int result = fileInfoMapper.add(projectId,realFileName);
         if (result <= 0){
             throw new MyException(CodeMsg.PROJECT_ID_NOI_EXIST);
         }
@@ -526,6 +539,20 @@ public class FileServiceImpl implements FileService {
         } catch (Exception e) {
             throw new MyException(CodeMsg.ZIP_FILE_PACKAGE_ERROR);
         }
+    }
+
+    /**
+     * 解决IE edge 文件上传 文件名却出现了全路径+文件名的形式
+     * @param fileName 文件名
+     * @return
+     */
+    private static String getRealFilename(String fileName){
+        if (fileName == null){
+            throw new MyException(CodeMsg.FILE_NAME_EMPTY_ERROR);
+        }
+        //最后一位  注意是"\\",主要针对于微软的浏览器
+        int lastIndexOfSlash = fileName.lastIndexOf("\\")+1;
+        return fileName.substring(lastIndexOfSlash);
     }
 
 

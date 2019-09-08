@@ -32,9 +32,8 @@ public class ProjectInfoMapperTest {
 
     @Test
     public void getAllProjectInfo(){
-        System.err.println(projectInfoMapper.getAllProjectInfo());
-        boolean b = redisTemplate.delete("project-info:");
-        System.err.println(b);
+        System.err.println(projectInfoMapper.getDeadlineProjectInfo());
+        System.err.println(projectInfoMapper.getDeadlineProjectInfo().size());
     }
 
 
