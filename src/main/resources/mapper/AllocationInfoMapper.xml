@@ -30,20 +30,36 @@
             (
                 #{key},
                 #{value},
-                #{value} * #{score},
+            <!--除去百分比-->
+            #{value} * #{score}/100,
                 #{projectId}
             )
         </foreach>
     </insert>
-    <insert id="uploadAllocationInfoToTempTable">
+    <insert id="uploadAllocationInfoToTempTable" parameterType="hashmap">
         insert into allocation_info_temp
-        (user_id, proportion,project_id)
+        (user_id, proportion,user_score, project_id)
         values
         <foreach collection="map" index="key" item="value" separator=",">
             (
             #{key},
             #{value},
+             <!--除去百分比-->
+            #{value} * #{score}/100,
             #{projectId}
+            )
+        </foreach>
+    </insert>
+    <!--不存在则插入,存在则忽略-->
+    <insert id="uploadOverdueProjectAllocationInfo" parameterType="list">
+        insert ignore into allocation_info(user_id, proportion,user_score, project_id)
+            values
+        <foreach collection="list" separator="," index="" item="overdueProjectInfo">
+            (
+                #{overdueProjectInfo.userId,jdbcType=INTEGER},
+                100,
+                #{overdueProjectInfo.score,jdbcType=DOUBLE},
+                #{overdueProjectInfo.projectId,jdbcType=VARCHAR}
             )
         </foreach>
     </insert>
@@ -59,7 +75,7 @@
         delete from allocation_info_temp
         where project_id = #{projectId}
     </delete>
-    <delete id="updateAllocationInfoStatusByProjectId">
+    <delete id="setAllocationInfoStatusInvalidByProjectId">
         update allocation_info
         set status = 0
         where project_id = #{projectId}

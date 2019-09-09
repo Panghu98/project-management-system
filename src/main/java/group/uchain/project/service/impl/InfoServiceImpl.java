@@ -180,7 +180,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             allocationInfoMapper.uploadAllocationInfoToTempTable(map,projectId);
             return new Result();
         }
-        allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore()/100);
+        allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore());
         //写入数据库  前端传入的是成绩整数百分比,所以要除以100
         projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
 

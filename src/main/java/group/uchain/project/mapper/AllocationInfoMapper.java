@@ -1,6 +1,7 @@
 package group.uchain.project.mapper;
 
 import group.uchain.project.dto.AllocationTempInfo;
+import group.uchain.project.dto.OverdueProjectInfo;
 import group.uchain.project.vo.AllocationInfo;
 import group.uchain.project.vo.AllocationInfo2;
 import org.apache.ibatis.annotations.Param;
@@ -23,15 +24,17 @@ public interface AllocationInfoMapper {
      * @param projectId  项目的ID
      * @param score 项目总分数
      */
-    void uploadAllocationInfo(@Param("map") Map<Long, Double> map,@Param("projectId") String projectId,@Param("score") Double score);
+    int uploadAllocationInfo(@Param("map") Map<Long, Double> map,@Param("projectId") String projectId,@Param("score") Double score);
 
     /**
      * 上传项目分配信息到临时表
      * @param map  用户ID以及对应的分配比例
      * @param projectId  项目的ID
      */
-    void uploadAllocationInfoToTempTable(@Param("map") Map<Long, Double> map,@Param("projectId") String projectId);
+    int uploadAllocationInfoToTempTable(@Param("map") Map<Long, Double> map,@Param("projectId") String projectId);
 
+
+    int uploadOverdueProjectAllocationInfo(List<OverdueProjectInfo> list);
 
     /**
      * 上传项目分配的时间
@@ -75,6 +78,6 @@ public interface AllocationInfoMapper {
      * @param projectId 项目ID
      * @return
      */
-    int updateAllocationInfoStatusByProjectId(@Param("projectId") String projectId);
+    int setAllocationInfoStatusInvalidByProjectId(@Param("projectId") String projectId);
 
 }

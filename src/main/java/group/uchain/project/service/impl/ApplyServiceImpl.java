@@ -112,16 +112,18 @@ public class ApplyServiceImpl implements ApplyService {
                     map.put(info.getUserId(),info.getProportion());
                 }
                 //将原数据设置为无效
-                allocationInfoMapper.updateAllocationInfoStatusByProjectId(projectId);
+                allocationInfoMapper.setAllocationInfoStatusInvalidByProjectId(projectId);
                 //进行数据的转移
                 ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(projectId);
-                allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore()/100);
+                allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore());
                 //删除临时表中的数据
                 allocationInfoMapper.deleteAllocationTempInfoByProjectId(projectId);
                 projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
 
             //申请类型为重新分配
             }else{
+                //将自动分配的信息设置为无效
+                allocationInfoMapper.setAllocationInfoStatusInvalidByProjectId(projectId);
                 //设置项目状态为未分配
                 projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
             }
@@ -137,6 +139,5 @@ public class ApplyServiceImpl implements ApplyService {
         List<ApplyMessage> list = applyInfoMapper.getApplyMessageById(userId);
         return Result.successData(list);
     }
-
 
 }

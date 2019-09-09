@@ -1,5 +1,6 @@
 package group.uchain.project.mapper;
 
+import group.uchain.project.dto.OverdueProjectInfo;
 import group.uchain.project.dto.ProjectInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -70,4 +71,11 @@ public interface ProjectInfoMapper {
     int setDeadline(@Param("id") String id,@Param("date") Date date);
 
     int updateAllocationStatus(@Param("id") String projectId,@Param("status") Integer status);
+
+    /**
+     * 获取过期的项目
+     * @param today 当前时间
+     * @return 过期项目集合
+     */
+    List<OverdueProjectInfo> getAllOverdueProjectId(Date today);
 }

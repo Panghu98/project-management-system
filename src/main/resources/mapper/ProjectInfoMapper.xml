@@ -4,7 +4,8 @@
 >
 
     <insert id="excelToDatabase" parameterType="list">
-        insert into project.project_info (`id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`,`date`,deadline)
+        insert into project.project_info
+            (`id`,`category`, `instruction`, `level`, `grade`, `number`, `variety`, `score`, `leader`, `division`,`date`,deadline)
         values
         <foreach collection="list" separator="," index="" item="projectInfo">
             (
@@ -141,6 +142,13 @@
     </select>
     <select id="getRemainingTime" resultType="java.lang.Integer">
         select remaining_time as remainingTime from project_info where id = #{id}
+    </select>
+    <select id="getAllOverdueProjectId" resultType="group.uchain.project.dto.OverdueProjectInfo">
+        select p.id as projectId,score,u.user_id as userId
+               from project_info p
+                inner join user u
+                    on p.leader = u.username
+        where deadline  &lt;  #{today}
     </select>
 
 </mapper>

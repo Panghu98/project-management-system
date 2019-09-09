@@ -47,6 +47,11 @@ public class ProjectInfoMapperTest {
         System.out.println(new Date(0));
     }
 
+    @Test
+    public void getAllOverdueProjectId(){
+        System.err.println(projectInfoMapper.getAllOverdueProjectId(new Date()));
+    }
+
 
     @Test
     public void getAllProjectById(){

@@ -1,5 +1,6 @@
 package group.uchain.project.mapper;
 
+import group.uchain.project.dto.OverdueProjectInfo;
 import group.uchain.project.vo.AllocationInfo2;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +58,18 @@ public class AllocationInfoMapperTest {
         System.err.println(end);
         List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo(start,end);
         System.out.println(list);
+    }
+
+    @Test
+    public void uploadOverdueProjectAllocationInfo(){
+        OverdueProjectInfo overdueProjectInfo = new OverdueProjectInfo();
+        overdueProjectInfo.setProjectId("P315");
+        overdueProjectInfo.setScore(100.0);
+        overdueProjectInfo.setUserId(123456789103L);
+        List<OverdueProjectInfo> list = new ArrayList<>();
+        list.add(overdueProjectInfo);
+        allocationInfoMapper.uploadOverdueProjectAllocationInfo(list);
+
     }
 
     @Test
