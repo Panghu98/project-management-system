@@ -31,7 +31,7 @@ public interface AllocationInfoMapper {
      * @param map  用户ID以及对应的分配比例
      * @param projectId  项目的ID
      */
-    int uploadAllocationInfoToTempTable(@Param("map") Map<Long, Double> map,@Param("projectId") String projectId);
+    int uploadAllocationInfoToTempTable(@Param("map") Map<Long, Double> map,@Param("projectId") String projectId,@Param("score") Double score);
 
 
     int uploadOverdueProjectAllocationInfo(List<OverdueProjectInfo> list);

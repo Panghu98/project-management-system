@@ -4,15 +4,15 @@
     <insert id="add">
         insert into file_info values (#{id},#{name}) 
             on duplicate key
-                update file_complate_name = #{name}
+                update file_complete_name = #{name}
     </insert>
 
     <select id="getCompleteFileNameByProjectId" resultType="java.lang.String">
-        select file_complate_name from file_info where project_id = #{id}
+        select file_complete_name from file_info where project_id = #{id}
     </select>
 
     <select id="getCompleteFileNameListByProjectId" resultType="java.lang.String">
-        select file_complate_name
+        select file_complete_name
             from file_info
         where project_id in
         <foreach collection="list" separator="," item="id" open="(" close=")">

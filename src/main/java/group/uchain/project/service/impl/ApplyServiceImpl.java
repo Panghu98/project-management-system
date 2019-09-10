@@ -17,6 +17,7 @@ import group.uchain.project.service.ApplyService;
 import group.uchain.project.service.UserService;
 import group.uchain.project.vo.ApplyInfo;
 import group.uchain.project.vo.ApplyMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,9 @@ import java.util.Map;
  * @author panghu
  */
 @Service
+@Slf4j
 public class ApplyServiceImpl implements ApplyService {
+
 
 
     private ProjectInfoMapper projectInfoMapper;
@@ -53,10 +56,11 @@ public class ApplyServiceImpl implements ApplyService {
     @Override
     @Transactional(rollbackFor = SQLException.class)
     public Result apply(ApplyForm applyForm) {
-        System.err.println(applyForm.toString());
         String projectId= applyForm.getProjectId();
 
-        if (applyInfoMapper.getApplyMount(projectId) > 0) {
+        int count = applyInfoMapper.getApplyMount(projectId);
+        if (count > 0) {
+            log.error("项目编号{}重复申请",projectId);
             return Result.error(CodeMsg.APPLY_REPEAT__ERROR);
         }
         //剩余申请次数
@@ -68,6 +72,8 @@ public class ApplyServiceImpl implements ApplyService {
         projectInfoMapper.updateAllocationStatus(projectId,ProjectStatus.APPLY_FOR_MODIFYING.getStatus());
         //申请成功之后减少
         projectInfoMapper.minusRemainingTime(projectId);
+        //将申请写入数据库
+        applyInfoMapper.addOne(applyForm);
         return new Result();
     }
 
@@ -104,6 +110,7 @@ public class ApplyServiceImpl implements ApplyService {
 
         //审核通过
         }else {
+            //申请类型为重新分配
             if (applyType.equals(ApplyType.UPDATE_ALLOCATION_INFO.getApplyType())){
                 List<AllocationTempInfo> list = allocationInfoMapper.getAllocationTempInfoByProjectId(projectId);
                 Map<Long, Double> map =new HashMap<>(32);
@@ -120,12 +127,12 @@ public class ApplyServiceImpl implements ApplyService {
                 allocationInfoMapper.deleteAllocationTempInfoByProjectId(projectId);
                 projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
 
-            //申请类型为重新分配
+            //申请类型为延长截止时间
             }else{
                 //将自动分配的信息设置为无效
                 allocationInfoMapper.setAllocationInfoStatusInvalidByProjectId(projectId);
                 //设置项目状态为未分配
-                projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
+                projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.UNDISTRIBUTED.getStatus());
             }
         }
         //删除申请信息  (这里可以通过设置状态来达到有有效性)

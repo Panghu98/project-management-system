@@ -27,6 +27,6 @@ public class ApplyInfoMapperTest {
 
     @Test
     public void getAllApplyInfoNotApproval(){
-        System.out.println(applyInfoMapper.getAllApplyInfoNotApproval());
+        System.out.println(applyInfoMapper.getApplyMount("P114"));
     }
 }

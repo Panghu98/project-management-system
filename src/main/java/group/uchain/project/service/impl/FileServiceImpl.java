@@ -323,7 +323,8 @@ public class FileServiceImpl implements FileService {
         //解决文件名待路径问题
         String realFileName = getRealFilename(fileName);
         String pathFile = evidentFilePath+realFileName;
-        if (realFileName.length() > 15){
+        log.info("传入的文件名为:"+realFileName);
+        if (realFileName.length() > 25){
             throw new MyException(CodeMsg.FILE_NAME_IS_TOO_LONG);
         }
         try{

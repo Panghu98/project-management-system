@@ -113,8 +113,8 @@
         where p.id = a.project_id and p.date &lt;= #{end} and p.date  &gt;= #{start}
     </select>
     <select id="getAllocationTempInfoByProjectId" resultType="group.uchain.project.dto.AllocationTempInfo">
-        select project_id,
-               user_id,
+        select project_id as projectId,
+               user_id as userId,
                proportion
         from allocation_info_temp
         where project_id = #{projectId} and status = 1;

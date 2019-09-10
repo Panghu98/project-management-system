@@ -114,6 +114,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     public Result uploadAllocationInfo(JSONObject jsonObject) {
+        System.err.println(System.currentTimeMillis());
         String allocationString = JSONObject.toJSONString(jsonObject);
         //做JSON处理
         String rightString = allocationString.replace(",\"", ":\"")
@@ -128,7 +129,6 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             log.error(JSON_FORMAT_ERROR.getMsg());
             throw new MyException(CodeMsg.JSON_FORMAT_ERROR);
         }
-        System.err.println(jsonResult);
         AllocationForm allocation = JSONObject.toJavaObject(jsonResult, AllocationForm.class);
         //利用Map进行去重,去除对同一个用户重复分配
         Map<Long, Double> map = allocation.getMap();
@@ -139,6 +139,9 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         //检测用户百分比
         Long user = userService.getCurrentUser().getUserId();
         Double proportion = map.get(user);
+
+        //多重判断  发生概率最大的放前面
+
         if(proportion == null){
             log.error(PROPORTION_ERROR.getMsg());
             throw new MyException(CodeMsg.PROPORTION_ERROR);
@@ -160,11 +163,6 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             return Result.error(CodeMsg.PROPORTION_SUM_ERROR);
         }
 
-        //检测项目是否已经分配
-        if (projectInfo.getAllocationStatus() != 0 ){
-            return Result.error(CodeMsg.PROJECT_HAS_BEEN_ALLOCATED);
-        }
-
 
         if (System.currentTimeMillis() >= projectInfo.getDeadline().getTime() ){
             return Result.error(CodeMsg.PROJECT_ALLOCATION_OVERDUE);
@@ -172,13 +170,21 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
         //标记项目状态已经更新
         redisTemplate.opsForValue().set(DEADLINE_FLAG,"Y");
+
+
+        Integer allocationStatus = projectInfo.getAllocationStatus();
         //如果是申请里面的,就放入临时表中
         if (applyInfoMapper.getApplyFormByProjectId(projectId) != null){
             log.info("放入临时表");
             //修改订单状态
             projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.APPLY_FOR_MODIFYING.getStatus());
-            allocationInfoMapper.uploadAllocationInfoToTempTable(map,projectId);
+            allocationInfoMapper.uploadAllocationInfoToTempTable(map,projectId,projectInfo.getScore());
             return new Result();
+        }
+
+        //检测项目是否已经分配
+        if (allocationStatus == 2 ){
+            return Result.error(CodeMsg.PROJECT_HAS_BEEN_ALLOCATED);
         }
         allocationInfoMapper.uploadAllocationInfo(map,projectId,projectInfo.getScore());
         //写入数据库  前端传入的是成绩整数百分比,所以要除以100
