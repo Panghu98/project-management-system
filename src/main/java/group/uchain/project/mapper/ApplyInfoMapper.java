@@ -2,8 +2,8 @@ package group.uchain.project.mapper;
 
 import group.uchain.project.entity.ApplyConfirmForm;
 import group.uchain.project.entity.ApplyForm;
+import group.uchain.project.vo.ApplyDetail;
 import group.uchain.project.vo.ApplyInfo;
-import group.uchain.project.vo.ApplyMessage;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -38,5 +38,6 @@ public interface ApplyInfoMapper {
      * @param userId 用户ID
      * @return
      */
-    List<ApplyMessage> getApplyMessageById(@Param("userId") Long userId);
+    List<ApplyDetail> getApplyDetailById(@Param("userId") Long userId);
+
 }

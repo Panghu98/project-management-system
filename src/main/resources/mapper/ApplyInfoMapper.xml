@@ -27,8 +27,11 @@
         from apply_info a inner join user u on a.user_id = u.user_id
         where approval_status = 0;
     </select>
-    <select id="getApplyMessageById" resultType="group.uchain.project.vo.ApplyMessage">
-        select project_id,approval_status
+    <select id="getApplyDetailById" resultType="group.uchain.project.vo.ApplyDetail">
+        select
+               project_id as projectId,
+               approval_status as approvalStatus,
+               apply_type as  applyType
         from apply_info
         where user_id = #{userId}
     </select>

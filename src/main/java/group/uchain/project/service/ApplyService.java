@@ -27,5 +27,6 @@ public interface ApplyService {
      */
     Result setApplyStatus(ApplyConfirmForm applyConfirmForm);
 
-    Result getApplyMessage();
+
+    Result getApplyDetail();
 }

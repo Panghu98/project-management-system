@@ -67,10 +67,11 @@ public class LeaderController {
         return applyService.apply(applyForm);
     }
 
-    @ApiOperation(value = "负责人获取申请消息")
-    @GetMapping("/info/getApplyMessage")
-    public Result getApplyMessage(){
-        return applyService.getApplyMessage();
+
+    @ApiOperation(value = "获取申请进度")
+    @GetMapping("/info/getApplyDetail")
+    public Result getApplyDetail(){
+        return applyService.getApplyDetail();
     }
 
 }

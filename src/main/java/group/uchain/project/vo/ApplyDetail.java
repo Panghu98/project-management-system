@@ -6,7 +6,7 @@ import lombok.Data;
  * @author panghu
  */
 @Data
-public class ApplyMessage {
+public class ApplyDetail {
 
     /**
      *项目ID
@@ -19,5 +19,10 @@ public class ApplyMessage {
      * 2.审核通过
      */
     private Integer approvalStatus;
+
+    /**
+     * 1.
+     */
+    private Integer applyType;
 
 }

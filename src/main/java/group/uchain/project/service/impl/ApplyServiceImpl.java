@@ -15,8 +15,8 @@ import group.uchain.project.mapper.ProjectInfoMapper;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.ApplyService;
 import group.uchain.project.service.UserService;
+import group.uchain.project.vo.ApplyDetail;
 import group.uchain.project.vo.ApplyInfo;
-import group.uchain.project.vo.ApplyMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,6 +86,7 @@ public class ApplyServiceImpl implements ApplyService {
     @Override
     @Transactional(rollbackFor = SQLException.class)
     public Result setApplyStatus(ApplyConfirmForm applyConfirmForm) {
+        System.err.println(applyConfirmForm.toString());
         String projectId = applyConfirmForm.getProjectId();
         int result = applyInfoMapper.updateApplyInfoStatus(applyConfirmForm);
         if (result == 0){
@@ -96,7 +97,7 @@ public class ApplyServiceImpl implements ApplyService {
 
 
         //审核不通过,还原状态
-        if (approvalStatus.equals(ApprovalStatus.NOT_APPROVAL.getApprovalStatus())){
+        if (approvalStatus.equals(ApprovalStatus.REFUSE.getApprovalStatus())){
             //如果申请的类型为延长截止时间
             if (applyType.equals(ApplyType.TIME_DELAY.getApplyType())){
                 //更改项目状态
@@ -106,6 +107,8 @@ public class ApplyServiceImpl implements ApplyService {
             }else {
                 //更改项目状态
                 projectInfoMapper.updateAllocationStatus(projectId,ProjectStatus.ALLOCATED.getStatus());
+                //删除临时分配信息
+                allocationInfoMapper.deleteAllocationTempInfoByProjectId(projectId);
             }
 
         //审核通过
@@ -140,10 +143,11 @@ public class ApplyServiceImpl implements ApplyService {
         return new Result();
     }
 
+
     @Override
-    public Result getApplyMessage() {
+    public Result getApplyDetail() {
         Long userId = userService.getCurrentUser().getUserId();
-        List<ApplyMessage> list = applyInfoMapper.getApplyMessageById(userId);
+        List<ApplyDetail> list = applyInfoMapper.getApplyDetailById(userId);
         return Result.successData(list);
     }
 
