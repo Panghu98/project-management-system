@@ -4,7 +4,7 @@ package group.uchain.project.interceptor;
 import com.alibaba.fastjson.JSON;
 
 import group.uchain.project.annotation.RoleRequired;
-import group.uchain.project.dto.User;
+import group.uchain.project.DTO.User;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.UserService;

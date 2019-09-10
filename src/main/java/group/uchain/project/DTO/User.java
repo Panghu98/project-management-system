@@ -1,7 +1,7 @@
-package group.uchain.project.dto;
+package group.uchain.project.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import group.uchain.project.entity.RegisterUser;
+import group.uchain.project.form.RegisterUser;
 import group.uchain.project.service.UserService;
 import group.uchain.project.util.MD5Util;
 import group.uchain.project.util.SaltUtil;

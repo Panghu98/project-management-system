@@ -1,4 +1,4 @@
-package group.uchain.project.dto;
+package group.uchain.project.DTO;
 
 import lombok.Data;
 

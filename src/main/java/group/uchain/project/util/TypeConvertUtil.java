@@ -2,7 +2,7 @@ package group.uchain.project.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.DTO.ProjectInfo;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,4 +1,4 @@
-package group.uchain.project.vo;
+package group.uchain.project.VO;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

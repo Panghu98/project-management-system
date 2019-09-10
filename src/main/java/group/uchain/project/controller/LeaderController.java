@@ -1,8 +1,8 @@
 package group.uchain.project.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import group.uchain.project.dto.ProjectInfo;
-import group.uchain.project.entity.ApplyForm;
+import group.uchain.project.DTO.ProjectInfo;
+import group.uchain.project.form.ApplyForm;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.ApplyService;
 import group.uchain.project.service.FileService;

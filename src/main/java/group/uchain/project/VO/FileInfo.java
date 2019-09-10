@@ -1,4 +1,4 @@
-package group.uchain.project.vo;
+package group.uchain.project.VO;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

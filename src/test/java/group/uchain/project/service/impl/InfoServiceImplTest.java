@@ -1,6 +1,6 @@
 package group.uchain.project.service.impl;
 
-import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.DTO.ProjectInfo;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.InfoService;
 import org.junit.Test;
@@ -10,13 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.sound.sampled.Line;
-
-import java.util.List;
-import java.util.Set;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

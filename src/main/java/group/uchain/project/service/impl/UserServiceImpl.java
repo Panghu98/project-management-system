@@ -1,9 +1,10 @@
 package group.uchain.project.service.impl;
 
 
-import group.uchain.project.dto.User;
-import group.uchain.project.entity.PasswordUpdateForm;
-import group.uchain.project.entity.RegisterUser;
+import group.uchain.project.DTO.User;
+import group.uchain.project.enums.RoleEnum;
+import group.uchain.project.form.PasswordUpdateForm;
+import group.uchain.project.form.RegisterUser;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.mapper.UserFormMapper;
 import group.uchain.project.result.Result;
@@ -124,10 +125,10 @@ public class UserServiceImpl implements UserService {
         if (user == null){
             return Result.error(CodeMsg.USER_NOT_EXIST);
         }
-        if (user.getRole().equals("3")) {
+        if (user.getRole().toString().equals(RoleEnum.SUPER_ADMIN.getRole())) {
             return Result.error(CodeMsg.NO_PERMISSION);
         }
-        ListOperations<String, group.uchain.project.vo.User> listOperations = redisTemplate.opsForList();
+        ListOperations<String, group.uchain.project.VO.User> listOperations = redisTemplate.opsForList();
         userMapper.deleteUser(userId);
         //刷新缓存
         listOperations.getOperations().delete(USER_REDIS_PREFIX);

@@ -1,7 +1,7 @@
 package group.uchain.project.mapper;
 
-import group.uchain.project.dto.OverdueProjectInfo;
-import group.uchain.project.vo.AllocationInfo2;
+import group.uchain.project.DTO.OverdueProjectInfo;
+import group.uchain.project.VO.AllocationInfo2;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

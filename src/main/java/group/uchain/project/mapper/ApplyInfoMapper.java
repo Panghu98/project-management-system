@@ -1,28 +1,50 @@
 package group.uchain.project.mapper;
 
-import group.uchain.project.entity.ApplyConfirmForm;
-import group.uchain.project.entity.ApplyForm;
-import group.uchain.project.vo.ApplyDetail;
-import group.uchain.project.vo.ApplyInfo;
+import group.uchain.project.form.ApplyConfirmForm;
+import group.uchain.project.form.ApplyForm;
+import group.uchain.project.VO.ApplyDetail;
+import group.uchain.project.VO.ApplyInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * @author panghu
+ */
 public interface ApplyInfoMapper {
 
-    int deleteApplyInfoByProjectId(String projectId);
+    /**
+     * 通过项目编号更改申请信息的有效性
+     * @param projectId 项目编号
+     * @return 影响的行数
+     */
+    int setApplyValidStatusByProjectId(@Param("projectId") String projectId,@Param("validStatus") Integer validStatus);
 
     /**
      * 获取项目申请记录次数
      * @param projectId 项目编号
      * @return
      */
-    int getApplyMount(String projectId);
+    int getValidApplyCount(String projectId);
 
+    /**
+     * 增加申请信息
+     * @param applyForm 申请表单
+     * @return
+     */
     int addOne(ApplyForm applyForm);
 
+    /**
+     * 通过项目编号来获取ApplyForm
+     * @param projectId  项目编号
+     * @return
+     */
     ApplyForm getApplyFormByProjectId(@Param("projectId") String projectId);
 
+    /**
+     * 获取所有未审核的ApplyInfo
+     * @return
+     */
     List<ApplyInfo> getAllApplyInfoNotApproval();
 
     /**

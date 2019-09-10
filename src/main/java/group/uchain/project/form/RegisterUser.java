@@ -1,4 +1,4 @@
-package group.uchain.project.entity;
+package group.uchain.project.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

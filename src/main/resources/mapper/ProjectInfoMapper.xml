@@ -66,7 +66,7 @@
     </select>
     <!--使用内连接代替子查询进行SQL优化-->
     <!--通过AuthenticationContext中放入用户ID（用户名无法作为用户的唯一标示）来获取用户所对应的项目信息-->
-    <select id="getAllProjectInfoByUserId" resultType="group.uchain.project.dto.ProjectInfo">
+    <select id="getAllProjectInfoByUserId" resultType="group.uchain.project.DTO.ProjectInfo">
         select p.`id`,
                `category`,
                `instruction`,
@@ -90,7 +90,7 @@
     <!--Mybatis是根据查询到的记录数进行转换的(1表示为true,0表示为false) 。
             然而，如果查询到多条记录(大于1)，则返回的布尔值为false-->
     <!--获取所有未设置截止日期的项目信息-->
-    <select id="getAllProjectInfo" resultType="group.uchain.project.dto.ProjectInfo">
+    <select id="getAllProjectInfo" resultType="group.uchain.project.DTO.ProjectInfo">
         select p.id as id,
                `category`,
                `instruction`,
@@ -111,7 +111,7 @@
         order by allocation_status,date
     </select>
     <!--获取所有已设置截止日期的项目-->
-    <select id="getDeadlineProjectInfo" resultType="group.uchain.project.dto.ProjectInfo">
+    <select id="getDeadlineProjectInfo" resultType="group.uchain.project.DTO.ProjectInfo">
         select p.id  as id,
                `category`,
                `instruction`,
@@ -134,7 +134,7 @@
         order by allocation_status, date
     </select>
 
-    <select id="getProjectInfoByProjectId" resultType="group.uchain.project.dto.ProjectInfo">
+    <select id="getProjectInfoByProjectId" resultType="group.uchain.project.DTO.ProjectInfo">
         select `id`,`category`, `instruction`, `level`, `grade`, `number`,
                `variety`, `score`, `leader`, `division`,`date`,`allocation_status` as allocationStatus,deadline
         from project_info
@@ -143,7 +143,7 @@
     <select id="getRemainingTime" resultType="java.lang.Integer">
         select remaining_time as remainingTime from project_info where id = #{id}
     </select>
-    <select id="getAllOverdueProjectId" resultType="group.uchain.project.dto.OverdueProjectInfo">
+    <select id="getAllOverdueProjectId" resultType="group.uchain.project.DTO.OverdueProjectInfo">
         select p.id as projectId,score,u.user_id as userId
                from project_info p
                 inner join user u

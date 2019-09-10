@@ -1,7 +1,7 @@
 package group.uchain.project.mapper;
 
-import group.uchain.project.dto.OverdueProjectInfo;
-import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.DTO.OverdueProjectInfo;
+import group.uchain.project.DTO.ProjectInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;

@@ -1,7 +1,7 @@
 package group.uchain.project.rabbitmq;
 
 import com.alibaba.fastjson.JSONArray;
-import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.DTO.ProjectInfo;
 import group.uchain.project.mapper.ProjectInfoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

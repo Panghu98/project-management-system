@@ -1,7 +1,7 @@
 package group.uchain.project.service;
 
-import group.uchain.project.entity.ApplyConfirmForm;
-import group.uchain.project.entity.ApplyForm;
+import group.uchain.project.form.ApplyConfirmForm;
+import group.uchain.project.form.ApplyForm;
 import group.uchain.project.result.Result;
 
 public interface ApplyService {
@@ -16,7 +16,7 @@ public interface ApplyService {
 
     /**
      * 获取所有的申请信息
-     * @return
+     * @return  List of ApplyInfo
      */
     Result getAllApplyInfo();
 
@@ -28,5 +28,9 @@ public interface ApplyService {
     Result setApplyStatus(ApplyConfirmForm applyConfirmForm);
 
 
+    /**
+     * 负责人获取申请进度
+     * @return ApplyDetail数组
+     */
     Result getApplyDetail();
 }

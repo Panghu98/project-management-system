@@ -3,7 +3,7 @@
 <mapper namespace="group.uchain.project.mapper.AllocationInfoMapper">
 
 
-    <resultMap id="Allocation" type="group.uchain.project.vo.AllocationInfo2">
+    <resultMap id="Allocation" type="group.uchain.project.VO.AllocationInfo2">
         <id column="id" property="projectId"/>
         <result column="category" property="category"/>
         <result column="leader" property="leader"/>
@@ -13,7 +13,7 @@
         <result column="number" property="number"/>
         <result column="variety" property="variety"/>
         <result column="score" property="score"/>
-        <collection property="teacherInfos" ofType="group.uchain.project.vo.TeacherInfo"
+        <collection property="teacherInfos" ofType="group.uchain.project.VO.TeacherInfo"
                     javaType="java.util.ArrayList" columnPrefix="t_">
             <!--column指的是查询结果中的列名-->
             <id column="username" property="username" jdbcType="VARCHAR"/>
@@ -81,7 +81,7 @@
         where project_id = #{projectId}
     </delete>
 
-    <select id="getUserAllocationInfo" resultType="group.uchain.project.vo.AllocationInfo">
+    <select id="getUserAllocationInfo" resultType="group.uchain.project.VO.AllocationInfo">
         select a.project_id as projectId,
                a.user_score as userScore,
                p.category,
@@ -93,7 +93,7 @@
         where a.user_id = #{userId} and a.status = 1
     </select>
 
-    <select id="getAllAllocationInfo" resultMap="Allocation" resultType="group.uchain.project.vo.AllocationInfo2">
+    <select id="getAllAllocationInfo" resultMap="Allocation" resultType="group.uchain.project.VO.AllocationInfo2">
         select p.id,
                p.category,
                p.leader,
@@ -112,7 +112,7 @@
         <!--p.date &lt;= #{end}(小于截止时间)  p.date  &gt;= #{start}(大于开始时间)-->
         where p.id = a.project_id and p.date &lt;= #{end} and p.date  &gt;= #{start}
     </select>
-    <select id="getAllocationTempInfoByProjectId" resultType="group.uchain.project.dto.AllocationTempInfo">
+    <select id="getAllocationTempInfoByProjectId" resultType="group.uchain.project.DTO.AllocationTempInfo">
         select project_id as projectId,
                user_id as userId,
                proportion

@@ -1,8 +1,8 @@
 package group.uchain.project.controller;
 
 import group.uchain.project.annotation.RoleRequired;
-import group.uchain.project.entity.LoginUser;
-import group.uchain.project.entity.PasswordUpdateForm;
+import group.uchain.project.form.LoginUser;
+import group.uchain.project.form.PasswordUpdateForm;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.InfoService;

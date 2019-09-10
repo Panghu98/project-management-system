@@ -1,6 +1,6 @@
 package group.uchain.project.mapper;
 
-import group.uchain.project.entity.ApplyForm;
+import group.uchain.project.form.ApplyForm;
 import group.uchain.project.enums.ApplyType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +27,6 @@ public class ApplyInfoMapperTest {
 
     @Test
     public void getAllApplyInfoNotApproval(){
-        System.out.println(applyInfoMapper.getApplyMount("P114"));
+        System.out.println(applyInfoMapper.getValidApplyCount("P114"));
     }
 }

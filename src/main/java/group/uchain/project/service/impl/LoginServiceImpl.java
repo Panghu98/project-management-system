@@ -1,7 +1,7 @@
 package group.uchain.project.service.impl;
 
 
-import group.uchain.project.dto.User;
+import group.uchain.project.DTO.User;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.mapper.UserFormMapper;
 import group.uchain.project.result.Result;

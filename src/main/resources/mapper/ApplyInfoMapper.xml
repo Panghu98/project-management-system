@@ -10,33 +10,44 @@
         set approval_status = #{approvalStatus}
         where project_id = #{projectId}
     </update>
-    <delete id="deleteApplyInfoByProjectId">
-        delete from apply_info where project_id = #{projectId}
+    <delete id="setApplyValidStatusByProjectId">
+        update apply_info set valid_status = #{validStatus}
+        <where>
+            <if test="projectId!=null">
+                `project_id` = #{projectId}
+            </if>
+        </where>
     </delete>
-    <select id="getApplyFormByProjectId" resultType="group.uchain.project.entity.ApplyForm">
+    <select id="getApplyFormByProjectId" resultType="group.uchain.project.form.ApplyForm">
         select apply_type as applyType,
                user_id applyUser,
                project_id projectId
         from apply_info
         where project_id = #{projectId} limit 1;
     </select>
-    <select id="getAllApplyInfoNotApproval" resultType="group.uchain.project.vo.ApplyInfo">
+    <select id="getAllApplyInfoNotApproval" resultType="group.uchain.project.VO.ApplyInfo">
         select apply_type as applyType,
                u.username applyUser,
                project_id projectId
         from apply_info a inner join user u on a.user_id = u.user_id
-        where approval_status = 0;
+        where approval_status = 0 ;
     </select>
-    <select id="getApplyDetailById" resultType="group.uchain.project.vo.ApplyDetail">
+    <select id="getApplyDetailById" resultType="group.uchain.project.VO.ApplyDetail">
         select
                project_id as projectId,
                approval_status as approvalStatus,
                apply_type as  applyType
         from apply_info
         where user_id = #{userId}
+        order by apply_time
     </select>
-    <select id="getApplyMount" resultType="java.lang.Integer">
-        select count(id) from apply_info where project_id = #{projectId} and approval_status = 0;
+    <select id="getValidApplyCount" resultType="java.lang.Integer">
+        select count(id)
+            from apply_info
+        where
+              project_id = #{projectId} and approval_status = 0 and valid_status = 1
+        <!--存在则退出,减少查询-->
+        limit 1;
     </select>
 
 </mapper>

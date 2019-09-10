@@ -1,9 +1,9 @@
 package group.uchain.project.service;
 
 import com.alibaba.fastjson.JSONObject;
-import group.uchain.project.dto.ProjectInfo;
+import group.uchain.project.DTO.ProjectInfo;
 import group.uchain.project.result.Result;
-import group.uchain.project.vo.User;
+import group.uchain.project.VO.User;
 
 import java.util.List;
 

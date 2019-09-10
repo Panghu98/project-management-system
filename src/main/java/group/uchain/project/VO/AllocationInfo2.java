@@ -1,9 +1,7 @@
-package group.uchain.project.vo;
+package group.uchain.project.VO;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.NonNull;
 
 import java.io.Serializable;
 import java.util.List;

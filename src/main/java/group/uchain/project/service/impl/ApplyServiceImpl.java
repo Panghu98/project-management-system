@@ -1,13 +1,10 @@
 package group.uchain.project.service.impl;
 
-import group.uchain.project.dto.AllocationTempInfo;
-import group.uchain.project.dto.ProjectInfo;
-import group.uchain.project.entity.ApplyConfirmForm;
-import group.uchain.project.entity.ApplyForm;
-import group.uchain.project.enums.ApplyType;
-import group.uchain.project.enums.ApprovalStatus;
-import group.uchain.project.enums.CodeMsg;
-import group.uchain.project.enums.ProjectStatus;
+import group.uchain.project.DTO.AllocationTempInfo;
+import group.uchain.project.DTO.ProjectInfo;
+import group.uchain.project.enums.*;
+import group.uchain.project.form.ApplyConfirmForm;
+import group.uchain.project.form.ApplyForm;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.mapper.AllocationInfoMapper;
 import group.uchain.project.mapper.ApplyInfoMapper;
@@ -15,8 +12,8 @@ import group.uchain.project.mapper.ProjectInfoMapper;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.ApplyService;
 import group.uchain.project.service.UserService;
-import group.uchain.project.vo.ApplyDetail;
-import group.uchain.project.vo.ApplyInfo;
+import group.uchain.project.VO.ApplyDetail;
+import group.uchain.project.VO.ApplyInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,7 +55,7 @@ public class ApplyServiceImpl implements ApplyService {
     public Result apply(ApplyForm applyForm) {
         String projectId= applyForm.getProjectId();
 
-        int count = applyInfoMapper.getApplyMount(projectId);
+        int count = applyInfoMapper.getValidApplyCount(projectId);
         if (count > 0) {
             log.error("项目编号{}重复申请",projectId);
             return Result.error(CodeMsg.APPLY_REPEAT__ERROR);
@@ -86,7 +83,6 @@ public class ApplyServiceImpl implements ApplyService {
     @Override
     @Transactional(rollbackFor = SQLException.class)
     public Result setApplyStatus(ApplyConfirmForm applyConfirmForm) {
-        System.err.println(applyConfirmForm.toString());
         String projectId = applyConfirmForm.getProjectId();
         int result = applyInfoMapper.updateApplyInfoStatus(applyConfirmForm);
         if (result == 0){
@@ -138,8 +134,8 @@ public class ApplyServiceImpl implements ApplyService {
                 projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.UNDISTRIBUTED.getStatus());
             }
         }
-        //删除申请信息  (这里可以通过设置状态来达到有有效性)
-        applyInfoMapper.deleteApplyInfoByProjectId(projectId);
+        //设置申请信息状态为无效
+        applyInfoMapper.setApplyValidStatusByProjectId(projectId, ApplyInfoValidStatus.NOT_VALID.getValidStatus());
         return new Result();
     }
 

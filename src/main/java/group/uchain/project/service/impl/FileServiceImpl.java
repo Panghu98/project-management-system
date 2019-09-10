@@ -1,8 +1,8 @@
 package group.uchain.project.service.impl;
 
-import group.uchain.project.dto.ProjectInfo;
-import group.uchain.project.dto.User;
-import group.uchain.project.entity.RegisterUser;
+import group.uchain.project.DTO.ProjectInfo;
+import group.uchain.project.DTO.User;
+import group.uchain.project.form.RegisterUser;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.mapper.AllocationInfoMapper;
@@ -13,8 +13,8 @@ import group.uchain.project.rabbitmq.MQSender;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;
 import group.uchain.project.util.ExcelUtil;
-import group.uchain.project.vo.AllocationInfo2;
-import group.uchain.project.vo.FileInfo;
+import group.uchain.project.VO.AllocationInfo2;
+import group.uchain.project.VO.FileInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;

@@ -1,4 +1,4 @@
-package group.uchain.project.entity;
+package group.uchain.project.form;
 import lombok.Data;
 
 import javax.validation.constraints.Max;

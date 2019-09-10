@@ -1,9 +1,9 @@
 package group.uchain.project.controller;
 
 import group.uchain.project.annotation.RoleRequired;
-import group.uchain.project.dto.ProjectInfo;
-import group.uchain.project.entity.DeadLineForm;
-import group.uchain.project.entity.TimeLimit;
+import group.uchain.project.DTO.ProjectInfo;
+import group.uchain.project.form.DeadLineForm;
+import group.uchain.project.form.TimeLimit;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;

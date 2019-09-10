@@ -1,6 +1,6 @@
 package group.uchain.project.util;
 
-import group.uchain.project.dto.OverdueProjectInfo;
+import group.uchain.project.DTO.OverdueProjectInfo;
 import group.uchain.project.mapper.AllocationInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
 import lombok.extern.slf4j.Slf4j;

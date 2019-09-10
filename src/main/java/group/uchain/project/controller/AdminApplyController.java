@@ -1,7 +1,7 @@
 package group.uchain.project.controller;
 
 import group.uchain.project.annotation.RoleRequired;
-import group.uchain.project.entity.ApplyConfirmForm;
+import group.uchain.project.form.ApplyConfirmForm;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.ApplyService;
