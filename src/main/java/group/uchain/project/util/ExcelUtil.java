@@ -1,5 +1,6 @@
 package group.uchain.project.util;
 
+import group.uchain.project.enums.AllocationStatus;
 import group.uchain.project.form.RegisterUser;
 import group.uchain.project.DTO.ProjectInfo;
 import group.uchain.project.enums.CodeMsg;
@@ -104,8 +105,9 @@ public class ExcelUtil {
             projectInfo.setScore(score);
             projectInfo.setVariety(variety);
             projectInfo.setDate(new Date());
-            projectInfo.setAllocationStatus(0);
+            projectInfo.setAllocationStatus(AllocationStatus.NOT_ALLOCATED.getStatus());
             projectInfo.setDeadline(new Date(0));
+            projectInfo.setFileUploadStatus(0);
 
             list.add(projectInfo);
         }
