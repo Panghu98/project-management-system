@@ -1,33 +1,28 @@
-import org.junit.Test;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Demo {
 
-    @Test
-    public void test(){
-        System.err.println(System.currentTimeMillis());
-        System.out.println(System.currentTimeMillis()-10*24*1000*60*60);
-    }
+    public static void main(String[] args) {
 
-    @Test
-    public void getTimeString(){
-        Date date = new Date();
-        String dateFormat = new SimpleDateFormat("yyyy-MM-dd").format(date);
-        System.out.println(dateFormat);
-    }
+        //short
+        System.out.println("short所占二进制位数为"+Short.SIZE);
 
-    @Test
-    public void testJson(){
-        String str = "{\"projectId\":\"H12\",\"map\":[[\"123456789104\",10],[\"123456789107\",10]]}";
-        System.err.println(str);
-        str = str.replace(",\"", ":\"")
-                .replace(":\"map\":[", ",\"map\":{")
-                .replace("]]","}")
-                .replace("[","")
-                .replace("]", "");
-        System.out.println(str);
-    }
+        //int
+        System.out.println("int 所占二进制位数为"+Integer.SIZE);
 
+        //long
+        System.out.println("long 所占二进制位数为"+Long.SIZE);
+
+        //float
+        System.out.println("float所占二进制位数为"+Float.SIZE);
+
+        //double
+        System.out.println("double所占二进制位数为"+Double.SIZE);
+
+        //byte
+        System.out.println("byte所占二进制位数为"+Byte.SIZE);
+
+        //char
+        System.out.println("char所占二进制位数为"+Character.SIZE);
+
+    }
+    
 }

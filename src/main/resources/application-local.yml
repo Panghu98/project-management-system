@@ -1,6 +1,4 @@
 spring:
-  http:
-
   mvc:
     view:
       prefix: /

@@ -6,8 +6,20 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/project?useSSL=false&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
-    password: "000411"
+    password: "root"
     driver-class-name: com.mysql.cj.jdbc.Driver
+  # Redis
+  redis:
+    port: 6380
+    host: 127.0.0.1
+    password: "root"
+    database: 0
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        min-idle: 0
+        max-idle: 8
   # RabbitMQ
   rabbitmq:
     host: 127.0.0.1
@@ -40,9 +52,9 @@ jwt:
   expiration: 86400
 
 filepath:
-  project-excel: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/register-excel/
-  register-excel: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/project-info-excel/
-  evident: /home/panghu/IdeaProjects/Project_Management_System/src/main/resources/evident/
+  project-excel: /root/home/panghu/Project/project/register-excel/
+  register-excel: /root/home/panghu/Project/project/project-info-excel/
+  evident: /root/home/panghu/Project/project/evident/
 
 file:
   zip-name: files.zip
