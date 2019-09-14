@@ -1,5 +1,6 @@
 package group.uchain.project.mapper;
 
+import group.uchain.project.form.ApplyConfirmForm;
 import group.uchain.project.form.ApplyForm;
 import group.uchain.project.enums.ApplyType;
 import org.junit.Test;
@@ -27,6 +28,16 @@ public class ApplyInfoMapperTest {
 
     @Test
     public void getAllApplyInfoNotApproval(){
-        System.out.println(applyInfoMapper.getValidApplyCount("P114"));
+        System.out.println(applyInfoMapper.getApplyDetailById(123456789102L));
+        System.out.println(applyInfoMapper.getApplyDetailById(123456789102L).size());
+    }
+
+    @Test
+    public void setApplyValidStatusByProjectId() {
+        ApplyConfirmForm applyConfirmForm = new ApplyConfirmForm();
+        applyConfirmForm.setApplyType(1);
+        applyConfirmForm.setApprovalStatus(2);
+        applyConfirmForm.setProjectId("P11");
+        System.err.println(applyInfoMapper.updateApplyInfoStatus(applyConfirmForm));
     }
 }

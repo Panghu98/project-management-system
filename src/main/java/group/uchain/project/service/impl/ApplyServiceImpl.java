@@ -70,7 +70,7 @@ public class ApplyServiceImpl implements ApplyService {
         //申请成功之后减少
         projectInfoMapper.minusRemainingTime(projectId);
         //将申请写入数据库
-        applyInfoMapper.addOne(applyForm);
+         applyInfoMapper.addOne(applyForm);
         return new Result();
     }
 
@@ -134,8 +134,7 @@ public class ApplyServiceImpl implements ApplyService {
                 projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.UNDISTRIBUTED.getStatus());
             }
         }
-        //设置申请信息状态为无效
-        applyInfoMapper.setApplyValidStatusByProjectId(projectId, ApplyInfoValidStatus.NOT_VALID.getValidStatus());
+        //设置申请信息状态为无效  已处理则为无效
         return new Result();
     }
 

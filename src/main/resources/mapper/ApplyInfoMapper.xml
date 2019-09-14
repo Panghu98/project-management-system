@@ -5,19 +5,15 @@
     <insert id="addOne">
         insert apply_info (project_id,user_id,apply_type) values (#{projectId},#{applyUser},#{applyType})
     </insert>
+    <!--修改最新的申请消息-->
     <update id="updateApplyInfoStatus">
         update apply_info
         set approval_status = #{approvalStatus}
         where project_id = #{projectId}
+          and apply_type = #{applyType}
+          and id = (select id from
+                        (select max(id) as id from apply_info where project_id = #{projectId} limit 1)as t)
     </update>
-    <delete id="setApplyValidStatusByProjectId">
-        update apply_info set valid_status = #{validStatus}
-        <where>
-            <if test="projectId!=null">
-                `project_id` = #{projectId}
-            </if>
-        </where>
-    </delete>
     <select id="getApplyFormByProjectId" resultType="group.uchain.project.form.ApplyForm">
         select apply_type as applyType,
                user_id applyUser,
@@ -46,7 +42,7 @@
         select count(id)
             from apply_info
         where
-              project_id = #{projectId} and approval_status = 0 and valid_status = 1
+              project_id = #{projectId} and approval_status = 0
         <!--存在则退出,减少查询-->
         limit 1;
     </select>

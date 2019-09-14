@@ -13,12 +13,6 @@ import java.util.List;
  */
 public interface ApplyInfoMapper {
 
-    /**
-     * 通过项目编号更改申请信息的有效性
-     * @param projectId 项目编号
-     * @return 影响的行数
-     */
-    int setApplyValidStatusByProjectId(@Param("projectId") String projectId,@Param("validStatus") Integer validStatus);
 
     /**
      * 获取项目申请记录次数

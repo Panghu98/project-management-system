@@ -1,6 +1,9 @@
 package group.uchain.project.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author panghu
@@ -21,8 +24,12 @@ public class ApplyDetail {
     private Integer approvalStatus;
 
     /**
-     * 1.
+     * 1.申请延长分配时间
+     * 2.申请重新分配
      */
     private Integer applyType;
+
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    private Date applyTime;
 
 }
