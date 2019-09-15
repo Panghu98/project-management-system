@@ -271,14 +271,19 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     @Override
     public Result deleteProjectInfo(String id) {
         HashOperations<String,String,ProjectInfo> hashOperations = redisTemplate.opsForHash();
+        ZSetOperations<String,ProjectInfo> zSetOperations = redisTemplate.opsForZSet();
         int result = projectInfoMapper.deleteProjectInfo(id);
-        System.out.println(result);
+        ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(id);
         if (result >= 1){
             //删除成功,同时刷新缓存
             //未设置截止时间的项目删除占多数,所以使用缓存刷新
-            hashOperations.delete(hashKey,id);
-            //设置了截止时间的项目占极少数,使用数据库刷新
-            redisTemplate.opsForValue().set(DEADLINE_FLAG,"Y");
+            Long count;
+            count = hashOperations.delete(hashKey,id);
+            log.info("共有{}条数据从缓存哈希中删除",count);
+            //同步删除  保证项目信息的一致性,删除的数据可能会和缓存中的数据不一致
+            count = zSetOperations.remove(setKey,projectInfo);
+            zSetOperations.removeRange(setKey,0,2);
+            log.info("共有{}条数据从缓存集合中删除",count);
             return new Result();
         }else {
             return Result.error(PROJECT_ID_NOI_EXIST);
