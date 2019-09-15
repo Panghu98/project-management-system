@@ -68,6 +68,8 @@ public class FileServiceImpl implements FileService {
 
     private static final String DEADLINE_FLAG = "project-info-has-deadline-flag";
 
+    private static final String USER_FLAG = "user-flag";
+
     @Autowired
     public FileServiceImpl(ProjectInfoMapper projectInfoMapper, UserFormMapper userFormMapper,
                            MQSender mqSender, AllocationInfoMapper allocationInfoMapper,
@@ -160,7 +162,7 @@ public class FileServiceImpl implements FileService {
         }
 
         //判断文件后缀名
-        if (!file.getContentType().contains(".xlsx")){
+        if (!file.getOriginalFilename().contains(".xlsx")){
             throw new MyException(CodeMsg.FILE_TYPE_ERROR);
         }
 
@@ -202,6 +204,11 @@ public class FileServiceImpl implements FileService {
         }
         //注册用户入库
         userFormMapper.registerMultiUser(users);
+
+        //不能直接新注册的用户加入缓存,达不到排序的作用,需要进行中文排序
+
+        //标记缓存需要更新
+        redisTemplate.opsForValue().set(USER_FLAG,"Y");
         return Result.successData(users);
 
     }

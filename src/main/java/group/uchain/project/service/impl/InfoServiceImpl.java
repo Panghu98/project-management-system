@@ -70,6 +70,8 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
      */
     private String setKey = "deadline-set-key";
 
+    private static final String USER_FLAG = "user-flag";
+
 
     @Autowired
     public InfoServiceImpl(UserFormMapper userFormMapper, ProjectInfoMapper projectInfoMapper,
@@ -94,19 +96,22 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     public Result<List<User>> getAllUser() {
         //用户需要根据中文名称进行排序,不能直接使用中文作为score
         ListOperations<String,User> listOperations = redisTemplate.opsForList();
-        Long size = listOperations.size(USER_REDIS_PREFIX);
-        if (size == 0){
-            log.info("缓存为空,从数据库中获取用户并放入缓存");
+        long ttl = redisTemplate.getExpire(USER_FLAG);
+        String flag = redisTemplate.opsForValue().get(USER_FLAG).toString();
+        if (ttl==-2||flag.equals("Y")){
+            log.info("缓存为空或者缓存存在更新,从数据库中获取用户并放入缓存");
             List<User> list = userFormMapper.getAllUser();
             listOperations.rightPushAll(USER_REDIS_PREFIX,list);
             listOperations.getOperations().expire(USER_REDIS_PREFIX,1,TimeUnit.DAYS);
+            redisTemplate.opsForValue().set(USER_FLAG,"N");
             return Result.successData(list);
         }else {
+            log.info("用户信息距离过期还有{}秒",ttl);
             log.info("缓存不为空,从缓存中获取用户");
             Long end = listOperations.size(USER_REDIS_PREFIX);
             //从左到右进行读取
             List<User> userList =listOperations.range(USER_REDIS_PREFIX,0,end);
-            return Result.successData(userList) ;
+            return Result.successData(userList);
         }
     }
 
@@ -217,8 +222,9 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         // Y有新的数据写入 ,N无新的数据写入
         //获取标记状态并且在刷新缓存之后重置状态为N
         String columnFlag = Objects.requireNonNull(redisTemplate.opsForValue().get(FLAG_KEY)).toString();
-        if ("Y".equals(columnFlag) || hashOperations.keys(hashKey).size() == 0){
-            log.info("数据存在更新,从数据库中读取数据");
+        long ttl = redisTemplate.getExpire(hashKey);
+        if ("Y".equals(columnFlag) || ttl == -2){
+            log.info("数据存在更新或者过期,从数据库中读取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
             //将最新的数据放入缓存
             Map<String, ProjectInfo> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
@@ -231,6 +237,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             return Result.successData(projectInfoList);
         }else {
             log.info("缓存中中为最新的键值,直接从缓存中取值");
+            log.info("剩余的过期时间为{}秒",ttl);
             //获取所有的Key
             Set<String> projectIdSet = hashOperations.keys(hashKey);
             //获取所有的结果
@@ -248,8 +255,9 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     public Result getDeadlineProjectInfo() {
         ZSetOperations<String,ProjectInfo> zSetOperations = redisTemplate.opsForZSet();
         String flag = redisTemplate.opsForValue().get(DEADLINE_FLAG).toString();
-        if ("Y".equals(flag) || zSetOperations.size(setKey) == 0){
-            log.info("缓存中不是最新的值,从数据库中获取数据");
+        long ttl = redisTemplate.getExpire(setKey);
+        if ("Y".equals(flag) || ttl == -2){
+            log.info("缓存中不是最新的值或者缓存已过期,从数据库中获取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getDeadlineProjectInfo();
             for (ProjectInfo projectInfo:projectInfoList
                  ) {
@@ -262,6 +270,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             return Result.successData(projectInfoList);
         }else {
             log.info("缓存中中为最新的键值,直接从缓存中取值");
+            log.info("剩余的过期时间为{}秒",ttl);
             Set<ProjectInfo> set = zSetOperations.rangeByScore(setKey,0,2);
             List<ProjectInfo> list = new ArrayList<>(set);
             return Result.successData(list);
@@ -369,6 +378,9 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         }
         zSetOperations.getOperations().expire(setKey,1,TimeUnit.DAYS);
         valueOperations.set(DEADLINE_FLAG,"N");
+
+
+        valueOperations.set(USER_FLAG,"Y");
 
     }
 
