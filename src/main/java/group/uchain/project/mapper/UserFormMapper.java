@@ -54,7 +54,7 @@ public interface UserFormMapper {
      * 获取所有的用户
      * @return
      */
-    List<group.uchain.project.VO.User> getAllUser();
+    List<group.uchain.project.vo.User> getAllUser();
 
     /**
      * 通过用户ID删除用户

@@ -15,8 +15,8 @@ import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;
 import group.uchain.project.service.InfoService;
 import group.uchain.project.service.UserService;
-import group.uchain.project.VO.AllocationInfo;
-import group.uchain.project.VO.User;
+import group.uchain.project.vo.AllocationInfo;
+import group.uchain.project.vo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -355,7 +355,6 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         //未设置截止时间的项目缓存预热操作
         List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
-        System.err.println(projectInfoList);
         //将最新的数据放入缓存
         Map<String, ProjectInfo> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId,(p)->p));
         //清理缓存,以免出现脏数据

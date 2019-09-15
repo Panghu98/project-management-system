@@ -2,8 +2,8 @@ package group.uchain.project.mapper;
 
 import group.uchain.project.form.ApplyConfirmForm;
 import group.uchain.project.form.ApplyForm;
-import group.uchain.project.VO.ApplyDetail;
-import group.uchain.project.VO.ApplyInfo;
+import group.uchain.project.vo.ApplyDetail;
+import group.uchain.project.vo.ApplyInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

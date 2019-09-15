@@ -2,8 +2,8 @@ package group.uchain.project.mapper;
 
 import group.uchain.project.DTO.AllocationTempInfo;
 import group.uchain.project.DTO.OverdueProjectInfo;
-import group.uchain.project.VO.AllocationInfo;
-import group.uchain.project.VO.AllocationInfo2;
+import group.uchain.project.vo.AllocationInfo;
+import group.uchain.project.vo.AllocationInfo2;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;

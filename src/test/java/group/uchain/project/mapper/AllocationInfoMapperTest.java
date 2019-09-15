@@ -1,7 +1,7 @@
 package group.uchain.project.mapper;
 
 import group.uchain.project.DTO.OverdueProjectInfo;
-import group.uchain.project.VO.AllocationInfo2;
+import group.uchain.project.vo.AllocationInfo2;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +58,7 @@ public class AllocationInfoMapperTest {
         System.err.println(end);
         List<AllocationInfo2> list = allocationInfoMapper.getAllAllocationInfo(start,end);
         System.out.println(list);
+        System.err.println(list.size());
     }
 
     @Test

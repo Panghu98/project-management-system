@@ -1,3 +1,5 @@
+import java.util.Date;
+
 public class Demo {
 
     public static void main(String[] args) {
@@ -23,6 +25,10 @@ public class Demo {
         //char
         System.out.println("char所占二进制位数为"+Character.SIZE);
 
+        Date start = new Date(System.currentTimeMillis()-18*60*60*24*1000);
+        Date end = new Date(System.currentTimeMillis());
+        System.err.println(System.currentTimeMillis()-18*60*60*24*1000);
+        System.err.println(System.currentTimeMillis());
     }
     
 }

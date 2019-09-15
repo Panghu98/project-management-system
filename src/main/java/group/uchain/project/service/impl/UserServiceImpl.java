@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
         if (user.getRole().toString().equals(RoleEnum.SUPER_ADMIN.getRole())) {
             return Result.error(CodeMsg.NO_PERMISSION);
         }
-        ListOperations<String, group.uchain.project.VO.User> listOperations = redisTemplate.opsForList();
+        ListOperations<String, group.uchain.project.vo.User> listOperations = redisTemplate.opsForList();
         userMapper.deleteUser(userId);
         //刷新缓存
         listOperations.getOperations().delete(USER_REDIS_PREFIX);

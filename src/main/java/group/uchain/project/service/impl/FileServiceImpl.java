@@ -2,8 +2,8 @@ package group.uchain.project.service.impl;
 
 import group.uchain.project.DTO.ProjectInfo;
 import group.uchain.project.DTO.User;
-import group.uchain.project.VO.AllocationInfo2;
-import group.uchain.project.VO.FileInfo;
+import group.uchain.project.vo.AllocationInfo2;
+import group.uchain.project.vo.FileInfo;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.exception.MyException;
 import group.uchain.project.form.RegisterUser;
@@ -396,10 +396,12 @@ public class FileServiceImpl implements FileService {
         sheet.setColumnWidth(8,256*12);
         //负责人
         sheet.setColumnWidth(9,256*10);
-        //分配信息
-        sheet.setColumnWidth(10,256*100);
+        //成员信息
+        sheet.setColumnWidth(10,256*10);
+        //成员所占比例
+        sheet.setColumnWidth(11,256*10);
         //备注
-        sheet.setColumnWidth(11,256*50);
+        sheet.setColumnWidth(12,256*50);
 
         //3.1设置字体居中
         XSSFCellStyle cellStyle = wb.createCellStyle();
@@ -408,7 +410,8 @@ public class FileServiceImpl implements FileService {
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
         // 4.设置表头，即每个列的列名
-        String[] title = {"项目编号","项目类别","项目说明","级别","等级","项数","分数类型","分数（暂定）","项目负责人","划分信息","备注"};
+        String[] title = {"项目编号","项目类别","项目说明","级别","等级","项数","分数类型"
+                ,"分数（暂定）","项目负责人","划分成员信息","划分比例","备注"};
         // 4.1创建第一行
         XSSFRow row = sheet.createRow(0);
         // 此处创建一个序号列
@@ -424,7 +427,7 @@ public class FileServiceImpl implements FileService {
             row = sheet.createRow(i+1);
 
             //设置行高
-            row.setHeight((short) (16*60));
+            row.setHeight((short) (16*15));
             // 序号
             row.createCell(0).setCellValue(i+1);
             row.createCell(1).setCellValue(list.get(i).getProjectId());
@@ -436,11 +439,8 @@ public class FileServiceImpl implements FileService {
             row.createCell(7).setCellValue(list.get(i).getVariety());
             row.createCell(8).setCellValue(list.get(i).getScore());
             row.createCell(9).setCellValue(list.get(i).getLeader());
-
-            String teachers = list.get(i).getTeacherInfos().toString().replaceAll(", ","\r\n");
-            //去除首尾的[]
-            teachers = teachers.substring(1,teachers.length()-1);
-            row.createCell(10).setCellValue(teachers);
+            row.createCell(10).setCellValue(list.get(i).getUsername());
+            row.createCell(11).setCellValue(list.get(i).getProportion());
         }
 
         Date date = new Date();

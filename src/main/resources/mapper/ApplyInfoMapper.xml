@@ -21,14 +21,14 @@
         from apply_info
         where project_id = #{projectId} limit 1;
     </select>
-    <select id="getAllApplyInfoNotApproval" resultType="group.uchain.project.VO.ApplyInfo">
+    <select id="getAllApplyInfoNotApproval" resultType="group.uchain.project.vo.ApplyInfo">
         select apply_type as applyType,
                u.username applyUser,
                project_id projectId
         from apply_info a inner join user u on a.user_id = u.user_id
         where approval_status = 0 ;
     </select>
-    <select id="getApplyDetailById" resultType="group.uchain.project.VO.ApplyDetail">
+    <select id="getApplyDetailById" resultType="group.uchain.project.vo.ApplyDetail">
         select
             distinct
                 project_id as projectId,

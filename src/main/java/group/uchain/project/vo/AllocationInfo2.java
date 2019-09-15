@@ -1,10 +1,9 @@
-package group.uchain.project.VO;
+package group.uchain.project.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 
 /**
@@ -41,8 +40,10 @@ public class AllocationInfo2 implements Serializable {
     @ApiModelProperty("项目分数")
     private Integer score;
 
-    @ApiModelProperty(value = "项目成员分配信息")
-    private List<TeacherInfo> teacherInfos;
+    @ApiModelProperty(value = "分配成员")
+    private String username;
 
+    @ApiModelProperty(value = "分配比例")
+    private double proportion;
 
 }

@@ -1,4 +1,4 @@
-package group.uchain.project.VO;
+package group.uchain.project.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

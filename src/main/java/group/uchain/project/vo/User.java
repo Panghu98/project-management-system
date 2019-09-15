@@ -1,4 +1,4 @@
-package group.uchain.project.VO;
+package group.uchain.project.vo;
 
 import lombok.Data;
 

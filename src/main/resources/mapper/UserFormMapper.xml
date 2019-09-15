@@ -53,7 +53,7 @@
         select user_id as userId,username,salt,`role`,`password` from `user` where user_id = #{id}
     </select>
 
-    <select id="getAllUser" resultType="group.uchain.project.VO.User">
+    <select id="getAllUser" resultType="group.uchain.project.vo.User">
         select user_id as userId,username,position,office
           from`user`
         <!--使用中文排序需要转码-->
