@@ -195,7 +195,6 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         Long count;
         //同步删除  保证项目信息的一致性,删除的数据可能会和缓存中的数据不一致
         count = zSetOperations.remove(setKey,projectInfo);
-        zSetOperations.removeRange(setKey,0,2);
         log.info("共有{}条数据从缓存集合中删除",count);
         return new Result();
     }
