@@ -250,11 +250,13 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
                     zSetOperations.add(setKey,projectInfo,projectInfo.getAllocationStatus());
                     //设置过期时间为一天
                     zSetOperations.getOperations().expire(setKey,1,TimeUnit.DAYS);
+                    redisTemplate.opsForValue().set(DEADLINE_FLAG,"N");
+
             }
             return Result.successData(projectInfoList);
         }else {
             log.info("缓存中中为最新的键值,直接从缓存中取值");
-            Set<ProjectInfo> set = zSetOperations.rangeByScore(setKey,0,1);
+            Set<ProjectInfo> set = zSetOperations.rangeByScore(setKey,0,2);
             List<ProjectInfo> list = new ArrayList<>(set);
             return Result.successData(list);
         }
