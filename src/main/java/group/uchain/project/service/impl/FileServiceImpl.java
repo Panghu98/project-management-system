@@ -2,9 +2,11 @@ package group.uchain.project.service.impl;
 
 import group.uchain.project.DTO.ProjectInfo;
 import group.uchain.project.DTO.User;
-import group.uchain.project.form.RegisterUser;
+import group.uchain.project.VO.AllocationInfo2;
+import group.uchain.project.VO.FileInfo;
 import group.uchain.project.enums.CodeMsg;
 import group.uchain.project.exception.MyException;
+import group.uchain.project.form.RegisterUser;
 import group.uchain.project.mapper.AllocationInfoMapper;
 import group.uchain.project.mapper.FileInfoMapper;
 import group.uchain.project.mapper.ProjectInfoMapper;
@@ -13,8 +15,6 @@ import group.uchain.project.rabbitmq.MQSender;
 import group.uchain.project.result.Result;
 import group.uchain.project.service.FileService;
 import group.uchain.project.util.ExcelUtil;
-import group.uchain.project.VO.AllocationInfo2;
-import group.uchain.project.VO.FileInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,6 +66,7 @@ public class FileServiceImpl implements FileService {
 
     private FileInfoMapper fileInfoMapper;
 
+    private static final String DEADLINE_FLAG = "project-info-has-deadline-flag";
 
     @Autowired
     public FileServiceImpl(ProjectInfoMapper projectInfoMapper, UserFormMapper userFormMapper,
@@ -343,6 +345,9 @@ public class FileServiceImpl implements FileService {
         if (result <= 0){
             throw new MyException(CodeMsg.PROJECT_ID_NOI_EXIST);
         }
+        //标记数据库更新,更新文件状态
+        ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(DEADLINE_FLAG,"N");
         return new Result();
     }
 
