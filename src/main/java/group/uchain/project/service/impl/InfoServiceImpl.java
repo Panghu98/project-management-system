@@ -190,6 +190,13 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         //写入数据库  前端传入的是成绩整数百分比,所以要除以100
         projectInfoMapper.updateAllocationStatus(projectId, ProjectStatus.ALLOCATED.getStatus());
 
+        //处理缓存
+        ZSetOperations<String,ProjectInfo> zSetOperations = redisTemplate.opsForZSet();
+        Long count;
+        //同步删除  保证项目信息的一致性,删除的数据可能会和缓存中的数据不一致
+        count = zSetOperations.remove(setKey,projectInfo);
+        zSetOperations.removeRange(setKey,0,2);
+        log.info("共有{}条数据从缓存集合中删除",count);
         return new Result();
     }
 
