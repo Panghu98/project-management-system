@@ -90,8 +90,6 @@
                 where u.user_id =#{userId} and p.deadline != '1970-01-01'
         group by p.id
     </select>
-    <!--Mybatis是根据查询到的记录数进行转换的(1表示为true,0表示为false) 。
-            然而，如果查询到多条记录(大于1)，则返回的布尔值为false-->
     <!--获取所有未设置截止日期的项目信息-->
     <select id="getAllProjectInfo" resultType="group.uchain.project.DTO.ProjectInfo">
         select p.id as id,
@@ -110,8 +108,8 @@
           from project_info p left join file_info f
         on p.id = f.project_id
         where  deadline = '1970-01-01'
-        group by p.id
-        order by allocation_status,date
+        group by p.id asc
+        <!--deadline和allocation的效果不同-->
     </select>
     <!--获取所有已设置截止日期的项目-->
     <select id="getDeadlineProjectInfo" resultType="group.uchain.project.DTO.ProjectInfo">
@@ -132,8 +130,7 @@
                  left join file_info f
         on p.id = f.project_id
         where  deadline != '1970-01-01' and allocation_status != 1
-        group by p.id
-        order by allocation_status, date
+        group by allocation_status asc ,deadline ,p.id
         <!--获取已经设置截止时间的并且状态不为修改申请中的-->
 
     </select>

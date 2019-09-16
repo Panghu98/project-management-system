@@ -314,6 +314,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
     public Result deleteProjectInfo(String id) {
         HashOperations<String, String, ProjectInfo> hashOperations = redisTemplate.opsForHash();
         ZSetOperations<String, ProjectInfo> zSetOperations = redisTemplate.opsForZSet();
+        ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         int result = projectInfoMapper.deleteProjectInfo(id);
         ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(id);
         if (result >= 1) {
@@ -324,8 +325,8 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
             log.info("共有{}条数据从缓存哈希中删除", count);
             //同步删除  保证项目信息的一致性,删除的数据可能会和缓存中的数据不一致
             count = zSetOperations.remove(setKey, projectInfo);
-            zSetOperations.removeRange(setKey, 0, 2);
             log.info("共有{}条数据从缓存集合中删除", count);
+            valueOperations.set(DEADLINE_FLAG,"Y");
             return new Result();
         } else {
             return Result.error(PROJECT_ID_NOI_EXIST);
@@ -383,8 +384,11 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         //未设置截止时间的项目缓存预热操作
         List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
-        //将最新的数据放入缓存
-        Map<String, ProjectInfo> map = projectInfoList.stream().collect(Collectors.toMap(ProjectInfo::getId, (p) -> p));
+        //进行反转,这样出队效果才会一致
+        Map<String, ProjectInfo> map = new LinkedHashMap<>();
+        for (ProjectInfo projectInfo:projectInfoList){
+            map.put(projectInfo.getId(),projectInfo);
+        }
         //清理缓存,以免出现脏数据
         hashOperations.getOperations().delete(hashKey);
         log.info("将数据库中的数据放入缓存当中");
