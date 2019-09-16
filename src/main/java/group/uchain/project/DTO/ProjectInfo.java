@@ -19,7 +19,7 @@ import java.util.Date;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(description = "项目信息")
-public class ProjectInfo implements Serializable{
+public class ProjectInfo implements Serializable,Comparable<ProjectInfo>{
 
     public ProjectInfo() {
     }
@@ -108,4 +108,8 @@ public class ProjectInfo implements Serializable{
      */
     private Integer fileUploadStatus;
 
+    @Override
+    public int compareTo(ProjectInfo info) {
+        return allocationStatus;
+    }
 }
