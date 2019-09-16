@@ -99,7 +99,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         ListOperations<String, User> listOperations = redisTemplate.opsForList();
         long ttl = redisTemplate.getExpire(USER_FLAG);
         String flag = redisTemplate.opsForValue().get(USER_FLAG).toString();
-        if (ttl == -2 || flag.equals("Y")) {
+        if (ttl < 0 || flag.equals("Y")) {
             log.info("缓存为空或者缓存存在更新,从数据库中获取用户并放入缓存");
             List<User> list = userFormMapper.getAllUser();
             listOperations.rightPushAll(USER_REDIS_PREFIX, list);
@@ -224,7 +224,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         //获取标记状态并且在刷新缓存之后重置状态为N
         String columnFlag = Objects.requireNonNull(redisTemplate.opsForValue().get(FLAG_KEY)).toString();
         long ttl = redisTemplate.getExpire(hashKey);
-        if ("Y".equals(columnFlag) || ttl == -2) {
+        if ("Y".equals(columnFlag) || ttl < 0) {
             log.info("数据存在更新或者过期,从数据库中读取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getAllProjectInfo();
             //将最新的数据放入缓存
@@ -258,7 +258,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         ZSetOperations<String, ProjectInfo> zSetOperations = redisTemplate.opsForZSet();
         String flag = redisTemplate.opsForValue().get(DEADLINE_FLAG).toString();
         long ttl = redisTemplate.getExpire(setKey);
-        if ("Y".equals(flag) || ttl == -2) {
+        if ("Y".equals(flag) || ttl < 0) {
             log.info("缓存中不是最新的值或者缓存已过期,从数据库中获取数据");
             List<ProjectInfo> projectInfoList = projectInfoMapper.getDeadlineProjectInfo();
             for (ProjectInfo projectInfo : projectInfoList
