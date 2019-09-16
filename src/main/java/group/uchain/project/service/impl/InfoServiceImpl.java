@@ -281,9 +281,26 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
 
     @Override
     public Result modifyScore(ModifyScoreForm modifyScoreForm) {
+        ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(modifyScoreForm.getProjectId());
+        if (projectInfo == null){
+            return Result.error(PROJECT_ID_NOI_EXIST);
+        }
         int result = projectInfoMapper.updateUserScoreByProjectId(modifyScoreForm.getScore(),
                 modifyScoreForm.getProjectId());
+
         log.info("进行项目分数修改,共计有{}条数据被修改",result);
+        //更新缓存
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        long date = projectInfo.getDeadline().getTime()+28800000;
+        //如果是没有设置了截止日期的项目
+        if (date == 0 ){
+            log.error("更新wei设置截止日期的项目分数");
+            valueOperations.set(FLAG_KEY, "Y");
+        }else {
+            //已经设置截止日期的项目
+            log.error("更新已设置截止日期的项目分数");
+            valueOperations.set(DEADLINE_FLAG,"Y");
+        }
         return new Result();
     }
 
