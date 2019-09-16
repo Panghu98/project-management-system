@@ -3,6 +3,7 @@ package group.uchain.project.controller;
 import group.uchain.project.annotation.RoleRequired;
 import group.uchain.project.DTO.ProjectInfo;
 import group.uchain.project.form.DeadLineForm;
+import group.uchain.project.form.ModifyScoreForm;
 import group.uchain.project.form.TimeLimit;
 import group.uchain.project.enums.RoleEnum;
 import group.uchain.project.result.Result;
@@ -126,6 +127,13 @@ public class AdminProjectController {
     @PostMapping("/action/setDeadline")
     public Result setDeadline(@Valid @RequestBody DeadLineForm form) throws InterruptedException {
         return infoService.setDeadline(form.getId(), form.getDate());
+    }
+
+    @RoleRequired(RoleEnum.SUPER_ADMIN)
+    @ApiOperation(value = "更改项目分数")
+    @PostMapping("/action/modifyScore")
+    public Result modifyScore(@Valid @RequestBody ModifyScoreForm modifyScoreForm){
+        return infoService.modifyScore(modifyScoreForm);
     }
 
 

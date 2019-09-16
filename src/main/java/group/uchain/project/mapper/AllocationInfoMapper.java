@@ -22,16 +22,15 @@ public interface AllocationInfoMapper {
      * 上传项目分配信息
      * @param map  用户ID以及对应的分配比例
      * @param projectId  项目的ID
-     * @param score 项目总分数
      */
-    int uploadAllocationInfo(@Param("map") Map<Long, Double> map,@Param("projectId") String projectId,@Param("score") Double score);
+    int uploadAllocationInfo(@Param("map") Map<Long, Double> map,@Param("projectId") String projectId);
 
     /**
      * 上传项目分配信息到临时表
      * @param map  用户ID以及对应的分配比例
      * @param projectId  项目的ID
      */
-    int uploadAllocationInfoToTempTable(@Param("map") Map<Long, Double> map,@Param("projectId") String projectId,@Param("score") Double score);
+    int uploadAllocationInfoToTempTable(@Param("map") Map<Long, Double> map,@Param("projectId") String projectId);
 
 
     int uploadOverdueProjectAllocationInfo(List<OverdueProjectInfo> list);
@@ -79,5 +78,7 @@ public interface AllocationInfoMapper {
      * @return
      */
     int setAllocationInfoStatusInvalidByProjectId(@Param("projectId") String projectId);
+
+
 
 }

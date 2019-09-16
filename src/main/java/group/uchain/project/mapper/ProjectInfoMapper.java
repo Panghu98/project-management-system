@@ -78,4 +78,13 @@ public interface ProjectInfoMapper {
      * @return 过期项目集合
      */
     List<OverdueProjectInfo> getAllOverdueProjectId(Date today);
+
+    /**
+     * 修改项目总分和比例
+     * tips:成绩
+     * @param score
+     * @param projectId
+     * @return
+     */
+    int updateUserScoreByProjectId(@Param("score") Integer score,@Param("projectId") String projectId);
 }

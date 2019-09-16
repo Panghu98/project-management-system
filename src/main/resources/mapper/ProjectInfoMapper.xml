@@ -50,6 +50,9 @@
     <update id="updateProjectInfo">
 
     </update>
+    <update id="updateUserScoreByProjectId">
+        update project_info set score = #{score} where id = #{projectId}
+    </update>
 
     <delete id="deleteProjectInfo" parameterType="string">
         delete from project_info where id = #{id}
