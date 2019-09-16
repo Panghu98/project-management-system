@@ -316,16 +316,15 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         ZSetOperations<String, ProjectInfo> zSetOperations = redisTemplate.opsForZSet();
         ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         int result = projectInfoMapper.deleteProjectInfo(id);
-        ProjectInfo projectInfo = projectInfoMapper.getProjectInfoByProjectId(id);
         if (result >= 1) {
             //删除成功,同时刷新缓存
             //未设置截止时间的项目删除占多数,所以使用缓存刷新
             Long count;
             count = hashOperations.delete(hashKey, id);
             log.info("共有{}条数据从缓存哈希中删除", count);
-            //同步删除  保证项目信息的一致性,删除的数据可能会和缓存中的数据不一致
-            count = zSetOperations.remove(setKey, projectInfo);
-            log.info("共有{}条数据从缓存集合中删除", count);
+            //直接删除数据可能会出现数据不一致,删除无效的可能
+            //清除多余的数据
+            zSetOperations.removeRangeByScore(setKey,0,2);
             valueOperations.set(DEADLINE_FLAG,"Y");
             return new Result();
         } else {
