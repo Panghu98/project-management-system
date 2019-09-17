@@ -260,6 +260,8 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         long ttl = redisTemplate.getExpire(setKey);
         if ("Y".equals(flag) || ttl < 0) {
             log.info("缓存中不是最新的值或者缓存已过期,从数据库中获取数据");
+            boolean result = zSetOperations.getOperations().delete(setKey);
+            log.error("清除Hash数据"+result);
             List<ProjectInfo> projectInfoList = projectInfoMapper.getDeadlineProjectInfo();
             for (ProjectInfo projectInfo : projectInfoList
             ) {
