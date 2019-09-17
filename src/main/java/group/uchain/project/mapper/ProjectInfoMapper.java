@@ -86,5 +86,5 @@ public interface ProjectInfoMapper {
      * @param projectId
      * @return
      */
-    int updateUserScoreByProjectId(@Param("score") Integer score,@Param("projectId") String projectId);
+    int updateUserScoreByProjectId(@Param("score") Double score,@Param("projectId") String projectId);
 }

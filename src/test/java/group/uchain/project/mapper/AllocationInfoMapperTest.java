@@ -36,7 +36,6 @@ public class AllocationInfoMapperTest {
         map.put(201731062629L, Double.valueOf(12));
         String projectId = "B12";
 
-        allocationInfoMapper.uploadAllocationInfo(map,projectId,1.0);
     }
 
     @Test
