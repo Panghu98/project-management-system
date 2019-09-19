@@ -293,6 +293,7 @@ public class InfoServiceImpl implements InfoService, InitializingBean {
         log.info("进行项目分数修改,共计有{}条数据被修改",result);
         //更新缓存
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        //时间戳的0点是北京时间的8点
         long date = projectInfo.getDeadline().getTime()+28800000;
         //如果是没有设置了截止日期的项目
         if (date == 0 ){

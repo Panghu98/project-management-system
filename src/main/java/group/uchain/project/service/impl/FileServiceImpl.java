@@ -465,7 +465,7 @@ public class FileServiceImpl implements FileService {
 
 
     /*
-        -----------------------------------问价压缩下载的私有方法-------------------------------
+        -----------------------------------文件压缩下载的私有方法-------------------------------
      */
 
     private static HttpServletResponse downloadZip(File file, HttpServletResponse response) {
