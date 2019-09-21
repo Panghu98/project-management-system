@@ -25,14 +25,13 @@ DROP TABLE IF EXISTS `allocation_info`;
 CREATE TABLE `allocation_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
-  `user_score` double DEFAULT NULL COMMENT '获得的分数',
   `project_id` varchar(20) NOT NULL COMMENT '所属项目',
   `proportion` double NOT NULL COMMENT '划分比例',
   `status` smallint(2) DEFAULT '1' COMMENT '有效状态:\n1,有效(默认)\n0.无效',
   PRIMARY KEY (`id`),
   KEY `user_id_index` (`user_id`),
   KEY `foreign_pro_id_idx` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +40,7 @@ CREATE TABLE `allocation_info` (
 
 LOCK TABLES `allocation_info` WRITE;
 /*!40000 ALTER TABLE `allocation_info` DISABLE KEYS */;
+INSERT INTO `allocation_info` VALUES (1,123456789102,'P114',100,0),(2,123456789102,'P114',50,1),(3,123456789104,'P114',50,1);
 /*!40000 ALTER TABLE `allocation_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,7 +62,7 @@ CREATE TABLE `allocation_info_temp` (
   UNIQUE KEY `composite_key_idx` (`user_id`,`project_id`),
   KEY `user_id_index` (`user_id`),
   KEY `foreign_pro_id_idx` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,6 +71,7 @@ CREATE TABLE `allocation_info_temp` (
 
 LOCK TABLES `allocation_info_temp` WRITE;
 /*!40000 ALTER TABLE `allocation_info_temp` DISABLE KEYS */;
+INSERT INTO `allocation_info_temp` VALUES (5,123456789102,25,'P114',100,1);
 /*!40000 ALTER TABLE `allocation_info_temp` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,8 +88,9 @@ CREATE TABLE `apply_info` (
   `project_id` varchar(20) NOT NULL,
   `approval_status` smallint(2) DEFAULT '0' COMMENT '0,未审核\\n1,审核不通过\\n2,审核通过',
   `apply_type` smallint(2) DEFAULT NULL COMMENT '申请类型\n1.延时\n2.重新分配',
+  `apply_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,6 +99,7 @@ CREATE TABLE `apply_info` (
 
 LOCK TABLES `apply_info` WRITE;
 /*!40000 ALTER TABLE `apply_info` DISABLE KEYS */;
+INSERT INTO `apply_info` VALUES (1,123456789102,'P11',1,1,'2019-09-14 11:43:51'),(2,123456789102,'P11',2,1,'2019-09-14 11:43:53');
 /*!40000 ALTER TABLE `apply_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,7 +112,7 @@ DROP TABLE IF EXISTS `file_info`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `file_info` (
   `project_id` varchar(20) NOT NULL COMMENT '项目名',
-  `file_complate_name` varchar(20) NOT NULL COMMENT '文件完整名称',
+  `file_complete_name` varchar(30) NOT NULL COMMENT '文件完整名称',
   PRIMARY KEY (`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -120,7 +123,6 @@ CREATE TABLE `file_info` (
 
 LOCK TABLES `file_info` WRITE;
 /*!40000 ALTER TABLE `file_info` DISABLE KEYS */;
-INSERT INTO `file_info` VALUES ('P114','xiaohui.png'),('P461','学习路线.jpg');
 /*!40000 ALTER TABLE `file_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -156,7 +158,7 @@ CREATE TABLE `project_info` (
 
 LOCK TABLES `project_info` WRITE;
 /*!40000 ALTER TABLE `project_info` DISABLE KEYS */;
-INSERT INTO `project_info` VALUES ('P114','其它专业建设项目','计算机科学与技术省级示范专业申报','省级','',1,'组织申报',25,'李建',50,'2019-09-01',0,'2019-09-10',998),('P315','专业认证','计算机公共基础协助2018年石工和化工的专业认证','     ','',3,'',40,'刘忠慧',20,'2019-09-01',0,'2019-08-27',1000),('P461','专业建设水平','计算机科学与技术专业','','',2,'建设运行',40,'李建',20,'2019-09-01',0,'2019-09-27',994),('P4611','专业建设水平','计算机科学与技术专业','','',2,'建设运行',40,'李建',0,'2019-09-01',0,'2019-10-01',994),('P4613','专业建设水平','计算机科学与技术专业','','',2,'建设运行',40,'李建',0,'2019-09-01',0,'2019-10-01',997),('P4614','专业建设水平','计算机科学与技术专业','','',2,'建设运行',40,'李建',0,'1970-01-01',0,'2019-09-12',998);
+INSERT INTO `project_info` VALUES ('L123211','其它专业建设项目','计算机科学与技术省级示范专业申报','省级','一级',0,'组织申报',25,'李建',50,'2019-09-16',0,'1970-01-01',2),('L123311','其它专业建设项目','计算机科学与技术省级示范专业申报','省级','一级',0,'组织申报',25,'李建',0,'2019-09-16',0,'1970-01-01',2);
 /*!40000 ALTER TABLE `project_info` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -204,7 +206,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (123456789101,'张三','4756a51e387552db1fa1dfc64cb6b194',1,'4995bd91','讲师','组织部'),(123456789102,'李建','4756a51e387552db1fa1dfc64cb6b194',2,'4995bd91','讲师','组织部'),(123456789103,'刘忠慧','4756a51e387552db1fa1dfc64cb6b194',3,'4995bd91','教授','计科院'),(123456789104,'测试用户1','4756a51e387552db1fa1dfc64cb6b194',2,'4995bd91','讲师','组织部'),(123456789105,'测试用户2','4756a51e387552db1fa1dfc64cb6b194',1,'4995bd91','讲师','组织部'),(123456789106,'测试用户3','4756a51e387552db1fa1dfc64cb6b194',1,'4995bd91','讲师','组织部'),(123456789107,'测试用户4','4756a51e387552db1fa1dfc64cb6b194',1,'4995bd91','讲师','组织部'),(123456789108,'测试用户5','ad42c8e1c2b0adfff795ed3930e3e0cd',2,'4a40a93e','教授','组织部');
+INSERT INTO `user` VALUES (123456789101,'张三','4756a51e387552db1fa1dfc64cb6b194',1,'4995bd91','讲师','组织部'),(123456789102,'李建','4756a51e387552db1fa1dfc64cb6b194',2,'4995bd91','讲师','组织部'),(123456789103,'刘忠慧','4756a51e387552db1fa1dfc64cb6b194',3,'4995bd91','教授','计科院'),(123456789104,'测试用户1','4756a51e387552db1fa1dfc64cb6b194',2,'4995bd91','讲师','组织部'),(123456789105,'测试用户2','4756a51e387552db1fa1dfc64cb6b194',1,'4995bd91','讲师','组织部'),(123456789106,'测试用户3','4756a51e387552db1fa1dfc64cb6b194',1,'4995bd91','讲师','组织部'),(123456789107,'测试用户4','4756a51e387552db1fa1dfc64cb6b194',1,'4995bd91','讲师','组织部'),(2005310626313,'小明','3277274e599e03c837829b2ce8df3c88',1,'49ddaa4b','副教授','组织部'),(2005310626321,'张三','d509efcaaf04ffb4192fc2e8f2fe423d',1,'403eaa23','副教授','计科院'),(2005310626341,'李四','a519f5cdb1d911f991c8727d52ed0790',1,'460c867e','教授','团委办公室'),(2005310626351,'张飞','8ba8ddba75da24e1a991d0feb10ce051',1,'448293a1','讲师','艺术院'),(2005310626361,'赵云','c1fd991256b81184af6b31c908495ff2',1,'490f993c','实习生','双创中心'),(2005310626371,'关羽','fc69420ff0dbe3da04cfc8d4b2141885',1,'4cc4be1b','教授','组织部');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,4 +227,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-09 16:49:51
+-- Dump completed on 2019-09-21 20:06:23
