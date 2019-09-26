@@ -13,6 +13,9 @@ import java.io.Serializable;
 @Data
 public class AllocationInfo2 implements Serializable {
 
+    @ApiModelProperty
+    private String id;
+
     @ApiModelProperty(value = "项目编号")
     private String projectId;
 
