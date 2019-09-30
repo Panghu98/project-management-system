@@ -1,5 +1,5 @@
 # 数据库设计
-
+![数据库设计图](https://github.com/Panghu98/project-management-system/blob/master/p1.png)
 
 # 功能说明
 ## 登录
